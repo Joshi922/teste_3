@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="pt-BR" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Livro de Feituras</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../css/feituras.css"></head><body>
+<header><button class="btn" onclick="parent.closeCtoniaMedicoes&&parent.closeCtoniaMedicoes()"><i class="fa-solid fa-arrow-left"></i> Gerenciar</button><h1><i class="fa-solid fa-book-open"></i> Livro de Feituras</h1><button class="btn" onclick="expCSV()" title="Exportar planilha (CSV)"><i class="fa-solid fa-file-csv"></i></button><button class="btn" onclick="expJSON()" title="Backup (JSON)"><i class="fa-solid fa-download"></i></button><button class="btn" onclick="$('#imp').click()" title="Restaurar backup"><i class="fa-solid fa-upload"></i></button><input type="file" id="imp" accept=".json,application/json" style="display:none" onchange="impJSON(this)"><button class="btn pri" onclick="newMed()">+ Nova medição</button></header>
+<div id="app"></div><div id="md" onclick="if(event.target===this)fm()"><div id="mb"></div></div><div id="ts"></div>
+<script src="../../js/feituras/app.js"></script></body></html>

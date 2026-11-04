@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Academia Ctônia</title>
+
+<!-- External Libraries -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>try{tailwind.config={theme:{extend:{colors:{ac:"var(--ac)",mut:"var(--mut)",tx:"var(--tx)",ok:"var(--ok)",warn:"var(--warn)",bad:"var(--bad)",xp:"var(--xp)"}}}}}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+<link rel="stylesheet" href="../../css/academia.css">
+<link rel="stylesheet" href="../../css/academia-gemas.css">
+</head>
+<body>
+
+<!-- === CABEÇALHO === -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="gem-sym" viewBox="0 0 64 64">
+<path d="M14 10h36l12 16-30 32L2 26z" fill="currentColor" fill-opacity=".28"/>
+<path d="M14 10h36l-6 16H20z" fill="currentColor" fill-opacity=".95"/>
+<path d="M14 10l6 16H2z" fill="currentColor" fill-opacity=".6"/>
+<path d="M50 10l12 16H44z" fill="currentColor" fill-opacity=".72"/>
+<path d="M2 26h18l12 32z" fill="currentColor" fill-opacity=".5"/>
+<path d="M20 26h24L32 58z" fill="currentColor" fill-opacity=".85"/>
+<path d="M44 26h18L32 58z" fill="currentColor" fill-opacity=".38"/>
+<path d="M14 10h36l12 16-30 32L2 26zM20 26h24M2 26h60M14 10l6 16 12 32M50 10l-6 16-12 32" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1" stroke-linejoin="round"/>
+</symbol></defs></svg>
+<div class="topbar">
+<header>
+    <button class="btn-icon" title="Voltar ao portal" aria-label="Voltar ao portal" onclick="try{window.parent.closeCtoniaAcademia();}catch(e){window.parent.postMessage({action:'closeCtoniaAcademia'},'*');}">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div class="brand">
+        <span class="brand-gem"><svg class="gem" style="width:100%;height:100%" viewBox="0 0 64 64"><use href="#gem-sym"/></svg></span>
+        <div><h1>Academia</h1><p>Ctônia · vida acadêmica</p></div>
+    </div>
+
+    <div class="xp-bar-container hidden sm:flex cursor-pointer" onclick="go('perfil')" title="Ver Perfil e Conquistas">
+        <span class="xp-lvl" id="header-lvl">1</span>
+        <span class="xp-txt">Nível</span>
+        <div class="xp-bar"><div id="header-xp-fill" class="xp-fill"></div></div>
+    </div>
+
+    <div class="flex items-center gap-3 ml-auto">
+        <button class="btn-icon" title="Sincronizar com Google Agenda" aria-label="Sincronizar com Google Agenda" onclick="openGCalModal()">
+            <i class="fa-brands fa-google"></i>
+        </button>
+        <select id="sem-filter" aria-label="Semestre"></select>
+    </div>
+</header>
+
+<!-- === NAVEGAÇÃO PRINCIPAL === -->
+<nav id="main-nav">
+    <button data-v="painel" onclick="go('painel')"><i class="fa-solid fa-chart-pie mr-2"></i> Painel</button>
+    <button data-v="salas" onclick="go('salas')"><i class="fa-solid fa-chalkboard-user mr-2"></i> Salas</button>
+    <button data-v="grade" onclick="go('grade')"><i class="fa-solid fa-table-cells mr-2"></i> Grade</button>
+    <button data-v="kanban" onclick="go('kanban')"><i class="fa-solid fa-map-location-dot mr-2"></i> Missões</button>
+    <button data-v="flashcards" onclick="go('flashcards')"><i class="fa-solid fa-layer-group mr-2"></i> Flashcards</button>
+    <button data-v="perfil" onclick="go('perfil')"><i class="fa-solid fa-medal mr-2"></i> Perfil</button>
+</nav>
+</div>
+
+<!-- === CONTAINER DA APLICAÇÃO === -->
+<div id="app"></div>
+
+<!-- === MODAIS === -->
+<div id="md" onclick="if(event.target===this)fm()"><div id="mb" class="glass"></div></div>
+<div id="toast-container"></div>
+
+<!-- === SCRIPT PRINCIPAL === -->
+<script src="../../js/academia/app.js"></script>
+<script src="../../js/academia/google-agenda.js"></script>
+</body>
+</html>

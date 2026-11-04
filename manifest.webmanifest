@@ -1,0 +1,15 @@
+{
+  "name": "Ctônia",
+  "short_name": "Ctônia",
+  "description": "Portal Ctônia: Biblioteca, Gerenciar, Academia e Livro de Feituras.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1B132B",
+  "theme_color": "#1B132B",
+  "icons": [
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "favicon.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}

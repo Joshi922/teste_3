@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<script>
+/* Helper global definido antes da renderização inicial dos cards. */
+window.ctEscape = window.ctEscape || function(v) { return String(v == null ? '' : v).replace(/[&<>"\\']/g, function(c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]); }); };
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1B132B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ctônia - Hub de Gestão</title>
+    <link rel="manifest" id="dynamic-manifest">
+    
+    <!-- Fontes Místicas: Cinzel para Títulos (Ancestralidade), Montserrat para Textos (Legibilidade/Modernidade) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <!-- Configuração do Tailwind para o Tema Ctônia -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        medieval: ['Cinzel', 'serif'],
+                        body: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        ctonia: {
+                            abyssal: '#1B132B',
+                            indigo: '#252B50',
+                            nightsky: '#4A6E8A',
+                            darkmint: '#1E4D4F',
+                            mystic: '#3B8C88',
+                            luminous: '#7BF0C3',
+                            magenta: '#E85A71',
+                            salmon: '#FFBEA6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../css/gerenciar.css">
+<script>
+(function(){
+  function syncCtoniaTheme(){
+    try { document.documentElement.classList.toggle('light', !!(parent && parent.document && parent.document.documentElement.classList.contains('light'))); }
+    catch(e) { try { document.documentElement.classList.toggle('light', localStorage.getItem('ct-theme') === 'light'); } catch(_) {} }
+  }
+  syncCtoniaTheme();
+  try { if (parent && parent.document && parent.MutationObserver) new parent.MutationObserver(syncCtoniaTheme).observe(parent.document.documentElement,{attributes:true,attributeFilter:['class']}); } catch(e) {}
+  window.addEventListener('storage', syncCtoniaTheme);
+})();
+</script>
+
+    
+
+<script>window.ctoniaBackToPortal=function(){try{if(parent&&typeof parent.closeCtoniaManager==='function')parent.closeCtoniaManager();}catch(e){console.warn(e);}};</script>
+
+
+<link rel="stylesheet" href="../../css/oraculo.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="../../css/astro.css">
+<script src="../../js/core/astro.js"></script><link rel="stylesheet" href="../../css/gerenciar-extras.css">
+
+
+
+
+
+
+</head>
+<body class="h-screen overflow-hidden flex flex-col relative transition-colors duration-300">
+
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+<div id="ct-google-drawer-backdrop" class="ct-google-drawer-backdrop hidden" aria-hidden="true"></div>
+<aside id="ct-google-drawer" class="ct-google-drawer" aria-label="Configurações do Google" aria-hidden="true">
+  <div class="ct-google-drawer-head"><div><span class="ct-google-g-mark"><i class="fa-brands fa-google"></i></span><div><h2>Google</h2><p>Conexões e integrações</p></div></div><button type="button" id="ct-google-drawer-close" aria-label="Fechar painel">×</button></div>
+  <div id="ct-google-drawer-content" class="ct-google-drawer-content">                    <!-- Integração Google Agenda: painel compacto integrado ao calendário existente -->
+                    <section id="ct-google-calendar-panel" class="mt-4 rounded-xl border border-ctonia-darkmint bg-ctonia-abyssal/50 p-4" aria-label="Integração com Google Agenda">
+                      <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="min-w-0">
+                          <div class="flex items-center gap-2 font-bold text-ctonia-salmon"><i class="fa-brands fa-google text-ctonia-luminous"></i> Google Agenda</div>
+                          <p id="ct-gcal-status" class="mt-1 text-xs text-ctonia-salmon/80">Configure a conexão para sincronizar tarefas e vencimentos automaticamente.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                          <button type="button" id="ct-gcal-settings-btn" class="rounded-lg border border-ctonia-darkmint px-3 py-2 text-xs font-bold hover:border-ctonia-luminous">Configurar</button>
+                          <button type="button" id="ct-gcal-connect-btn" class="rounded-lg bg-ctonia-mystic px-3 py-2 text-xs font-bold text-white hover:opacity-90"><i class="fa-brands fa-google mr-1"></i> Conectar</button>
+                          <button type="button" id="ct-gcal-sync-btn" class="hidden rounded-lg border border-ctonia-luminous px-3 py-2 text-xs font-bold text-ctonia-luminous hover:bg-ctonia-mystic/20">Sincronizar agora</button>
+                        </div>
+                      </div>
+                      <div id="ct-gcal-settings" class="hidden mt-4 border-t border-ctonia-darkmint pt-4">
+                        <label for="ct-gcal-client-id" class="mb-1 block text-xs font-bold text-ctonia-salmon">ID do cliente OAuth do Google</label>
+                        <input id="ct-gcal-client-id" type="text" autocomplete="off" spellcheck="false" placeholder="000000000000-abc123.apps.googleusercontent.com" class="w-full rounded-lg border border-ctonia-darkmint bg-ctonia-abyssal px-3 py-2 text-sm text-white outline-none focus:border-ctonia-luminous" />
+                        <p class="mt-2 text-xs leading-relaxed text-ctonia-salmon/70">No Google Cloud, ative a Google Calendar API e crie um ID OAuth do tipo Aplicativo da Web. Cadastre o domínio deste site em “Origens JavaScript autorizadas”. Não cole aqui um segredo de cliente.</p>
+                        <div class="mt-3 flex flex-wrap gap-4 text-xs text-ctonia-salmon">
+                          <label class="flex items-center gap-2"><input id="ct-gcal-include-tasks" type="checkbox" checked /> Tarefas e acompanhamentos</label>
+                          <label class="flex items-center gap-2"><input id="ct-gcal-include-finance" type="checkbox" checked /> Vencimentos da tesouraria</label>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                          <button type="button" id="ct-gcal-save-settings" class="rounded-lg bg-ctonia-mystic px-3 py-2 text-xs font-bold text-white">Salvar configuração</button>
+                          <a class="rounded-lg border border-ctonia-darkmint px-3 py-2 text-xs font-bold text-ctonia-salmon hover:border-ctonia-luminous" href="https://console.cloud.google.com/apis/library/calendar-json.googleapis.com" target="_blank" rel="noopener noreferrer">Abrir Google Cloud</a>
+                        </div>
+                      </div>
+                    </section></div>
+</aside>
+
+
+    <!-- ========================================== -->
+    <!-- TELA 1: HUB PORTAL (PÁGINA INICIAL)        -->
+    <!-- ========================================== -->
+    <div id="view-hub" class="flex-1 flex flex-col h-full overflow-y-auto">
+        <header class="bg-ctonia-indigo/80 backdrop-blur-md text-white shadow-lg py-6 px-8 flex justify-between items-center shrink-0 border-b-2 border-ctonia-magenta">
+            <div class="flex items-center gap-4">
+                <button onclick="ctoniaBackToPortal()" aria-label="Voltar ao Ctônia Hub" title="Voltar ao Ctônia Hub" class="hub-back-button shrink-0 inline-flex items-center rounded-full px-3 py-2 font-bold text-sm border transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m15 18-6-6 6-6"/><path d="M9 12h12"/></svg><span class="hub-back-label">Hub</span></button>
+            <div>
+                <h1 class="text-3xl font-medieval font-bold tracking-wider text-ctonia-salmon"><i class="fa-solid fa-gem mr-2 text-ctonia-luminous"></i> Ctônia</h1>
+                <p class="text-ctonia-luminous/70 text-sm mt-1 font-body italic">Hub de Gestão Abissal</p>
+            </div>
+            </div>
+            <div class="flex items-center gap-4 text-sm font-medium">
+                <button id="btn-install-app" class="hidden bg-ctonia-magenta hover:bg-[#d4485f] text-white px-4 py-2 rounded border border-[#d4485f] transition-colors flex items-center gap-2 shadow-sm text-xs font-bold uppercase tracking-wider font-medieval" title="Forjar Aplicativo">
+                    <i class="fa-solid fa-hammer"></i> Instalar Hub
+                </button>
+                <button class="fosso-trigger" onclick="window.openFosso()" title="Abrir o Fosso de Ulisses"><i class="fa-solid fa-skull text-lg"></i><span>Fosso de Ulisses</span><b id="fosso-count" class="rounded-full px-2 py-1 bg-[#392849] text-[#d8dcef]">0</b></button>
+                <button type="button" id="ct-google-drawer-open" class="ct-google-shortcut" title="Configurações do Google" aria-label="Abrir configurações do Google"><i class="fa-brands fa-google"></i></button>
+                <span id="header-date" class="bg-ctonia-abyssal px-4 py-2 rounded border border-ctonia-darkmint font-medieval text-ctonia-luminous shadow-inner"></span>
+            </div>
+        </header>
+
+        <div class="ct-hub-row">
+        <main class="p-8 max-w-7xl mx-auto w-full">
+            <div id="ct-kpi-row" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                <div class="ct-kpi"><span>Pendências atrasadas</span><strong id="kpi-overdue">0</strong></div>
+                <div class="ct-kpi"><span>Aguardando terceiros</span><strong id="kpi-third">0</strong></div>
+                <div class="ct-kpi"><span>Concluídas esta semana</span><strong id="kpi-done">0</strong></div>
+            </div>
+            <div class="flex justify-end mb-4"><button id="focus-mode-btn" onclick="window.toggleFocusMode()" class="px-4 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider">◎ O Meu Foco Hoje</button></div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Calendário Dinâmico -->
+                <div class="lg:col-span-2 bg-ctonia-indigo/60 backdrop-blur-md rounded-xl shadow-lg border border-ctonia-darkmint p-5 mystic-glow">
+                    <h2 class="text-xl font-medieval font-bold text-ctonia-salmon mb-4 border-b border-ctonia-darkmint pb-2"><i class="fa-solid fa-calendar-days text-ctonia-luminous mr-2"></i> Ciclo Temporal</h2>
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs mb-2 font-medieval text-ctonia-mystic">
+                        <div class="font-bold">Dom</div><div class="font-bold">Seg</div><div class="font-bold">Ter</div>
+                        <div class="font-bold">Qua</div><div class="font-bold">Qui</div><div class="font-bold">Sex</div><div class="font-bold">Sáb</div>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 text-sm">
+                        <!-- Preenchido via JS -->
+                    </div>
+                    <div id="calendar-legend" class="mt-4 text-sm text-ctonia-salmon bg-ctonia-abyssal/50 p-3 rounded-md border border-ctonia-darkmint flex items-start gap-3 italic">
+                        <i class="fa-solid fa-eye text-ctonia-luminous mt-0.5"></i>
+                        <span id="calendar-legend-text">Lendo os veios de cristal...</span>
+                    </div>
+                    <!-- Configurações do Google ficam no painel lateral acessado pelo botão G. -->
+                </div>
+
+                <!-- Gráfico de Pizza -->
+                <div class="bg-ctonia-indigo/60 backdrop-blur-md rounded-xl shadow-lg border border-ctonia-darkmint p-5 flex flex-col h-full items-center mystic-glow">
+                    <h2 class="text-xl font-medieval font-bold text-ctonia-salmon mb-4 border-b border-ctonia-darkmint pb-2 w-full text-left"><i class="fa-solid fa-chart-pie text-ctonia-luminous mr-2"></i> Mapa do Domínio</h2>
+                    <div class="flex-1 w-full flex flex-col items-center justify-center">
+                        <div id="dist-pie-chart" class="w-40 h-40 pie-chart shadow-lg relative flex items-center justify-center" aria-label="Distribuição das tarefas">
+                            <div class="donut-hole"><strong id="donut-active-count">0</strong><span>Ativas</span></div>
+                        </div>
+                        <div id="dist-legend" class="mt-5 flex flex-col gap-2 w-full px-2 text-xs font-semibold text-ctonia-salmon">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fique Atento (Urgentes) -->
+                <div class="bg-ctonia-indigo/60 backdrop-blur-md rounded-xl shadow-lg border border-ctonia-darkmint p-5 flex flex-col h-full mystic-glow">
+                    <h2 class="text-xl font-medieval font-bold text-ctonia-magenta mb-4 border-b border-ctonia-magenta/50 pb-2"><i class="fa-solid fa-fire text-ctonia-magenta mr-2"></i> Urgências</h2>
+                    <p class="text-xs text-ctonia-salmon/70 mb-3 italic">Avisos dos próximos 7 dias</p>
+                    <div id="urgentes-list" class="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-ctonia-mystic">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-medieval font-bold text-ctonia-luminous mb-6 border-b-2 border-ctonia-mystic pb-2 backdrop-blur-sm inline-block px-4 py-1 rounded-t-lg bg-ctonia-indigo/40">Frentes de Trabalho</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card Controle Contábil -->
+                <div onclick="showView('view-contabil')" class="group cursor-pointer bg-ctonia-indigo/60 backdrop-blur-md rounded-xl shadow-lg border border-ctonia-darkmint p-6 hover:shadow-[0_0_15px_rgba(232,90,113,0.3)] hover:border-ctonia-magenta transition-all mystic-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-ctonia-abyssal text-ctonia-magenta rounded flex items-center justify-center text-2xl group-hover:bg-ctonia-magenta group-hover:text-white transition-colors border border-ctonia-darkmint shadow-inner">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-medieval font-bold text-ctonia-salmon group-hover:text-white transition-colors">Tesouraria</h3>
+                            <p class="text-sm text-ctonia-luminous/70 italic">Tributos & Notas Fiscais</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-ctonia-salmon/80 line-clamp-2">Gerencie envios de Notas Fiscais para a contabilidade, acompanhe pagamentos e gere relatórios com a inteligência do Oráculo.</p>
+                </div>
+
+                <!-- Card Tarefas Interativo -->
+                <div class="bg-ctonia-indigo/60 backdrop-blur-md rounded-xl shadow-lg border border-ctonia-darkmint p-6 mystic-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-ctonia-abyssal text-ctonia-luminous rounded flex items-center justify-center text-2xl border border-ctonia-darkmint shadow-inner">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-medieval font-bold text-ctonia-salmon">Gestão de Missões</h3>
+                            <p class="text-sm text-ctonia-luminous/70 italic">Obras e Burocracia em andamento</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 mt-4">
+                        <button onclick="openTarefas('obra')" class="w-full text-left px-4 py-3 bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 border border-ctonia-darkmint hover:border-ctonia-luminous rounded text-sm font-medium text-ctonia-salmon transition-colors flex justify-between items-center shadow-sm group">
+                            <span><i class="fa-solid fa-hammer w-6 text-center mr-2 text-ctonia-mystic group-hover:text-ctonia-luminous transition-colors"></i> Construções</span>
+                            <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                        </button>
+                        <button onclick="openTarefas('adm')" class="w-full text-left px-4 py-3 bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 border border-ctonia-darkmint hover:border-ctonia-luminous rounded text-sm font-medium text-ctonia-salmon transition-colors flex justify-between items-center shadow-sm group">
+                            <span><i class="fa-solid fa-scroll w-6 text-center mr-2 text-ctonia-mystic group-hover:text-ctonia-luminous transition-colors"></i> Burocracia</span>
+                            <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                        </button>
+                        <button onclick="openTarefas('outros')" class="w-full text-left px-4 py-3 bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 border border-ctonia-darkmint hover:border-ctonia-luminous rounded text-sm font-medium text-ctonia-salmon transition-colors flex justify-between items-center shadow-sm group">
+                            <span><i class="fa-solid fa-dungeon w-6 text-center mr-2 text-ctonia-mystic group-hover:text-ctonia-luminous transition-colors"></i> Outras Missões</span>
+                            <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <aside class="ct-hub-side">
+        <div data-ct-astro aria-label="Relógio e painel astrológico"></div>
+        <div id="ct-med-card" class="ct-med-card" role="button" tabindex="0" onclick="window.openMedicoes()" onkeydown="if(event.key==='Enter')window.openMedicoes()" aria-label="Abrir Livro de Feituras">
+            <div class="ct-med-head"><i class="fa-solid fa-book-open"></i><div><b>Livro de Feituras</b><small>Controle de medições</small></div><i class="fa-solid fa-chevron-right ct-med-go"></i></div>
+            <div class="ct-med-kpis"><div><b id="med-k-week">0</b><span>na semana</span></div><div><b id="med-k-open">0</b><span>em andamento</span></div><div><b id="med-k-val">R$ 0</b><span>medido na semana</span></div></div>
+            <div id="med-week-list" class="ct-med-list"></div>
+        </div>
+        </aside>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TELA 2: CONTROLE CONTÁBIL                  -->
+    <!-- ========================================== -->
+    <div id="view-contabil" class="hidden flex-1 flex flex-col h-full bg-transparent">
+        <header class="bg-ctonia-indigo/80 backdrop-blur-md shadow-lg border-b border-ctonia-magenta px-6 py-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="showView('view-hub')" class="w-10 h-10 flex items-center justify-center rounded bg-ctonia-abyssal text-ctonia-salmon hover:bg-ctonia-magenta hover:text-white border border-ctonia-darkmint transition-colors shadow-sm">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-medieval font-bold text-ctonia-salmon">Tesouraria</h1>
+                    <p class="text-sm text-ctonia-luminous/70 italic">Gestão de Tributos e Notas Fiscais</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-end gap-2">
+                <label class="relative flex items-center" aria-label="Pesquisar na Tesouraria">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 text-ctonia-mystic text-xs pointer-events-none"></i>
+                    <input id="tesouraria-search" type="search" oninput="window.renderKanban()" placeholder="Pesquisar na Tesouraria…" class="w-40 sm:w-48 lg:w-56 bg-ctonia-abyssal/70 border border-ctonia-darkmint rounded-lg pl-8 pr-3 py-2 text-xs text-ctonia-salmon placeholder:text-ctonia-mystic/70 focus:outline-none focus:ring-1 focus:ring-ctonia-mystic">
+                </label>
+                <button onclick="generateAIReport()" class="bg-ctonia-mystic hover:bg-ctonia-luminous hover:text-ctonia-abyssal text-white px-4 py-2 rounded font-medieval text-sm transition-colors flex items-center shadow-sm border border-ctonia-darkmint">
+                    <i class="fa-solid fa-crystal-ball mr-2"></i> Oráculo
+                </button>
+                <button onclick="openModal('modal-novo-item')" class="bg-ctonia-magenta hover:bg-[#d4485f] text-white px-4 py-2 rounded font-medieval text-sm transition-colors flex items-center shadow-sm border border-[#d4485f]">
+                    <i class="fa-solid fa-plus mr-2"></i> Novo Envio
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-auto p-6">
+            <div class="flex gap-6 min-w-max h-full">
+                <!-- Colunas Drag & Drop Kanban -->
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Pendente', 'contabil')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-magenta shadow-[0_0_5px_rgba(232,90,113,0.5)]"></span> Pendente de Envio
+                        </h2>
+                        <span id="count-pendente" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded shadow-inner border border-ctonia-darkmint">0</span>
+                    </div>
+                    <div id="col-pendente" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Em Andamento', 'contabil')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-salmon shadow-[0_0_5px_rgba(255,190,166,0.5)]"></span> Com a Contabilidade
+                        </h2>
+                        <span id="count-andamento" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded shadow-inner border border-ctonia-darkmint">0</span>
+                    </div>
+                    <div id="col-andamento" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Concluído', 'contabil')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-luminous shadow-[0_0_5px_rgba(123,240,195,0.5)]"></span> Selado (Concluído)
+                        </h2>
+                        <span id="count-concluido" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded shadow-inner border border-ctonia-darkmint">0</span>
+                    </div>
+                    <div id="col-concluido" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TELA 3: TAREFAS POR DEPARTAMENTO           -->
+    <!-- ========================================== -->
+    <div id="view-tarefas" class="hidden flex-1 flex flex-col h-full bg-transparent">
+        <header class="bg-ctonia-indigo/80 backdrop-blur-md shadow-lg border-b border-ctonia-magenta px-6 py-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="showView('view-hub')" class="w-10 h-10 flex items-center justify-center rounded bg-ctonia-abyssal text-ctonia-salmon hover:bg-ctonia-magenta hover:text-white border border-ctonia-darkmint transition-colors shadow-sm">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h1 id="tarefas-title" class="text-2xl font-medieval font-bold text-ctonia-salmon">Missões: Obra</h1>
+                    <p class="text-sm text-ctonia-luminous/70 italic">Quadro de Aventuras e Afazeres</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-end gap-2">
+                <input id="tarefas-search" type="search" placeholder="Buscar missão..." oninput="window.renderTarefasKanban()" class="w-40 md:w-52 bg-ctonia-abyssal border border-ctonia-darkmint rounded px-3 py-2 text-xs text-ctonia-salmon">
+                <select id="tarefas-responsavel-filter" onchange="window.renderTarefasKanban()" aria-label="Filtrar por responsável" class="max-w-40 bg-ctonia-abyssal border border-ctonia-darkmint rounded px-2 py-2 text-xs text-ctonia-salmon"><option value="">Todos responsáveis</option></select>
+                <button onclick="window.openNovaTarefa()" class="ct-btn-emerald px-4 py-2 rounded font-medieval text-sm flex items-center">
+                    <i class="fa-solid fa-scroll mr-2"></i> Adicionar Missão
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-auto p-6">
+            <div class="flex gap-6 min-w-max h-full">
+                <!-- Colunas de Tarefas Drag/Drop -->
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Pendente', 'tarefa')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-magenta shadow-[0_0_5px_rgba(232,90,113,0.5)]"></span> Pendente
+                        </h2><span id="count-tarefa-pendente" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded">0</span>
+                    </div>
+                    <div id="col-tarefa-pendente" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Em Andamento', 'tarefa')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-salmon shadow-[0_0_5px_rgba(255,190,166,0.5)]"></span> Em Andamento
+                        </h2><span id="count-tarefa-andamento" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded">0</span>
+                    </div>
+                    <div id="col-tarefa-andamento" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Aguardando Terceiros', 'tarefa')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval"><span class="w-3 h-3 rounded-full bg-amber-400"></span> Aguardando Terceiros</h2>
+                        <span id="count-tarefa-terceiros" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded">0</span>
+                    </div>
+                    <div id="col-tarefa-terceiros" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+
+                <div class="w-80 flex flex-col bg-ctonia-abyssal/90 backdrop-blur-md rounded border border-ctonia-darkmint shadow-lg transition-all" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Concluído', 'tarefa')">
+                    <div class="p-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50 rounded-t flex justify-between items-center pointer-events-none">
+                        <h2 class="font-bold text-ctonia-salmon flex items-center gap-2 font-medieval">
+                            <span class="w-3 h-3 rounded-full bg-ctonia-luminous shadow-[0_0_5px_rgba(123,240,195,0.5)]"></span> Concluído
+                        </h2><span id="count-tarefa-concluido" class="text-xs font-bold bg-ctonia-nightsky text-white px-2 py-1 rounded">0</span>
+                    </div>
+                    <div id="col-tarefa-concluido" class="flex-1 p-3 overflow-y-auto kanban-col flex flex-col gap-3 pointer-events-none"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAIS E CONFIGURAÇÕES                     -->
+    <!-- ========================================== -->
+
+    <!-- MODAL NOVO ITEM CONTÁBIL (Com PDF Preview) -->
+    <div id="modal-novo-item" class="hidden fixed inset-0 bg-[#0f0917]/90 backdrop-blur-md z-40 flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal rounded-xl shadow-2xl w-full max-w-7xl h-[95vh] flex flex-col overflow-hidden border border-ctonia-magenta">
+            <div class="p-4 md:p-6 border-b border-ctonia-indigo flex justify-between items-center shrink-0 bg-ctonia-indigo">
+                <h3 class="text-xl font-medieval font-bold text-ctonia-salmon" id="modal-title">Registrar Tributo / NF</h3>
+                <button onclick="closeModal('modal-novo-item')" class="text-ctonia-mystic hover:text-ctonia-magenta transition-colors">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 flex overflow-hidden text-white flex-col lg:flex-row">
+                
+                <!-- COLUNA ESQUERDA: Formulário e Upload -->
+                <div class="w-full lg:w-1/2 p-4 md:p-6 overflow-y-auto border-r border-ctonia-indigo flex flex-col gap-6 relative scrollbar-thin scrollbar-thumb-ctonia-mystic">
+                    
+                    <!-- Seção Upload Inteligente Offline (Dropzone) -->
+                    <div id="upload-dropzone" class="relative p-5 bg-ctonia-indigo/30 border-2 border-dashed border-ctonia-darkmint hover:border-ctonia-mystic transition-colors rounded-xl flex flex-col md:flex-row gap-4 shadow-inner group">
+                        
+                        <div id="drop-overlay" class="absolute inset-0 z-50 hidden bg-ctonia-mystic/20 backdrop-blur-sm border-2 border-ctonia-luminous rounded-xl flex items-center justify-center pointer-events-none transition-all">
+                            <div class="text-center">
+                                <i class="fa-solid fa-cloud-arrow-up text-5xl text-ctonia-luminous mb-2 animate-bounce"></i>
+                                <p class="text-ctonia-luminous font-bold font-medieval text-xl">Solte o pergaminho aqui!</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 w-full">
+                            <label class="block text-xs font-bold text-ctonia-salmon mb-3 uppercase tracking-widest font-medieval"><i class="fa-solid fa-gears mr-1"></i> Varredura Expressa (Offline)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+                                <div class="relative">
+                                    <input type="file" id="upload-nf" accept="application/pdf" class="hidden" onchange="handlePdfUpload(event, 'nf')">
+                                    <button type="button" onclick="document.getElementById('upload-nf').click()" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white hover:bg-ctonia-nightsky text-sm font-bold py-2 px-4 rounded transition-colors flex items-center justify-center gap-2 shadow-sm font-body">
+                                        <i class="fa-solid fa-file-pdf text-ctonia-magenta"></i> Extrair NF (PDF)
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <input type="file" id="upload-boleto" accept="application/pdf" class="hidden" onchange="handlePdfUpload(event, 'boleto')">
+                                    <button type="button" onclick="document.getElementById('upload-boleto').click()" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white hover:bg-ctonia-nightsky text-sm font-bold py-2 px-4 rounded transition-colors flex items-center justify-center gap-2 shadow-sm font-body">
+                                        <i class="fa-solid fa-barcode text-ctonia-luminous"></i> Extrair Boleto
+                                    </button>
+                                </div>
+                                <div class="relative md:col-span-2">
+                                    <input type="file" id="upload-xml" accept=".xml" class="hidden" onchange="handleXmlUpload(event)">
+                                    <button type="button" onclick="document.getElementById('upload-xml').click()" class="w-full bg-ctonia-darkmint/30 border border-ctonia-mystic text-ctonia-luminous hover:bg-ctonia-darkmint/60 text-sm font-bold py-2 px-4 rounded transition-colors flex items-center justify-center gap-2 shadow-sm font-body">
+                                        <i class="fa-solid fa-file-code"></i> Extração Completa (XML)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ai-loading" class="hidden w-full md:w-1/3 flex items-center justify-center border-2 border-dashed border-ctonia-mystic rounded bg-ctonia-indigo/50">
+                            <div class="text-center text-ctonia-luminous py-4 px-2">
+                                <i class="fa-solid fa-gears fa-spin text-2xl mb-2 text-ctonia-luminous"></i>
+                                <p class="text-xs font-bold font-medieval mt-1" id="ai-loading-text">Processando<br>Local...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FORMULÁRIO -->
+                    <form id="form-novo-item" class="space-y-5">
+                        <!-- Ocultado e com ID correto: input-id para parear corretamente com os loops da IA de editar -->
+                        <input type="hidden" id="input-id">
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Identificação / Título</label>
+                            <input type="text" id="input-title" required class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic placeholder-ctonia-nightsky" placeholder="Ex: DANFe 12345">
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Descrição</label>
+                            <textarea id="input-description" rows="2" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic placeholder-ctonia-nightsky" placeholder="O que foi faturado..."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Status</label>
+                            <select id="input-status" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic" onchange="toggleNuField()">
+                                <option value="Pendente" class="bg-ctonia-abyssal">Pendente de Envio</option>
+                                <option value="Em Andamento" class="bg-ctonia-abyssal">Com a Contabilidade</option>
+                                <option value="Concluído" class="bg-ctonia-abyssal">Selado (Concluído)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Nº do Pedido (Opcional)</label>
+                            <input type="text" id="input-pedido" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                        </div>
+                        
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-3 rounded-lg border border-ctonia-mystic/40 p-3">
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Centro de Resultado (CR)
+                                <select id="input-cr" class="w-full mt-1 border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white">
+                                    <option value="">Selecionar CR...</option>
+                                    <option value="70920100">70920100 - LA II Obra</option>
+                                    <option value="70920200">70920200 - LA II E.E.E.</option>
+                                    <option value="70920300">70920300 - LA II Água</option>
+                                </select>
+                            </label>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Natureza real
+                                <input id="input-natureza-real" oninput="window.lookupNatureDescription('real')" class="w-full mt-1 border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white" placeholder="Digite o código da natureza real">
+                                <span id="natureza-real-descricao" class="block mt-1 text-xs text-ctonia-mystic" aria-live="polite"></span>
+                            </label>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Natureza lançada
+                                <input id="input-natureza-lancada" oninput="window.lookupNatureDescription('lancada')" class="w-full mt-1 border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white" placeholder="Digite o código da natureza lançada">
+                                <span id="natureza-lancada-descricao" class="block mt-1 text-xs text-ctonia-mystic" aria-live="polite"></span>
+                            </label>
+                        </div>
+
+                        <div id="container-nu" class="hidden md:col-span-2 bg-ctonia-darkmint/20 p-3 rounded border border-ctonia-mystic">
+                            <label class="block text-sm font-bold text-ctonia-luminous mb-1">Número Único (NU)</label>
+                            <input type="text" id="input-nu" class="w-full border border-ctonia-mystic bg-ctonia-abyssal rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-luminous placeholder-ctonia-darkmint" placeholder="Insira o NU para selar...">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Tipo (TOP)</label>
+                            <select id="input-top" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                                <option value="" class="bg-ctonia-abyssal">Selecionar...</option>
+                                <option value="9" class="bg-ctonia-abyssal">DANFE (9)</option>
+                                <option value="40" class="bg-ctonia-abyssal">NFSe (40)</option>
+                                <option value="55" class="bg-ctonia-abyssal">Recibo (55)</option>
+                                <option value="161" class="bg-ctonia-abyssal">DACTE (161)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Valor (Moeda Real)</label>
+                            <input type="number" step="0.01" id="input-valor-doc" required class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic placeholder-ctonia-nightsky" placeholder="0.00">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Emissor</label>
+                            <input type="text" id="input-emissor" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">CNPJ do Emissor</label>
+                            <input type="text" id="input-cnpj-emissor" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">CNPJ de Destino</label>
+                            <input type="text" id="input-cnpj-dest" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Data de Emissão</label>
+                            <input type="date" id="input-data-emissao" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic [color-scheme:dark]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-luminous mb-1"><i class="fa-regular fa-calendar-check mr-1"></i> Data de Pagamento</label>
+                            <input type="date" id="input-data-pagamento" class="w-full border border-ctonia-mystic bg-ctonia-darkmint/20 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-luminous shadow-inner [color-scheme:dark]">
+                        </div>
+
+                        <div id="container-oc" class="hidden md:col-span-2 bg-ctonia-magenta/10 p-3 rounded border border-ctonia-magenta/50">
+                            <label class="block text-sm font-bold text-ctonia-magenta mb-1">Ordem de Compra (OC)</label>
+                            <p class="text-xs text-ctonia-salmon/70 mb-2 italic">Exigido para valores acima de R$ 1.000,00.</p>
+                            <input type="text" id="input-oc" class="w-full border border-ctonia-magenta/50 bg-ctonia-abyssal rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-magenta placeholder-ctonia-nightsky" placeholder="Ex: 8720260034">
+                        </div>
+
+                        <div class="md:col-span-2 border-t border-ctonia-indigo pt-4 mt-2">
+                            <h4 class="text-sm font-medieval font-bold text-ctonia-mystic mb-3"><i class="fa-solid fa-barcode mr-1"></i> Dados da Guia (Boleto)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-ctonia-salmon mb-1">Valor (R$)</label>
+                                    <input type="number" step="0.01" id="input-valor-boleto" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic shadow-inner">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-ctonia-salmon mb-1">Vencimento</label>
+                                    <input type="date" id="input-vencimento-boleto" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic shadow-inner [color-scheme:dark]">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-ctonia-salmon mb-1">Código de Barras (Linha Digitável)</label>
+                                    <input type="text" id="input-linha" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm font-mono tracking-wider text-white focus:outline-none focus:ring-2 focus:ring-ctonia-mystic shadow-inner placeholder-ctonia-nightsky" placeholder="Apenas números...">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- COLUNA DIREITA: VISUALIZADOR DE PDF -->
+                <div class="hidden lg:flex w-1/2 bg-ctonia-indigo/30 flex-col relative overflow-hidden">
+                    <div id="preview-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-ctonia-nightsky transition-opacity">
+                        <i class="fa-solid fa-file-pdf text-7xl mb-4 opacity-50 drop-shadow-md text-ctonia-mystic"></i>
+                        <p class="font-medieval text-xl font-bold text-ctonia-salmon">O pergaminho aparecerá aqui</p>
+                        <p class="text-sm font-body italic mt-2 opacity-80">Arraste um PDF ou XML ao lado</p>
+                    </div>
+                    <!-- O iframe do PDF precisa de background branco para legibilidade do documento -->
+                    <iframe id="pdf-preview-frame" class="hidden w-full h-full border-none z-10 bg-white" title="Visualizador de Documentos"></iframe>
+                </div>
+            </div>
+            
+            <div class="p-4 md:p-6 border-t border-ctonia-indigo bg-ctonia-indigo flex justify-end gap-3 shrink-0">
+                <button type="button" onclick="closeModal('modal-novo-item')" class="px-4 py-2 text-sm font-bold text-ctonia-salmon bg-ctonia-abyssal border border-ctonia-darkmint rounded hover:bg-ctonia-nightsky transition-colors">Cancelar</button>
+                <button type="button" onclick="saveItem()" class="px-4 py-2 text-sm font-bold text-white bg-ctonia-magenta rounded hover:bg-[#d4485f] border border-[#d4485f] transition-colors shadow-sm font-medieval tracking-widest">Salvar Tributo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA TAREFA -->
+    <div id="modal-nova-tarefa" class="hidden fixed inset-0 bg-[#0f0917]/90 z-40 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-ctonia-abyssal rounded-xl shadow-2xl w-full max-w-3xl max-h-[94vh] flex flex-col overflow-hidden border border-ctonia-mystic">
+            <div class="p-4 border-b border-ctonia-indigo flex justify-between items-center bg-ctonia-indigo">
+                <h3 class="text-xl font-medieval font-bold text-ctonia-salmon">Detalhes da Missão</h3>
+                <button onclick="closeModal('modal-nova-tarefa')" class="text-ctonia-mystic hover:text-ctonia-magenta transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 text-white overflow-y-auto">
+                <form id="form-nova-tarefa" class="space-y-4">
+                    <input type="hidden" id="input-tarefa-id">
+                    <div>
+                        <label class="block text-sm font-bold text-ctonia-salmon mb-1">Título da Missão</label>
+                        <input type="text" id="input-tarefa-title" required class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-ctonia-salmon mb-1">Detalhes (Descrição)</label>
+                        <textarea id="input-tarefa-desc" rows="3" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Prazo Limite</label>
+                            <input type="date" id="input-tarefa-date" required class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic [color-scheme:dark]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-ctonia-salmon mb-1">Status</label>
+                            <select id="input-tarefa-status" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                                <option value="Pendente" class="bg-ctonia-abyssal">Pendente</option>
+                                <option value="Em Andamento" class="bg-ctonia-abyssal">Em Andamento</option>
+                                <option value="Aguardando Terceiros" class="bg-ctonia-abyssal">Aguardando Terceiros</option>
+                                <option value="Concluído" class="bg-ctonia-abyssal">Concluído</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-ctonia-salmon mb-1">Categoria da Missão</label>
+                        <select id="input-tarefa-module" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic">
+                            <option value="obra" class="bg-ctonia-abyssal">Construções</option>
+                            <option value="adm" class="bg-ctonia-abyssal">Burocracia</option>
+                            <option value="outros" class="bg-ctonia-abyssal">Outras Missões</option>
+                        </select>
+                        <p class="text-[11px] opacity-70 mt-1">Ao mudar a categoria, a missão é movida com todo o histórico, checklist e demais dados.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Responsável interno</label><input id="input-tarefa-responsavel" type="text" placeholder="Quem conduz esta missão?" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></div>
+                        <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Terceiro / órgão / fornecedor</label><input id="input-tarefa-terceiro" type="text" placeholder="Pessoa ou entidade externa" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></div>
+                        <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Data para acompanhar</label><input id="input-tarefa-followup" type="date" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm [color-scheme:dark]"></div>
+                        <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Próxima ação concreta</label><input id="input-tarefa-next" type="text" placeholder="Ex.: ligar para confirmar protocolo" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></div>
+                    </div>
+                    <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Conclusão (resumo do resultado)</label><textarea id="input-tarefa-conclusao" rows="2" placeholder="Preenchida ao concluir a missão" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></textarea></div>
+                    <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Checklist (uma etapa por linha)</label><textarea id="input-tarefa-checklist" rows="3" placeholder="Ex.: Solicitar orçamento&#10;Enviar documentos&#10;Confirmar recebimento" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></textarea><p class="text-[11px] text-ctonia-nightsky mt-1">Ao editar, etapas concluídas aparecem marcadas com [x].</p></div>
+                    <div><label class="block text-sm font-bold text-ctonia-salmon mb-1">Nota para o histórico (opcional)</label><textarea id="input-tarefa-note" rows="2" placeholder="Registre contato, protocolo, decisão ou impedimento..." class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm"></textarea></div>
+                </form>
+            </div>
+            <div class="p-4 border-t border-ctonia-indigo bg-ctonia-indigo flex justify-end gap-3">
+                <button onclick="closeModal('modal-nova-tarefa')" class="px-4 py-2 text-sm font-bold text-ctonia-salmon bg-ctonia-abyssal border border-ctonia-darkmint rounded hover:bg-ctonia-nightsky transition-colors">Cancelar</button>
+                <button onclick="saveTarefa()" class="ct-btn-emerald px-4 py-2 text-sm font-bold rounded font-medieval tracking-widest">Salvar Missão</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAÇÃO GLOBAL -->
+    <div id="modal-confirm-delete" class="hidden fixed inset-0 bg-[#0f0917]/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal rounded-xl shadow-2xl w-full max-w-sm p-6 text-center border border-ctonia-magenta">
+            <div class="fosso-skull-circle">
+                <i class="fa-solid fa-skull"></i>
+            </div>
+            <h3 class="text-xl font-medieval font-bold text-white mb-2">Tem Certeza?</h3>
+            <p class="text-sm text-ctonia-salmon/80 mb-6 italic">Deseja alimentar as almas do Fosso?</p>
+            <div class="flex justify-center gap-3">
+                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-sm font-bold text-ctonia-salmon bg-ctonia-indigo border border-ctonia-darkmint rounded hover:bg-ctonia-nightsky transition-colors">Poupar</button>
+                <button onclick="confirmDeleteExec()" id="btn-confirm-del" class="px-4 py-2 text-sm font-bold text-white bg-ctonia-magenta rounded hover:bg-[#d4485f] font-medieval tracking-widest transition-colors">Banir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOSSO DE ULISSES: LIXEIRA COM RETENÇÃO DE 30 DIAS -->
+    <div id="fosso-overlay" class="fosso-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="fosso-title" onclick="if(event.target===this)window.closeFosso()">
+      <section class="fosso-panel">
+        <div class="fosso-header flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4"><div class="fosso-skull-circle !w-12 !h-12 !text-2xl !mb-0"><i class="fa-solid fa-skull"></i></div><div><h2 id="fosso-title">FOSSO DE ULISSES</h2><p class="fosso-subtitle mt-1">As almas aguardam. Registros serão consumidos após 30 dias.</p></div></div>
+          <button onclick="window.closeFosso()" aria-label="Fechar Fosso" class="text-slate-300 hover:text-white text-2xl px-2">×</button>
+        </div>
+        <div class="fosso-content"><div class="flex justify-between items-center gap-3 mb-4 text-xs text-slate-400"><span><i class="fa-solid fa-hourglass-half mr-2"></i>Retenção de 30 dias</span><span id="fosso-summary">0 registros</span></div><div id="fosso-items"></div></div>
+      </section>
+    </div>
+
+    <!-- ORÁCULO: PAINEL ANALÍTICO EXCLUSIVO DA TESOURARIA -->
+    <div id="modal-ia-summary" class="hidden fixed inset-0 bg-[#0f0917]/85 backdrop-blur-md z-50 flex items-center justify-center p-3 md:p-6">
+      <section class="oracle-panel w-full max-w-7xl max-h-[94vh] overflow-hidden rounded-2xl border border-ctonia-mystic/70 shadow-2xl flex flex-col">
+        <header class="oracle-head px-5 py-4 flex flex-wrap items-center justify-between gap-3"><div><div class="oracle-brand">Ctônia</div><h2 class="text-xl md:text-2xl font-medieval font-bold">Gestão - Oráculo</h2><p class="text-sm opacity-75">Cartografia financeira da Tesouraria</p></div><button onclick="closeModal('modal-ia-summary')" class="text-2xl px-3 py-1 rounded-lg hover:bg-white/10" aria-label="Fechar">×</button></header>
+        <div class="oracle-filters p-4 flex flex-wrap gap-3 items-end">
+          <label class="text-xs flex flex-col gap-1">Natureza<select id="oracle-nature-kind" class="oracle-input"><option value="all">Real + lançada</option><option value="real">Natureza real</option><option value="launched">Natureza lançada</option></select></label>
+          <label class="text-xs flex flex-col gap-1">Centro de Resultado<select id="oracle-cr" class="oracle-input"><option value="">Todos os CRs</option><option value="70920100">70920100 - LA II Obra</option><option value="70920200">70920200 - LA II E.E.E.</option><option value="70920300">70920300 - LA II Água</option></select></label>
+          <label class="text-xs flex flex-col gap-1">Período<select id="oracle-days" class="oracle-input"><option value="15">Últimos 15 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option><option value="180">Últimos 180 dias</option><option value="365" selected>Últimos 365 dias</option><option value="all">Todo o histórico</option></select></label>
+          <label class="text-xs flex flex-col gap-1">Ano<select id="oracle-year" class="oracle-input"><option value="all">Todos os anos</option></select></label>
+          <button onclick="window.renderTreasuryOracle()" class="oracle-apply px-4 py-2 rounded-lg font-bold text-sm">Aplicar filtros</button>
+        </div>
+        <div class="oracle-quarters px-4 pb-4 flex items-center justify-center gap-3 md:gap-5"><button class="oracle-gem gem-ruby" data-quarter="1" onclick="window.setOracleQuarter(1)"><span>I</span></button><button class="oracle-gem gem-sapphire" data-quarter="2" onclick="window.setOracleQuarter(2)"><span>II</span></button><button class="oracle-gem gem-emerald" data-quarter="3" onclick="window.setOracleQuarter(3)"><span>III</span></button><button class="oracle-gem gem-amethyst" data-quarter="4" onclick="window.setOracleQuarter(4)"><span>IV</span></button><button class="oracle-clear" onclick="window.setOracleQuarter(0)">Ano inteiro</button></div>
+        <main class="oracle-scroll flex-1 overflow-y-auto p-4 md:p-5"><div id="oracle-kpis" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4"></div><div class="grid grid-cols-1 xl:grid-cols-2 gap-4"><section class="oracle-card"><h3>Aplicação por natureza</h3><p class="oracle-muted">Selecione uma natureza para cruzar todos os gráficos e detalhes.</p><div id="oracle-nature-list" class="oracle-nature-scroll"></div></section><section class="oracle-card"><h3>Distribuição trimestral · meses</h3><div id="oracle-month-chart" class="oracle-chart"></div></section><section class="oracle-card"><h3>Totais Anuais</h3><div id="oracle-year-chart" class="oracle-chart oracle-3d"></div></section><section class="oracle-card"><h3 class="oracle-section-title">Comparação de valores</h3><div id="oracle-nature-chart" class="oracle-chart"></div></section></div><section class="oracle-card mt-4"><div id="oracle-detail"></div></section></main>
+      </section>
+    </div>
+    <!-- MODAL DE CONFIGURAÇÃO -->
+    <div id="modal-config" class="hidden fixed inset-0 bg-[#0f0917]/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal rounded-xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden border border-ctonia-mystic">
+            <div class="p-4 border-b border-ctonia-indigo flex justify-between items-center bg-ctonia-indigo">
+                <h3 class="text-xl font-medieval font-bold text-ctonia-salmon"><i class="fa-solid fa-wand-sparkles mr-2 text-ctonia-luminous"></i> Magia da IA</h3>
+                <button onclick="closeModal('modal-config')" class="text-ctonia-mystic hover:text-ctonia-magenta transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 text-white">
+                <label class="block text-sm font-bold text-ctonia-salmon mb-2">Chave de Acesso (API Key)</label>
+                <p class="text-xs text-ctonia-salmon/70 mb-4 italic">Se você usar o sistema offline/baixado, cole sua chave aqui (Formato AIzaSy...). Se usar online aqui na plataforma, pode apagar e salvar!</p>
+                <input type="password" id="input-api-key" class="w-full border border-ctonia-darkmint bg-ctonia-indigo/50 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ctonia-mystic text-white" placeholder="Cole a chave aqui...">
+            </div>
+            <div class="p-4 border-t border-ctonia-indigo bg-ctonia-indigo flex justify-end gap-3">
+                <button onclick="closeModal('modal-config')" class="px-4 py-2 text-sm font-bold text-ctonia-salmon bg-ctonia-abyssal border border-ctonia-darkmint rounded hover:bg-ctonia-nightsky transition-colors">Cancelar</button>
+                <button onclick="saveApiKey()" class="px-4 py-2 text-sm font-bold text-white bg-ctonia-magenta rounded hover:bg-[#d4485f] transition-colors">Salvar Chave</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT GLOBAL - TODA A LÓGICA DO APP   -->
+    <!-- ========================================== -->
+    <script src="../../js/gerenciar/app.js" type="module"></script>
+
+<script src="../../js/gerenciar/google-agenda.js"></script>
+
+<script src="../../js/gerenciar/google-drawer.js"></script>
+</body>
+</html>

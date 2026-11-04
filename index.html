@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ctônia — Portal</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#1B132B">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Ctônia">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF para gerar PDF e SortableJS para arrastar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <script>try{if(localStorage.getItem("ct-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: Object.fromEntries(['abyssal','indigo','night','mint','mystic','luminous','magenta','salmon'].map(n=>[n,`rgb(var(--${n}) / <alpha-value>)`]))
+                    ,
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="css/hub-themes.css">
+
+<link rel="stylesheet" href="css/hub-mobile.css">
+
+
+
+
+<link rel="stylesheet" href="css/astro.css"><script src="js/hub/astro.js"></script><link rel="stylesheet" href="css/hub-letreiro.css">
+
+<style id="ctonia-flow-bg">
+/* ===== Fundo vivo Ctônia: degradê animado (efeito.css) — claro e escuro ===== */
+/* Quadros-chave: o fundo "passeia" pelo degradê ampliado */
+/* (quadros-chave antigos removidos: animavam background-position, que repinta a tela inteira a cada frame) */
+html{
+ /* Claro: azul-claro/teal e amarelo/creme (cores do efeito.css) */
+ --ctf-grad:linear-gradient(-45deg,#cde6e3,#fdf1d0,#e0f2f1,#fcf4dd);
+ background-color:#e6e2cb!important;min-height:100%;
+}
+html:not(.light){
+ /* Escuro: mesma lógica (teal + dourado), em tons profundos */
+ --ctf-grad:linear-gradient(-45deg,#171426,#17323a,#211f38,#32291f);
+ background-color:#171426!important;
+}
+html:is(.light,:not(.light)):is(.hub-light,:not(.hub-light)) body{background:transparent!important;background-image:none!important;background-color:transparent!important}
+/* Camada fixa atrás de tudo; .fundo-animado = a classe do efeito.css */
+#ct-flow{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+/* Fundo vivo OTIMIZADO: o degradê (4x a largura da tela) fica numa camada própria e só se desloca via
+   transform (acelerado por GPU, sem repintar). Visual igual ao anterior. */
+.fundo-animado{background:none!important}
+#ct-flow::before{content:"";position:absolute;top:0;left:0;width:400%;height:100%;background:var(--ctf-grad);
+  will-change:transform;animation:ctfPan 15s ease infinite;animation-delay:var(--ctf-d1,0s)}
+@keyframes ctfPan{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-75%,0,0)}}
+/* Biblioteca/Gerenciador abertos cobrem a tela: pausa o fundo do portal que ficou por trás */
+html:has(#ctonia-library-overlay:not(.hidden)) #ct-flow::before,
+html:has(#ctonia-manager-overlay:not(.hidden)) #ct-flow::before{animation-play-state:paused}
+/* Relógio no tema claro: sem retângulo azul, mesma cor da barra */
+html:is(.light,.hub-light):is(.light,.hub-light,:not(.x)) body .ct-astro-clock,
+html:is(.light,.hub-light):is(.light,.hub-light,:not(.x)) body .ct-astro .ct-astro-clock,
+html:is(.light,.hub-light):is(.light,.hub-light,:not(.x)) body #portal-view .ct-astro-clock{background:none!important;background-image:none!important;background-color:transparent!important;box-shadow:none!important;border:0!important}
+@media (prefers-reduced-motion:reduce){#ct-flow::before{animation:none!important}}
+/* Telas do app: todas transparentes para o fundo aparecer (vence html.light #portal-view etc.) */
+html:is(.light,:not(.light)) body #portal-view,
+html:is(.light,:not(.light)) body #hub-view,
+html:is(.light,:not(.light)) body #workspace-view{background:transparent!important;background-image:none!important;background-color:transparent!important}
+#ctonia-library-overlay,#ctonia-manager-overlay,#ctonia-library-frame,#ctonia-manager-frame{background:transparent!important}
+html.light .portal-header{background:rgba(235,229,210,.78)!important}
+html:not(.light) .portal-header{background:rgba(25,24,43,.78)!important}
+</style>
+<script id="ctonia-flow-js">(function(){var d=document.documentElement,n=Date.now()/1000;d.style.setProperty('--ctf-d1',(-(n%15)).toFixed(2)+'s');function m(){var b=document.body;if(!b||document.getElementById('ct-flow'))return;var f=document.createElement('div');f.id='ct-flow';f.className='fundo-animado';f.setAttribute('aria-hidden','true');b.insertBefore(f,b.firstChild)}if(document.body)m();else document.addEventListener('DOMContentLoaded',m)})();</script>
+
+<link rel="stylesheet" href="css/hub-oraculo.css">
+</head>
+<body class="antialiased flex flex-col h-screen overflow-hidden text-sm relative">
+<a id="ctonia-portal-back" href="#" onclick="return voltarAoPortal(event)" aria-label="Voltar ao portal inicial" title="Voltar ao portal inicial"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m15 18-6-6 6-6"/><path d="M9 12h12"/></svg><span class="hub-back-label">Hub</span></a>
+
+    <div class="bg-noise"></div>
+    <button id="fs-toggle" type="button" onclick="toggleFullscreenCtonia()" aria-label="Tela cheia" title="Tela cheia (esconde a barra do navegador)" style="display:none;position:fixed;top:max(12px,env(safe-area-inset-top));right:max(64px,calc(env(safe-area-inset-right) + 64px));z-index:99998;width:40px;height:40px;border-radius:9999px;align-items:center;justify-content:center;border:1px solid rgb(var(--night));background:rgb(var(--indigo));color:rgb(var(--mystic));cursor:pointer">
+        <svg id="fs-icon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+    <button id="install-btn" type="button" onclick="installCtonia()" aria-label="Instalar app" title="Instalar o Ctônia como app" style="display:none;position:fixed;top:max(12px,env(safe-area-inset-top));right:max(112px,calc(env(safe-area-inset-right) + 112px));z-index:99998;width:40px;height:40px;border-radius:9999px;align-items:center;justify-content:center;border:1px solid rgb(var(--night));background:rgb(var(--indigo));color:rgb(var(--mystic));cursor:pointer">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+    </button>
+    <button id="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema claro/escuro" class="fixed top-3 right-4 z-[60] w-10 h-10 rounded-full border border-night bg-indigo text-mystic hover:text-luminous shadow-lg flex items-center justify-center transition-colors"><i id="theme-icon" class="fas fa-moon"></i></button>
+
+    <!-- PORTAL INICIAL CTÔNIA -->
+    <div id="portal-view" class="relative z-10 flex-1 overflow-y-auto">
+        <header class="portal-header px-5 py-5 md:py-6 text-center">
+            <div class="portal-brand text-3xl md:text-5xl font-bold uppercase text-salmon title-glow">Ctônia</div>
+            <p class="mt-2 text-[10px] md:text-xs uppercase tracking-[.34em] text-mystic">Portal de ferramentas</p>
+        </header>
+        <main class="max-w-[1500px] mx-auto px-5 md:px-10 py-10 md:py-14">
+            <div data-ct-astro aria-label="Relógio e painel astrológico"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 items-stretch">
+                <button type="button" class="portal-card" onclick="enterPdfHub()" aria-label="Abrir Forja">
+                    <i class="portal-symbol fa-solid fa-fire-flame-curved" aria-hidden="true"></i>
+                    <span class="portal-card-title">Forja</span>
+                </button>
+                <a class="portal-card" href="#arquivo" aria-label="Abrir Academia Ctônia" onclick="event.preventDefault();openCtoniaAcademia()">
+                    <i class="portal-symbol fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                    <span class="portal-card-title">Academia</span>
+                </a>
+                <a class="portal-card" href="#arquivo" aria-label="Abrir Biblioteca Ctônia" onclick="openCtoniaLibrary()">
+                    <i class="portal-symbol fa-solid fa-book-open" aria-hidden="true"></i>
+                    <span class="portal-card-title">Biblioteca</span>
+                </a>
+                <a class="portal-card" href="#arquivo" aria-label="Abrir Laboratório Ctônia" onclick="portalPlaceholder(event,'Laboratório')">
+                    <i class="portal-symbol fa-solid fa-flask" aria-hidden="true"></i>
+                    <span class="portal-card-title">Laboratório</span>
+                </a>
+                <button type="button" class="portal-card" aria-label="Abrir Gerenciar Ctônia" onclick="openCtoniaManager()">
+                    <i class="portal-symbol fa-regular fa-compass" aria-hidden="true"></i>
+                    <span class="portal-card-title">Gerenciar</span>
+                </button>
+            </div>
+            <div class="ct-backup-bar">
+                <button type="button" onclick="ctBackupExport()" title="Baixa um arquivo com todos os dados do site"><i class="fa-solid fa-download"></i> Gerar backup</button>
+                <button type="button" onclick="ctBackupImport()" title="Restaura os dados a partir de um arquivo de backup"><i class="fa-solid fa-upload"></i> Importar backup</button>
+                <button type="button" id="ct-sync-btn" onclick="CTS.open()" title="Sincroniza Gerenciar, Academia e Medições entre PC e celular pelo Google Drive"><i class="fa-solid fa-cloud-arrow-up"></i> Sincronizar aparelhos</button>
+                <span id="ct-backup-info"></span> <span id="ct-sync-info"></span>
+            </div>
+            <p class="text-center text-[10px] uppercase tracking-[.2em] text-mystic/70 mt-6">Conhecimento · Criação · Organização</p>
+        </main>
+    </div>
+
+    <!-- VIEW PRINCIPAL (HUB) -->
+    <div id="hub-view" class="relative z-10 hidden flex-col h-screen overflow-y-auto">
+        <header class="pt-16 pb-8 px-4 text-center max-w-6xl mx-auto w-full">
+            <h1 class="text-4xl md:text-6xl font-bold mb-8 tracking-widest text-salmon font-serif title-glow uppercase">Forja</h1>
+            <nav id="filters-nav" class="flex flex-wrap justify-center gap-2 md:gap-6 border-b border-night pb-3 px-2"></nav>
+        </header>
+
+        <main class="max-w-[1400px] mx-auto px-6 md:px-12 pb-24 w-full flex-1">
+            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+        </main>
+    </div>
+
+    <!-- VIEW DO WORKSPACE -->
+    <div id="workspace-view" class="relative z-20 h-screen w-full hidden flex flex-col bg-abyssal">
+        <header class="h-14 bg-indigo border-b border-night flex items-center justify-between px-4 shrink-0 shadow-md">
+            <div class="flex items-center gap-4">
+                <button onclick="closeWorkspace()" class="text-mystic hover:text-luminous flex items-center gap-2 font-medium tracking-wide transition-colors">
+                    <i class="fas fa-arrow-left"></i> Retornar ao Hub
+                </button>
+            </div>
+            <div class="font-serif text-salmon text-lg uppercase tracking-wider font-bold title-glow" id="workspace-title">Ferramenta</div>
+            <div class="w-24"></div>
+        </header>
+        <main id="workspace-content" class="flex-1 flex overflow-hidden"></main>
+    </div>
+
+    <!-- GERENCIADOR CTÔNIA EMBUTIDO (documento isolado em iframe) -->
+    <section id="ctonia-manager-overlay" class="fixed inset-0 z-[100] hidden flex-col bg-[#1B132B]" aria-label="Gerenciador Ctônia">
+        <iframe id="ctonia-manager-frame" title="Ctônia Manager" class="w-full flex-1 border-0 bg-[#1B132B]" style="min-height:0;height:100%" loading="eager"></iframe>
+    </section>
+
+    <!-- BIBLIOTECA CTÔNIA EMBUTIDA (documento isolado em iframe) -->
+    <section id="ctonia-library-overlay" class="fixed inset-0 z-[101] hidden flex-col bg-[#1B132B]" aria-label="Biblioteca Ctônia">
+        <iframe id="ctonia-library-frame" title="Ctônia Biblioteca" class="w-full flex-1 border-0 bg-[#1B132B]" style="min-height:0;height:100%" loading="eager"></iframe>
+    </section>
+
+    <!-- ACADEMIA CTÔNIA (documento isolado em iframe) -->
+    <section id="ctonia-academia-overlay" class="fixed inset-0 z-[102] hidden flex-col bg-[#1B132B]" aria-label="Academia Ctônia">
+        <iframe id="ctonia-academia-frame" title="Ctônia Academia" class="w-full flex-1 border-0 bg-[#1B132B]" style="min-height:0;height:100%" loading="eager"></iframe>
+    </section>
+
+    <!-- LIVRO DE FEITURAS (medições) -->
+    <section id="ctonia-medicoes-overlay" class="fixed inset-0 z-[110] hidden flex-col bg-[#1B132B]" aria-label="Livro de Feituras">
+        <iframe id="ctonia-medicoes-frame" title="Livro de Feituras" class="w-full flex-1 border-0 bg-[#1B132B]" style="min-height:0;height:100%"></iframe>
+    </section>
+
+    <!-- MODAL GLOBAL -->
+    <div id="global-modal" class="fixed inset-0 z-50 modal-overlay hidden flex items-center justify-center p-4">
+        <div id="modal-content" class="bg-indigo border border-night rounded-xl shadow-2xl max-w-lg w-full p-6 text-center transform scale-95 transition-transform">
+            <!-- Injetado dinamicamente -->
+        </div>
+    </div>
+
+    <script src="js/hub/app.js"></script>
+<script src="js/hub/storage.js"></script>
+<script src="js/hub/cloud-sync.js"></script>
+<script src="js/hub/tools-ui.js"></script>
+<script src="js/hub/img-to-pdf.js"></script>
+<script src="js/hub/workflows.js"></script>
+<script src="js/hub/sign-pdf.js"></script>
+<script src="js/hub/theme.js"></script>
+<script src="js/hub/pdf-engine.js"></script>
+<script src="js/hub/organize-pdf.js"></script>
+<script src="js/hub/boot.js"></script>
+
+<script src="js/hub/portal.js"></script>
+
+
+    <script src="js/core/loader.js"></script>
+
+
+<script src="js/hub/pwa.js"></script>
+
+<link rel="stylesheet" href="css/hub-relogio.css">
+
+
+
+
+
+
+<script src="js/sync/google-calendar-bridge.js"></script>
+</body>
+</html>

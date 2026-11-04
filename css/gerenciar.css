@@ -1,0 +1,216 @@
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #1B132B; /* Roxo Abissal */
+            color: #FFBEA6; /* Salmão Claro */
+            /* Fundo simulando escuridão geológica com leve gradiente místico */
+            background-image: radial-gradient(circle at 50% 0%, #252B50 0%, #1B132B 70%);
+            background-attachment: fixed;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1B132B; }
+        ::-webkit-scrollbar-thumb { background: #3B8C88; border-radius: 4px; border: 1px solid #1B132B; }
+        ::-webkit-scrollbar-thumb:hover { background: #7BF0C3; }
+        
+        .kanban-col { min-height: 60vh; }
+        
+        /* Efeito Místico Ctônico para Widgets */
+        .mystic-glow {
+            box-shadow: 0 0 12px rgba(123,240,195,.10), 0 0 24px rgba(59,140,136,.15);
+            border: 1px solid rgba(123, 240, 195, 0.1);
+        }
+        
+        @keyframes mystic-flicker {
+            0% { box-shadow: 0 0 10px rgba(123, 240, 195, 0.05), 0 0 20px rgba(59, 140, 136, 0.1); }
+            100% { box-shadow: 0 0 15px rgba(123, 240, 195, 0.15), 0 0 30px rgba(59, 140, 136, 0.2); border-color: rgba(123, 240, 195, 0.3); }
+        }
+
+        .pulse-today {
+            box-shadow: 0 0 0 0 rgba(232, 90, 113, 0.7); /* Magenta */
+            animation: pulse-magenta 2s infinite;
+        }
+        @keyframes pulse-magenta {
+            0% { box-shadow: 0 0 0 0 rgba(232, 90, 113, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(232, 90, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(232, 90, 113, 0); }
+        }
+
+        .pie-chart {
+            border-radius: 50%;
+            transition: background 0.5s ease;
+        }
+
+
+        .ct-kpi{border:1px solid #1E4D4F;border-radius:14px;padding:12px 16px;background:rgba(37,43,80,.65);display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 14px 28px rgba(0,0,0,.12)}
+        .ct-kpi span{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#7BF0C3}.ct-kpi strong{font:700 25px 'Cinzel',serif;color:#FFBEA6}
+        .donut-hole{width:62%;height:62%;border-radius:50%;background:#252B50;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 2px 10px rgba(0,0,0,.14)}.donut-hole strong{font:700 30px 'Cinzel',serif;line-height:1;color:#FFBEA6}.donut-hole span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7BF0C3;margin-top:4px}
+        html.light .ct-kpi{background:#F7F0E2;border-color:#D8C7A6;box-shadow:0 14px 28px rgba(58,31,18,.08)}html.light .ct-kpi span{color:#8B681D}html.light .ct-kpi strong{color:#65452D}html.light .donut-hole{background:#F7F0E2;border-color:#D8C7A6}html.light .donut-hole strong{color:#3A1F12}html.light .donut-hole span{color:#A57B26}
+        html.light .ct-task-card h3{color:#65452D!important}html.light .ct-task-card .text-white\/70{color:#705D4A!important}html.light .ct-task-card .text-ctonia-luminous{color:#8B681D!important}html.light .ct-task-card .text-amber-200{color:#8B681D!important}
+        html.light .ct-task-card .text-rose-300{color:#8D1F2D!important}html.light .ct-task-card .text-rose-200{color:#8D1F2D!important}
+        html.light .ct-urgent-today{background:#B5122A!important;border-color:#8D071A!important;color:#090909!important;box-shadow:0 5px 16px rgba(141,7,26,.18)!important}html.light .ct-urgent-today *{color:#090909!important}
+        html.light .ct-task-card,html.light .bg-ctonia-indigo\/60,html.light .bg-ctonia-indigo\/90{box-shadow:0 14px 28px rgba(58,31,18,.07)!important}
+        #dist-legend>div{display:flex;align-items:center;gap:8px;white-space:normal;line-height:1.35}#dist-legend span:last-child{overflow-wrap:anywhere}
+        #focus-mode-btn{border-color:#3B8C88;color:#7BF0C3;background:#252B50}html.light #focus-mode-btn{background:#F7F0E2;border-color:#D8C7A6;color:#65452D}#focus-mode-btn.active{background:#3B8C88;color:white}html.light #focus-mode-btn.active{background:#A57B26;color:#fff}
+
+        /* Suavização de Inputs */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) sepia(1) saturate(5) hue-rotate(120deg);
+        }
+    
+
+        html.light .group .fa-coins{color:#D4A64A!important}html.light .group .fa-list-check,html.light .group .fa-tasks{color:#4169A1!important}
+        html.light .urgent-check{background:#F7F0E2!important;color:#3A1F12!important;border-color:#3A1F12!important}
+        /* Paleta clara Ctônia — alinhada ao tema claro do portal principal */
+        html.light body {
+            background-color: #E4DCC4 !important;
+            color: #3A1F12 !important;
+            background-image: radial-gradient(circle at 85% 0%, rgba(169,233,255,.55), transparent 45%), radial-gradient(circle at 0 100%, rgba(255,226,104,.35), transparent 40%) !important;
+        }
+        html.light ::-webkit-scrollbar-track { background: #F0EAD8; }
+        html.light ::-webkit-scrollbar-thumb { background: #DA6A4E; border-color: #F0EAD8; }
+        html.light ::-webkit-scrollbar-thumb:hover { background: #00D0FE; }
+        html.light .mystic-glow { border-color: rgba(162,87,50,.22); animation: none; box-shadow: 0 5px 18px rgba(58,31,18,.08); }
+        html.light .text-ctonia-salmon, html.light .text-ctonia-salmon\/70, html.light .text-ctonia-salmon\/80 { color: #3A1F12 !important; }
+        html.light .text-ctonia-luminous, html.light .text-ctonia-luminous\/70 { color: #A25732 !important; }
+        html.light .text-ctonia-mystic { color: #A25732 !important; }
+        html.light .text-ctonia-nightsky { color: #A25732 !important; }
+        html.light .text-ctonia-abyssal { color: #3A1F12 !important; }
+        html.light .text-ctonia-magenta { color: #E1414F !important; }
+        html.light .bg-ctonia-abyssal, html.light .bg-ctonia-abyssal\/90, html.light .bg-ctonia-abyssal\/50 { background-color: #E4DCC4 !important; }
+        html.light .bg-ctonia-indigo, html.light .bg-ctonia-indigo\/80, html.light .bg-ctonia-indigo\/60, html.light .bg-ctonia-indigo\/50, html.light .bg-ctonia-indigo\/40, html.light .bg-ctonia-indigo\/30 { background-color: rgba(240,234,216,.94) !important; }
+        html.light .bg-ctonia-nightsky { background-color: #A25732 !important; }
+        html.light .bg-ctonia-darkmint\/30, html.light .bg-ctonia-darkmint\/20 { background-color: rgba(162,87,50,.13) !important; }
+        html.light .bg-ctonia-mystic, html.light .bg-ctonia-mystic\/20 { background-color: #DA6A4E !important; }
+        html.light .bg-ctonia-luminous { background-color: #00D0FE !important; }
+        html.light .bg-ctonia-magenta, html.light .bg-ctonia-magenta\/20, html.light .bg-ctonia-magenta\/10, html.light .bg-\[\#E85A71\] { background-color: #E1414F !important; }
+        html.light .bg-ctonia-salmon { background-color: #FFE268 !important; }
+        html.light .bg-\[\#0f0917\]\/90 { background-color: rgba(240,234,216,.98) !important; }
+        html.light .bg-\[\#3B8C88\] { background-color: #DA6A4E !important; }
+        html.light .bg-\[\#1E4D4F\] { background-color: #A25732 !important; }
+        html.light .bg-\[\#FFBEA6\] { background-color: #FFE268 !important; }
+        html.light .bg-white { background-color: #F0EAD8 !important; }
+        html.light .border-ctonia-darkmint, html.light .border-ctonia-mystic, html.light .border-ctonia-indigo, html.light .border-ctonia-abyssal, html.light .border-ctonia-magenta\/50, html.light .border-ctonia-magenta { border-color: rgba(162,87,50,.42) !important; }
+        html.light .border-ctonia-luminous { border-color: #00D0FE !important; }
+        html.light .border-\[\#d4485f\] { border-color: #E1414F !important; }
+        html.light .border-black\/30 { border-color: rgba(58,31,18,.22) !important; }
+        html.light .placeholder-ctonia-nightsky::placeholder, html.light .placeholder-ctonia-darkmint::placeholder { color: #A25732 !important; opacity: .8; }
+        html.light .hover\:bg-ctonia-nightsky:hover { background-color: #A25732 !important; }
+        html.light .hover\:bg-ctonia-magenta:hover, html.light .group-hover\:bg-ctonia-magenta:hover { background-color: #E1414F !important; }
+        html.light .hover\:bg-ctonia-luminous:hover { background-color: #00D0FE !important; }
+        html.light .hover\:bg-ctonia-darkmint\/60:hover { background-color: rgba(162,87,50,.2) !important; }
+        html.light .hover\:bg-\[\#d4485f\]:hover { background-color: #C93443 !important; }
+        html.light .hover\:bg-white:hover { background-color: #FFE268 !important; }
+        html.light .hover\:text-ctonia-luminous:hover, html.light .group-hover\:text-ctonia-luminous:hover { color: #A25732 !important; }
+        html.light .hover\:text-ctonia-magenta:hover { color: #E1414F !important; }
+        html.light .hover\:text-ctonia-abyssal:hover { color: #3A1F12 !important; }
+        html.light .focus\:ring-ctonia-mystic:focus, html.light .focus\:ring-ctonia-luminous:focus { --tw-ring-color: #00D0FE !important; }
+        html.light .focus\:ring-ctonia-magenta:focus { --tw-ring-color: #E1414F !important; }
+        html.light .text-white, html.light .text-white\/70, html.light .text-white\/90 { color: #3A1F12 !important; }
+        html.light .bg-ctonia-magenta.text-white, html.light .bg-\[\#E85A71\].text-white { color: #fff !important; }
+        html.light header.bg-ctonia-indigo { color: #3A1F12 !important; }
+        html.light input, html.light select, html.light textarea { color: #3A1F12; }
+        html.light input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
+        html.light .pulse-today { box-shadow: 0 0 0 0 rgba(225,65,79,.55); }
+
+        /* Tema claro: cartões de tarefas e calendário em tons de gemas suaves */
+        html.light .ct-task-card { background: #F7F0E2 !important; color: #3A1F12 !important; border-color: #D8C7A6 !important; box-shadow: 0 2px 8px rgba(58,31,18,.07) !important; }
+        html.light .ct-task-card h3 { color: #65452D !important; }
+        html.light .ct-task-card .ct-task-desc { color: #705D4A !important; }
+        html.light .ct-task-card .ct-task-date { color: #527D70 !important; }
+        html.light .ct-task-card select { background: #EEE5D2 !important; color: #493323 !important; border-color: #CDBB9B !important; }
+        html.light .ct-task-card select option { background: #F7F0E2; color: #3A1F12; }
+        html.light .ct-task-card button { background: #EDE1CE !important; color: #A64B55 !important; border-color: #D8C7A6 !important; }
+        html.light #calendar-grid .ct-calendar-day { background: #F7F0E2 !important; color: #5D4936 !important; border-color: #D8C7A6 !important; box-shadow: 0 1px 3px rgba(58,31,18,.05) !important; }
+        html.light #calendar-grid .ct-calendar-today { background: #F4E4A8 !important; color: #654B18 !important; border-color: #C7A34A !important; box-shadow: inset 0 0 0 1px rgba(199,163,74,.22) !important; }
+        html.light #calendar-grid .ct-calendar-today .ct-calendar-label { color: #8B681D !important; }
+        html.light #calendar-grid .ct-calendar-deadline { background: #F4DEDF !important; color: #873F4B !important; border-color: #D9A1A8 !important; }
+        html.light #calendar-grid .ct-calendar-deadline i { color: #A64B5A !important; }
+        html.light #calendar-grid .ct-calendar-payment { background: #DDECE2 !important; color: #315F4B !important; border-color: #9EC7AD !important; }
+        html.light #calendar-grid .ct-calendar-payment i { color: #397B5C !important; }
+        html.light #calendar-legend { background: #F7F0E2 !important; color: #5D4936 !important; border-color: #D8C7A6 !important; }
+        html.light #calendar-legend strong { color: #65452D !important; }
+
+
+/* Ctônia: polimento visual do Oráculo e cartões */
+.oracle-head{background:linear-gradient(115deg,#f4ead7,#e4edf0 54%,#e8ddf1);color:#282438;border-bottom:1px solid #c7b7d8}
+.oracle-brand{color:#4b3c66;text-shadow:0 2px 14px #8a72ba55}
+.oracle-filters{background:#f8f4eb;border-bottom:1px solid #d9cdbb;color:#302b3c}
+.oracle-input{background:#fffdf8!important;color:#282438!important;border:1px solid #cbbda8!important;box-shadow:0 2px 8px #4a38520d}
+.oracle-input option{background:#fffdf8;color:#282438}
+.oracle-card,.oracle-kpi{background:#fffaf0;border-color:#d9cbb4;color:#302b3c;box-shadow:0 8px 24px #59452b12}
+.oracle-muted{color:#62596b;opacity:1}
+.oracle-nature-label b{color:#302b3c;font-size:12px}
+.oracle-nature-label strong{color:#7957a5;font-size:12px}
+.oracle-bar-wrap{background:#e9e0d5}
+.oracle-bar-wrap i{background:linear-gradient(90deg,#b89ae5,#62bfc7,#d8b05a);box-shadow:0 0 12px #8d6bd733}
+.oracle-apply{background:linear-gradient(120deg,#e5d8f5,#cfe9eb);color:#322844;border:1px solid #c0b1d5;box-shadow:0 5px 16px #7962a322}
+.oracle-quarters{padding-top:4px}
+.oracle-gem{width:54px;height:54px;cursor:pointer}
+.oracle-months{height:205px;perspective:800px}
+.oracle-month-col i{width:58%;background:linear-gradient(180deg,#a6edf0,#6b80c8 60%,#8c5db4);box-shadow:5px 4px 0 #493b7655,0 0 13px #8c72ce44;transform:skewY(-5deg);border-radius:8px 8px 3px 3px}
+.oracle-pillars{height:280px;gap:20px;perspective:900px;align-items:stretch}
+.oracle-pillar{min-width:72px;transform-style:preserve-3d}
+.oracle-pillar i{position:relative;width:38px;border-radius:14px 14px 5px 5px;background:linear-gradient(90deg,#5b91c5,#a68be3 52%,#58c4ca);box-shadow:8px 0 0 #3c437b88,0 0 20px #7d78cf66;transform:rotateX(-5deg) rotateY(-13deg);transform-origin:bottom;min-height:8px}
+.oracle-pillar i:before{content:"";position:absolute;left:0;right:-8px;top:-8px;height:16px;border-radius:50%;background:linear-gradient(120deg,#d9f4f2,#9e8cdb 70%);border:1px solid #ffffff88}
+.oracle-pillar b{color:inherit;font-size:10px;text-shadow:0 0 8px #8d7bcb55;max-height:95px}
+.oracle-compare{grid-template-columns:minmax(120px,1.2fr) minmax(60px,1fr) auto;gap:12px}
+.oracle-compare i{background:linear-gradient(90deg,#bca1e8,#62c7cb,#d6b15f)}
+.oracle-total-line strong{color:#7957a5}
+.oracle-table{color:inherit}
+.oracle-table th{color:#6c6275;opacity:1}
+.oracle-table td{border-color:#a99baf33}
+.dark .oracle-head,html:not(.light) .oracle-head{background:linear-gradient(115deg,#17172f,#1a2941 54%,#302044);color:#f0edf8}
+.dark .oracle-brand,html:not(.light) .oracle-brand{color:#a9e8ee;text-shadow:0 0 16px #9676dd}
+.dark .oracle-filters,html:not(.light) .oracle-filters{background:#17182c;color:#e5e1ef}
+.dark .oracle-input,html:not(.light) .oracle-input{background:#20223b!important;color:#f1edf8!important;border-color:#62577f!important}
+.dark .oracle-input option,html:not(.light) .oracle-input option{background:#20223b;color:#f1edf8}
+.dark .oracle-card,.dark .oracle-kpi,html:not(.light) .oracle-card,html:not(.light) .oracle-kpi{background:#171a31;border-color:#62577f;color:#ece9f5}
+.dark .oracle-muted,html:not(.light) .oracle-muted{color:#b8b4ca}
+.dark .oracle-nature-label b,html:not(.light) .oracle-nature-label b{color:#f0edf8}
+.dark .oracle-nature-label strong,html:not(.light) .oracle-nature-label strong{color:#c5a6f0}
+.dark .oracle-apply,html:not(.light) .oracle-apply{background:linear-gradient(120deg,#6550a1,#337a9d);color:white}
+.dark .oracle-table th,html:not(.light) .oracle-table th{color:#c2bad5}
+.dark .oracle-table td,html:not(.light) .oracle-table td{border-color:#9688ad33}
+.task-card,.treasury-card,.group.task-card{transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease,filter .35s ease;position:relative}
+.task-card:hover,.treasury-card:hover,.group.task-card:hover{transform:translateY(-3px);filter:brightness(1.025);box-shadow:0 0 0 1px var(--card-gem,#72cbd0),0 0 20px color-mix(in srgb,var(--card-gem,#72cbd0) 38%,transparent),0 12px 28px #33244a22}
+.task-card .fa-solid,.treasury-card .fa-solid,.group.task-card .fa-solid{transition:filter .3s ease,transform .3s ease;color:var(--card-gem,#74bfc6)}
+.task-card:hover .fa-solid,.treasury-card:hover .fa-solid,.group.task-card:hover .fa-solid{filter:drop-shadow(0 0 7px var(--card-gem,#74bfc6)) drop-shadow(0 0 13px var(--card-gem,#74bfc6));transform:scale(1.08)}
+
+
+html.light body{background:#e6dfc8!important}
+
+      /* Identificação financeira em tons suaves de gemas no modo claro */
+      html.light .ctonia-badge-top { background-color:#E0EAF8 !important; color:#31578B !important; border-color:#AFC5E6 !important; }
+      html.light .ctonia-badge-oc { background-color:#F5E9BC !important; color:#765B1D !important; border-color:#D9C47A !important; }
+      html.light .ctonia-badge-boleto { background-color:#E8E9EB !important; color:#555B63 !important; border-color:#C7CBD0 !important; }
+      html.light .ctonia-badge-nu { background-color:#EDE3F6 !important; color:#694A86 !important; border-color:#CDB9E2 !important; }
+      html.light .ctonia-payment-date { color:#557044 !important; }
+    
+
+ 
+/* Mobile: altura real da tela, sem zoom de toque duplo, sem destaque de toque */
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+button,a,label,input,select{touch-action:manipulation}
+@supports (height:100dvh){.h-screen{height:100dvh!important}.min-h-screen{min-height:100dvh!important}}
+
+@media (max-width:640px){
+  header{padding:12px 14px!important}
+  header h1{font-size:1.4rem!important}
+  header .flex.items-center.gap-4{flex-wrap:wrap;gap:8px!important}
+  main{padding:14px!important}
+  .grid{gap:12px!important}
+  table{display:block;overflow-x:auto;white-space:nowrap}
+  #toast-container{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+}
+.hub-back-button{background:#1B132B;color:#7BF0C3;border-color:#4A6E8A;gap:0;overflow:hidden;white-space:nowrap;cursor:pointer}
+.hub-back-button:hover{border-color:#7BF0C3;box-shadow:0 0 14px rgba(123,240,195,.25)}
+html.light .hub-back-button{background:#fffaf0;color:#3A1F12;border-color:#A25732}
+html.light .hub-back-button:hover{border-color:#DA6A4E;color:#A25732;box-shadow:0 0 12px rgba(162,87,50,.2)}
+.hub-back-label{display:inline-block;max-width:0;opacity:0;margin-left:0;overflow:hidden;transition:max-width .25s ease,opacity .2s ease,margin-left .25s ease}
+.hub-back-button:hover .hub-back-label,.hub-back-button:focus-visible .hub-back-label{max-width:56px;opacity:1;margin-left:6px}
+
+/* Ajustes 11: sem vinhetas */
+*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html body{background-image:none!important}
+header{box-shadow:none!important}
+html:not(.light) header{background-color:#252B50!important}

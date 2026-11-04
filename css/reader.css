@@ -1,0 +1,16 @@
+        /* ===== Livro 3D (PDF): duas páginas na paisagem, uma no retrato ===== */
+        #viewer .pdf-bk-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;perspective:1800px}
+        #viewer .pdf-bk-frame{position:relative;flex:none}
+        #viewer .pdf-bk-frame #pdf-book{width:100%;height:100%}
+        #viewer .pdf-bk-frame .stf__wrapper{height:100%!important}
+        #viewer .pdf-bk-page{background:#fdfbf7;border:1px solid #d8cbb5;overflow:hidden;touch-action:pan-y;-webkit-user-select:text;user-select:text}
+        #viewer .pdf-bk-page.--left{border-right:0;box-shadow:inset -7px 0 20px -7px rgba(0,0,0,.2)}
+        #viewer .pdf-bk-page.--right{border-left:0;box-shadow:inset 7px 0 20px -7px rgba(0,0,0,.2)}
+        body.theme-dark #viewer .pdf-bk-page{background:#191521;border-color:#2c2646}
+        body.theme-sepia #viewer .pdf-bk-page{background:#4a3a2b;border-color:#2a1f16}
+        #viewer .pdf-bk-inner{position:absolute;overflow:hidden}
+        #viewer .pdf-bk-inner .pdf-canvas{position:absolute;left:0;top:0;margin:0;width:100%!important;height:100%!important;max-width:none!important;box-shadow:none!important;outline:none!important}
+        #viewer .pdf-bk-textwrap{position:absolute;left:0;top:0;width:calc(var(--pw) * 1px);height:calc(var(--ph) * 1px);transform:scale(var(--k,1));transform-origin:0 0;z-index:2}
+        #viewer .pdf-bk-textwrap .textLayer{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+        #viewer .pdf-bk-textwrap .textLayer span{-webkit-user-select:text;user-select:text}
+    

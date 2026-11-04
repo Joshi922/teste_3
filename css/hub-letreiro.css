@@ -1,0 +1,25 @@
+/* === Letreiro v2: tema claro consistente (vale para html.light e html.hub-light) === */
+html.light .ct-astro,html.hub-light .ct-astro{--ct-sun:#b97d0a;--ct-moon:#5f70b8;--ct-mercury:#2f8f74;--ct-venus:#b9467a;--ct-mars:#c0452f;--ct-jupiter:#7a56c0;--ct-saturn:#7b6a52}
+html.light .el-fire,html.hub-light .el-fire{color:#c0592a}html.light .el-earth,html.hub-light .el-earth{color:#3f8a3c}html.light .el-air,html.hub-light .el-air{color:#1f87ab}html.light .el-water,html.hub-light .el-water{color:#3d6fc0}
+html.light .ct-astro-overlay,html.hub-light .ct-astro-overlay{background:#3a1f1273}
+html.light .ct-astro-modal,html.hub-light .ct-astro-modal{background:#F0EAD8;color:#3A1F12;border-color:#A25732;box-shadow:0 10px 40px #3a1f122e}
+html.light .ct-astro-modal .ct-geo,html.hub-light .ct-astro-modal .ct-geo,html.light .ct-astro-modal .ct-c-ok,html.hub-light .ct-astro-modal .ct-c-ok{background:#E4DCC4;border-color:#A2573266;color:#3A1F12}
+html.light .ct-astro-modal .ct-search,html.hub-light .ct-astro-modal .ct-search,html.light .ct-astro-modal .ct-custom input,html.hub-light .ct-astro-modal .ct-custom input{background:#fffaf0;border-color:#A2573299;color:#3A1F12}
+html.light .ct-astro-modal .ct-list button,html.hub-light .ct-astro-modal .ct-list button{background:#3a1f120d;border-color:#A2573233;color:#3A1F12}
+html.light .ct-astro-modal .ct-list button.on,html.hub-light .ct-astro-modal .ct-list button.on{border-color:#DA6A4E;box-shadow:0 0 10px #da6a4e44}
+
+/* === Letreiro no portal: faixa horizontal no mesmo molde dos cards verticais === */
+#portal-view main>.ct-astro{width:100%;max-width:none;margin:0 0 clamp(14px,2vw,22px);padding:0;color:rgb(var(--salmon))}
+#portal-view .ct-astro-inner{position:relative;isolation:isolate;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 22px;padding:14px 26px;text-align:left;border-radius:18px;border:1px solid rgb(var(--mystic)/.42);background:linear-gradient(160deg,rgb(var(--indigo)/.92),rgb(var(--abyssal)/.95))!important;box-shadow:none;overflow:hidden;min-height:0}
+#portal-view .ct-astro-inner:before{content:'';position:absolute;inset:-60% -10%;z-index:-1;animation:none;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgb(var(--mystic)/.18),transparent 62%);filter:blur(18px);opacity:.8}
+#portal-view .ct-astro-clock{font:700 clamp(1.7rem,2.5vw,2.3rem)/1 'Montserrat',sans-serif;letter-spacing:.05em;color:rgb(var(--salmon));text-shadow:0 0 14px rgb(var(--mystic)/.35);white-space:nowrap}
+#portal-view .ct-astro-day{margin:0;font-size:.95rem;gap:8px;color:rgb(var(--mystic));letter-spacing:.06em}
+#portal-view .ct-astro-bodies{display:flex;flex-wrap:nowrap;gap:10px;margin:0;justify-content:flex-start}
+#portal-view .ct-body{flex:none;padding:7px 14px;font-size:.88rem;gap:6px;border-radius:999px;background:rgb(var(--abyssal)/.45);border:1px solid rgb(var(--mystic)/.28);color:rgb(var(--salmon))}
+#portal-view .ct-sep{display:none}
+#portal-view .ct-planet,#portal-view .ct-day-sym{font-size:1.3em}
+#portal-view .ct-astro-phase{margin:0;font-size:.78rem;gap:7px;color:rgb(var(--salmon)/.85)}
+#portal-view .ct-astro-city{padding:6px 12px;font-size:.72rem;border-color:rgb(var(--mystic)/.45);color:rgb(var(--mystic));background:transparent}
+#portal-view .ct-astro-city:hover{box-shadow:0 0 16px rgb(var(--mystic)/.3);border-color:rgb(var(--mystic))}
+@media(max-width:1100px){#portal-view .ct-astro-inner{justify-content:center;text-align:center}}
+@media(max-width:640px){#portal-view .ct-astro-inner{padding:12px 14px;gap:8px 14px}#portal-view .ct-astro-bodies{flex-wrap:wrap;justify-content:center}}

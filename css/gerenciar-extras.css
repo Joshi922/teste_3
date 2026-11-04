@@ -1,0 +1,173 @@
+/* === Letreiro v2: tema claro consistente (vale para html.light e html.hub-light) === */
+html.light .ct-astro,html.hub-light .ct-astro{--ct-sun:#b97d0a;--ct-moon:#5f70b8;--ct-mercury:#2f8f74;--ct-venus:#b9467a;--ct-mars:#c0452f;--ct-jupiter:#7a56c0;--ct-saturn:#7b6a52}
+html.light .el-fire,html.hub-light .el-fire{color:#c0592a}html.light .el-earth,html.hub-light .el-earth{color:#3f8a3c}html.light .el-air,html.hub-light .el-air{color:#1f87ab}html.light .el-water,html.hub-light .el-water{color:#3d6fc0}
+html.light .ct-astro-overlay,html.hub-light .ct-astro-overlay{background:#3a1f1273}
+html.light .ct-astro-modal,html.hub-light .ct-astro-modal{background:#F0EAD8;color:#3A1F12;border-color:#A25732;box-shadow:0 10px 40px #3a1f122e}
+html.light .ct-astro-modal .ct-geo,html.hub-light .ct-astro-modal .ct-geo,html.light .ct-astro-modal .ct-c-ok,html.hub-light .ct-astro-modal .ct-c-ok{background:#E4DCC4;border-color:#A2573266;color:#3A1F12}
+html.light .ct-astro-modal .ct-search,html.hub-light .ct-astro-modal .ct-search,html.light .ct-astro-modal .ct-custom input,html.hub-light .ct-astro-modal .ct-custom input{background:#fffaf0;border-color:#A2573299;color:#3A1F12}
+html.light .ct-astro-modal .ct-list button,html.hub-light .ct-astro-modal .ct-list button{background:#3a1f120d;border-color:#A2573233;color:#3A1F12}
+html.light .ct-astro-modal .ct-list button.on,html.hub-light .ct-astro-modal .ct-list button.on{border-color:#DA6A4E;box-shadow:0 0 10px #da6a4e44}
+
+/* === Letreiro no Gerenciador: card vertical dentro do layout (coluna à direita do hub) === */
+.ct-hub-row{display:flex;align-items:flex-start;width:100%;max-width:1560px;margin:0 auto}
+.ct-hub-row>main{flex:1 1 0;min-width:0;max-width:none!important;width:auto!important;margin:0!important}
+.ct-hub-row>.ct-astro{flex:0 0 clamp(200px,15vw,244px);position:sticky;top:32px;width:auto;margin:32px 32px 0 0;padding:0;color:#e8e3ef}
+.ct-hub-row .ct-astro-inner{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px 14px;text-align:center;min-height:0;border-radius:14px;border:1px solid #1E4D4F;background:rgba(37,43,80,.65)!important;box-shadow:0 14px 28px rgba(0,0,0,.12);overflow:hidden}
+.ct-hub-row .ct-astro-inner:before{display:none}
+.ct-hub-row .ct-astro-clock{font:700 clamp(1.9rem,2.4vw,2.5rem)/1 'Cinzel','Montserrat',serif;letter-spacing:.05em;color:#FFBEA6;text-shadow:none}
+.ct-hub-row .ct-astro-day{justify-content:center;flex-wrap:wrap;margin:0;font-size:.85rem;color:#7BF0C3}
+.ct-hub-row .ct-astro-bodies{display:flex;flex-direction:column;flex-wrap:nowrap;gap:8px;margin:0}
+.ct-hub-row .ct-body{width:100%;box-sizing:border-box;padding:8px 8px;font-size:.86rem;border-radius:10px;background:rgba(10,12,30,.25);border:1px solid #1E4D4F}
+.ct-hub-row .ct-sep{display:none}
+.ct-hub-row .ct-planet,.ct-hub-row .ct-day-sym{font-size:1.35em;text-shadow:none}
+.ct-hub-row .ct-astro-phase{margin:0;font-size:.72rem;line-height:1.4;color:#c9cde8}
+.ct-hub-row .ct-astro-city{align-self:center;max-width:100%;margin-top:2px;padding:5px 10px;font-size:.7rem;overflow-wrap:anywhere;color:#7BF0C3;border-color:#1E4D4F}
+html.light .ct-hub-row>.ct-astro{color:#3A1F12}
+html.light .ct-hub-row .ct-astro-inner{background:#F7F0E2!important;border-color:#D8C7A6;box-shadow:0 14px 28px rgba(58,31,18,.08)}
+html.light .ct-hub-row .ct-astro-clock{color:#65452D}
+html.light .ct-hub-row .ct-astro-day{color:#8B681D}
+html.light .ct-hub-row .ct-body{background:#fffaf0;border-color:#D8C7A6;color:#3A1F12}
+html.light .ct-hub-row .ct-astro-phase{color:#5F4635}
+html.light .ct-hub-row .ct-astro-city{background:#fffaf0;color:#8B681D;border-color:#D8C7A6}
+@media(max-width:1100px){
+  .ct-hub-row{flex-direction:column}
+  .ct-hub-row>.ct-astro{order:-1;flex:none;position:static;width:calc(100% - 32px);margin:16px 16px 0}
+  .ct-hub-row .ct-astro-inner{flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 16px}
+  .ct-hub-row .ct-astro-bodies{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .ct-hub-row .ct-body{width:auto}
+}
+
+/* Pesquisa da Tesouraria: paleta clara, sem fundo escuro herdado */
+html.light #tesouraria-search{
+  background:#F7F0E2!important;
+  color:#3A1F12!important;
+  border-color:#C9B58C!important;
+  box-shadow:inset 0 1px 2px rgba(58,31,18,.05)!important;
+}
+html.light #tesouraria-search::placeholder{color:#9A775C!important;opacity:1!important}
+html.light #tesouraria-search:focus{
+  background:#FFFBF2!important;
+  border-color:#A57B26!important;
+  box-shadow:0 0 0 2px rgba(165,123,38,.16)!important;
+}
+html.light #view-contabil header label[aria-label="Pesquisar na Tesouraria"]{
+  background:transparent!important;
+}
+
+.oracle-launch,.oracle-button,[onclick*="generateAIReport"]{background:linear-gradient(135deg,#dce8fb,#c4d7f3)!important;border:1px solid #9db8e5!important;color:#29466f!important;box-shadow:0 3px 12px #547eb52b!important;position:relative}.oracle-launch:hover,.oracle-button:hover,[onclick*="generateAIReport"]:hover{background:linear-gradient(135deg,#cfdef7,#b8cff0)!important;box-shadow:0 5px 16px #547eb545!important}.oracle-launch:after,.oracle-button:after,[onclick*="generateAIReport"]:after{content:none!important}
+
+/* === Coluna lateral do hub: relógio mais largo + Livro de Feituras === */
+.ct-hub-side{flex:0 0 clamp(240px,17.5vw,340px);display:flex;flex-direction:column;gap:16px;margin:32px 32px 0 0;align-self:flex-start}
+.ct-hub-side .ct-astro{width:100%;margin:0;padding:0;color:#e8e3ef}
+html.light .ct-hub-side .ct-astro{color:#3A1F12}
+.ct-hub-side .ct-astro-clock{font-size:clamp(2.3rem,3vw,3.2rem)!important}
+.ct-med-card{cursor:pointer;border-radius:14px;border:1px solid #1E4D4F;background:rgba(37,43,80,.65);color:#e8e3ef;padding:14px;box-shadow:0 14px 28px rgba(0,0,0,.12);transition:transform .2s,border-color .2s}
+.ct-med-card:hover{transform:translateY(-2px);border-color:#7BF0C3}
+.ct-med-head{display:flex;align-items:center;gap:10px}.ct-med-head>i:first-child{font-size:1.4rem;color:#FFBEA6}.ct-med-head>div{flex:1;min-width:0}
+.ct-med-head b{display:block;font:700 1.05rem 'Cinzel','Montserrat',serif;color:#FFBEA6}.ct-med-head small{display:block;font-size:.7rem;opacity:.75}.ct-med-go{opacity:.6}
+.ct-med-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 10px}.ct-med-kpis>div{background:rgba(10,12,30,.25);border:1px solid #1E4D4F;border-radius:10px;padding:8px;text-align:center}
+.ct-med-kpis>div:last-child{grid-column:1/-1}.ct-med-kpis b{display:block;font:700 1.15rem 'Cinzel','Montserrat',serif;color:#7BF0C3}.ct-med-kpis span{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+.ct-med-list{display:flex;flex-direction:column;gap:6px}.ct-med-it{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.72rem;padding:6px 8px;border-radius:8px;background:rgba(10,12,30,.2);border-left:3px solid var(--c,#7BF0C3)}
+.ct-med-it b{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ct-med-it small{display:block;opacity:.75;font-size:.62rem}.ct-med-it>div{min-width:0}.ct-med-it>span{font-weight:700;white-space:nowrap}
+.ct-med-empty{font-size:.72rem;opacity:.7;text-align:center;padding:6px}
+html.light .ct-med-card{background:#F7F0E2;border-color:#D8C7A6;color:#3A1F12;box-shadow:0 14px 28px rgba(58,31,18,.08)}
+html.light .ct-med-head b{color:#65452D}html.light .ct-med-head>i:first-child{color:#9a4f2e}html.light .ct-med-kpis>div,html.light .ct-med-it{background:#fffaf0;border-color:#D8C7A6}html.light .ct-med-kpis b{color:#1f7a5c}
+@media(max-width:900px){.ct-hub-row{flex-direction:column}.ct-hub-side{flex:none;width:calc(100% - 32px);margin:0 16px 24px}}
+
+.ct-concl{background:linear-gradient(135deg,#5aa88a,#9bdcbc);border:1px solid #86d8b3;border-left:3px solid #2f7d5e;color:#0f2e23;box-shadow:0 2px 12px #4d9e7d33}
+.ct-concl .ct-concl-label,.ct-concl .ct-concl-text{color:#0f2e23}.ct-concl .ct-concl-label{font-weight:700}
+html.light .ct-concl{background:linear-gradient(135deg,#8fd0b0,#cdeedd);border-color:#6fbf9a}
+
+/* ===== Missões: harmonia de cores (tema escuro e claro) ===== */
+
+/* --- Botões principais em esmeralda suave (Adicionar / Salvar / Editar missão) --- */
+button.ct-btn-emerald.ct-btn-emerald{background:linear-gradient(135deg,#4d9e7d,#76c7a1)!important;border:1px solid #86d8b3!important;color:#0f2e23!important;box-shadow:0 2px 10px #4d9e7d33!important;transition:transform .2s,box-shadow .2s,background .2s}
+html button.ct-btn-emerald.ct-btn-emerald:hover,html.light button.ct-btn-emerald.ct-btn-emerald:hover{background:linear-gradient(135deg,#58ad8a,#88d6b0)!important;border-color:#9fe3c4!important;color:#0c281e!important;box-shadow:0 6px 18px #4d9e7d45!important;transform:translateY(-1px)}
+
+/* --- Próxima ação: destaque âmbar suave --- */
+.ct-next{background:rgba(242,201,107,.11);border:1px solid rgba(227,176,75,.34);border-left:3px solid #E3B04B;color:#F5EAD3}
+.ct-next .ct-next-label{color:#F2C96B}
+.ct-next .ct-next-text{color:#F5EAD3}
+html.light .ct-next{background:#FBF1D3;border-color:#EBD08F;border-left-color:#D9A233}
+html.light .ct-next .ct-next-label{color:#8A5A0B}
+html.light .ct-next .ct-next-text{color:#4A3A22}
+
+/* --- Cores de gemas por campo (card do kanban) --- */
+.ct-task-card .ct-f i{color:inherit}
+.ct-task-card .ct-f-prazo.ct-f{color:#F5A97A}
+.ct-task-card .ct-f-prazo.ct-f.is-overdue{color:#FF9AA8}
+.ct-task-card .ct-f-follow.ct-f{color:#9CC0F5}
+.ct-task-card .ct-f-resp.ct-f{color:#C9AEF2}
+.ct-task-card .ct-f-terc.ct-f{color:#7FD8DD}
+.ct-f-desc{color:rgba(255,255,255,.62)}
+html.light .ct-task-card .ct-f-prazo.ct-f{color:#B4571F}
+html.light .ct-task-card .ct-f-prazo.ct-f.is-overdue{color:#A61E34}
+html.light .ct-task-card .ct-f-follow.ct-f{color:#2F5F9F}
+html.light .ct-task-card .ct-f-resp.ct-f{color:#6F46A0}
+html.light .ct-task-card .ct-f-terc.ct-f{color:#1C7D88}
+html.light .ct-f-desc,html.light .ct-task-card .ct-f-desc{color:#7A6650!important}
+
+/* selos "Prazo atrasado" / "Acompanhar agora" claros no tema claro */
+html.light .ct-task-card .bg-rose-900\/60{background:#F8DDE0!important;border-color:#E3A3AC!important}
+html.light .ct-task-card .bg-amber-900\/50{background:#FAEBC4!important;border-color:#E7C46E!important}
+html.light .ct-task-card .bg-amber-900\/50.text-amber-200{color:#8A5A0B!important}
+
+/* --- Tiles do detalhe da missão --- */
+.ct-tile-prazo{--g:#F5A97A}.ct-tile-follow{--g:#9CC0F5}.ct-tile-resp{--g:#C9AEF2}.ct-tile-terc{--g:#7FD8DD}
+html.light .ct-tile-prazo{--g:#B4571F}html.light .ct-tile-follow{--g:#2F5F9F}html.light .ct-tile-resp{--g:#6F46A0}html.light .ct-tile-terc{--g:#1C7D88}
+.ct-tile{border:1px solid color-mix(in srgb,var(--g) 34%,transparent);border-top:3px solid var(--g);background:color-mix(in srgb,var(--g) 8%,transparent)}
+.ct-tile .ct-tile-label{color:var(--g);font-weight:700;letter-spacing:.06em}
+.ct-tile .ct-tile-val{color:var(--g)}
+html.light .ct-tile .ct-tile-val{color:color-mix(in srgb,var(--g) 82%,#2a1a0e)}
+.ct-tile .ct-tile-val.is-due{color:#FF9AA8}
+html.light .ct-tile .ct-tile-val.is-due{color:#C0293F}
+.ct-modal-desc{color:rgba(255,255,255,.78)}
+html.light .ct-modal-desc{color:#5A4836!important}
+
+/* --- Checklist em esmeralda suave --- */
+.ct-chk-count{color:#7FD4AE}
+.ct-chk-meta{color:#7FD4AE}
+html.light .ct-chk-count,html.light .ct-chk-meta{color:#2F7D5E}
+.ct-chk-track{background:rgba(118,199,161,.2)}
+html.light .ct-chk-track{background:rgba(63,154,118,.18)}
+.ct-chk-fill{background:linear-gradient(90deg,#4d9e7d,#76c7a1)}
+.ct-chk-row{border:1px solid rgba(118,199,161,.3);background:transparent;transition:background .18s,border-color .18s}
+.ct-chk-row .ct-chk-text{color:#EAF6F0}
+.ct-chk-row .ct-chk-text.is-done{text-decoration:line-through;color:#7FB89E}
+.ct-chk-box{accent-color:#3f9a76;width:1rem;height:1rem;flex-shrink:0}
+html label.ct-chk-row.ct-chk-row:hover,html.light label.ct-chk-row.ct-chk-row:hover{background:rgba(118,199,161,.15)!important;border-color:#76c7a1!important;box-shadow:none!important;transform:none!important}
+html.light .ct-chk-row{border-color:rgba(63,154,118,.34);background:rgba(255,255,255,.38)}
+html.light .ct-chk-row .ct-chk-text{color:#2B3B33}
+html.light .ct-chk-row .ct-chk-text.is-done{color:#6E9B86}
+html.light label.ct-chk-row.ct-chk-row:hover{background:rgba(76,166,125,.14)!important;border-color:#5DB28D!important}
+
+/* --- Moldura do modal sem o brilho roxo do hover global --- */
+html #ct-task-detail-modal .ct-modal-shell,html #ct-task-detail-modal .ct-modal-shell:hover{border:1px solid rgba(118,199,161,.38)!important;box-shadow:0 20px 50px rgba(0,0,0,.35)!important}
+html.light #ct-task-detail-modal .ct-modal-shell,html.light #ct-task-detail-modal .ct-modal-shell:hover{border:1px solid rgba(63,154,118,.34)!important;box-shadow:0 20px 50px rgba(58,31,18,.18)!important}
+
+/* Urgências: cartões mais compactos, hierarquia clara e rolagem discreta. */
+#urgentes-list{gap:7px!important;padding-right:4px!important;scrollbar-width:thin;}
+#urgentes-list>button{min-height:0!important;max-height:88px!important;padding:8px 9px!important;gap:7px!important;border-radius:7px!important;box-shadow:none!important;}
+#urgentes-list>div>*{min-width:0;}
+#urgentes-list p{font-size:11px!important;line-height:1.25!important;margin:0 0 3px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#urgentes-list p,#urgentes-list .urgent-subtitle,#urgentes-list span{font-size:9px!important;line-height:1.25!important;}
+#urgentes-list .urgent-check{width:21px!important;height:21px!important;flex:0 0 21px!important;border-radius:5px!important;}
+.ct-google-shortcut{width:40px;height:40px;flex:0 0 40px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid #d8a58c;background:linear-gradient(145deg,#fffaf0,#eadcc1);color:#4285f4;font-size:20px;box-shadow:0 3px 10px #24150d18;transition:transform .18s,box-shadow .18s;}
+.ct-google-shortcut:hover{transform:translateY(-1px);box-shadow:0 5px 15px #24150d26;}
+.ct-google-drawer-backdrop{position:fixed;inset:0;z-index:150;background:rgba(18,13,25,.34);backdrop-filter:blur(2px)!important;}
+.ct-google-drawer-backdrop.hidden{display:none!important;}
+.ct-google-drawer{position:fixed;z-index:151;right:0;top:0;height:100dvh;width:min(430px,94vw);display:flex;flex-direction:column;background:#f4ecd9;color:#402719;border-left:1px solid #d7b69a;box-shadow:-18px 0 45px #21130e24;transform:translateX(105%);transition:transform .24s ease;visibility:hidden;}
+.ct-google-drawer.open{transform:translateX(0);visibility:visible;}
+.ct-google-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 20px;border-bottom:1px solid #dfc6aa;background:#eee2ca;}
+.ct-google-drawer-head>div{display:flex;align-items:center;gap:12px;}.ct-google-g-mark{width:42px;height:42px;display:grid;place-items:center;background:#fffaf0;border:1px solid #ddc6a6;border-radius:12px;color:#4285f4;font-size:21px;}
+.ct-google-drawer-head h2{font:700 18px 'Cinzel',serif;margin:0;color:#48291b;}.ct-google-drawer-head p{font-size:11px;color:#8d6a53;margin:3px 0 0;}
+#ct-google-drawer-close{width:34px;height:34px;border:1px solid #d7b69a;border-radius:10px;font-size:24px;line-height:1;background:#f9f1e2;color:#69442e;}
+.ct-google-drawer-content{overflow:auto;padding:18px;flex:1;}.ct-google-drawer-content #ct-google-calendar-panel{display:block!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+.ct-google-drawer-content #ct-google-calendar-panel>div:first-child{display:block!important;}
+.ct-google-drawer-content #ct-google-calendar-panel>div:first-child>div:first-child{margin-bottom:16px;}
+.ct-google-drawer-content #ct-google-calendar-panel .flex.flex-wrap.gap-2{display:flex;flex-wrap:wrap;}
+.ct-google-drawer-content #ct-gcal-status{color:#75563f!important;line-height:1.5;}
+.ct-google-drawer-content #ct-gcal-settings{border-color:#dfc6aa!important;}
+.ct-google-drawer-content #ct-gcal-client-id{background:#fffaf0!important;color:#402719!important;border-color:#d7b69a!important;}
+.ct-google-drawer-content #ct-gcal-settings label{color:#69442e!important;}
+@media(max-width:640px){.ct-google-shortcut{width:36px;height:36px;flex-basis:36px}.ct-google-drawer-content{padding:14px;}}

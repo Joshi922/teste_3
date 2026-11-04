@@ -1,0 +1,22 @@
+/* Oráculo: safira suave, com contraste e sem brilho agressivo */
+.oracle-launch,.oracle-button,[onclick*="generateAIReport"]{background:linear-gradient(135deg,#dce8fb,#c4d7f3)!important;border:1px solid #9db8e5!important;color:#29466f!important;box-shadow:0 3px 12px #547eb52b!important;position:relative}
+.oracle-launch:hover,.oracle-button:hover,[onclick*="generateAIReport"]:hover{background:linear-gradient(135deg,#cfdef7,#b8cff0)!important;box-shadow:0 5px 16px #547eb545!important}
+.oracle-launch:after,.oracle-button:after,[onclick*="generateAIReport"]:after{content:none!important}
+/* Letreiro do relógio: faixa destacada, legível em ambos os temas */
+.ct-astro-clock{display:inline-flex;align-items:center;justify-content:center;gap:.08em;padding:.16em .34em;border:1px solid #9bb8ed80;border-radius:18px;background:linear-gradient(135deg,#293d68c9,#394a76b8);color:#fff!important;text-shadow:0 0 12px #b7caff9c,0 2px 2px #10172d!important;box-shadow:0 0 0 4px #9db9ef12,0 8px 22px #10172d25,inset 0 1px #ffffff2b!important}
+.ct-astro-day,.ct-astro-phase{color:#f0f3ff!important;text-shadow:0 1px 3px #10172d99}
+.ct-astro .ct-body{color:#f0effa}
+.ct-astro .ct-in,.ct-astro .ct-deg,.ct-astro .ct-house{opacity:.92}
+#portal-view .ct-astro-clock{background:linear-gradient(135deg,#2e4778,#45629a)!important;border-color:#b1c9f3!important;color:#fff!important}
+#portal-view .ct-astro-day,#portal-view .ct-astro-phase{color:#f5f6ff!important}
+#portal-view .ct-body{color:#f0effa!important;border-color:#aab7e270!important}
+/* Planetas em cores tradicionais */
+.ct-astro{--ct-sun:#ffc83d;--ct-moon:#e9edf5;--ct-mars:#e53945;--ct-mercury:#b4d334;--ct-jupiter:#7162e8;--ct-venus:#f0a9c5;--ct-saturn:#8b72ad}
+html.light .ct-astro,html.hub-light .ct-astro{--ct-sun:#c28a00;--ct-moon:#8792a5;--ct-mars:#c92f43;--ct-mercury:#718e18;--ct-jupiter:#5140b5;--ct-venus:#c76b96;--ct-saturn:#55416f}
+/* Cada signo recebe cor própria; mantém a classe elemental original como fallback */
+.ct-astro .ct-sign{font-weight:700!important;text-shadow:0 0 8px currentColor!important}
+.ct-astro .sign-aries{color:#f04452!important}.ct-astro .sign-taurus{color:#5f9c55!important}.ct-astro .sign-gemini{color:#e6c641!important}.ct-astro .sign-cancer{color:#a9c8e8!important}.ct-astro .sign-leo{color:#f5b82e!important}.ct-astro .sign-virgo{color:#9a8064!important}.ct-astro .sign-libra{color:#e9a9c7!important}.ct-astro .sign-scorpio{color:#d64262!important}.ct-astro .sign-sagittarius{color:#9162d8!important}.ct-astro .sign-capricorn{color:#777080!important}.ct-astro .sign-aquarius{color:#4d9ec2!important}.ct-astro .sign-pisces{color:#55bfc4!important}
+html.light .ct-astro-clock,html.hub-light .ct-astro-clock{background:linear-gradient(135deg,#e5edff,#d5e3fa)!important;color:#302b50!important;text-shadow:0 1px 2px #fff,0 0 10px #8a9fe655!important;border-color:#aabbe0!important;box-shadow:0 0 0 4px #7b8fc812,0 8px 22px #35234a12,inset 0 1px #ffffff!important}
+html.light .ct-astro-day,html.hub-light .ct-astro-day,html.light .ct-astro-phase,html.hub-light .ct-astro-phase{color:#403650!important;text-shadow:none!important}
+html.light #portal-view .ct-astro-clock,html.hub-light #portal-view .ct-astro-clock{background:linear-gradient(135deg,#e5edff,#d5e3fa)!important;color:#302b50!important}
+html.light #portal-view .ct-astro-day,html.hub-light #portal-view .ct-astro-day,html.light #portal-view .ct-astro-phase,html.hub-light #portal-view .ct-astro-phase{color:#403650!important}

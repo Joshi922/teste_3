@@ -1,0 +1,3 @@
+        // --- TEMA ---
+        function applyTheme(t){document.documentElement.classList.toggle('light',t==='light');document.getElementById('theme-icon').className='fas '+(t==='light'?'fa-sun':'fa-moon');try{localStorage.setItem('ct-theme',t)}catch(e){};['ctonia-library-frame','ctonia-manager-frame','ctonia-academia-frame','ctonia-medicoes-frame'].forEach(id=>{try{const d=document.getElementById(id).contentDocument;if(d){d.documentElement.classList.toggle('light',t==='light');d.documentElement.classList.toggle('dark',t!=='light')}}catch(e){}})}
+        function toggleTheme(){applyTheme(document.documentElement.classList.contains('light')?'dark':'light')}

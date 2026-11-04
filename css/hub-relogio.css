@@ -1,0 +1,74 @@
+/* Relógio: preservar o letreiro/pílula original e alterar somente os algarismos */
+.ct-astro-clock{background:linear-gradient(135deg,#e5edff,#d5e3fa)!important;border:1px solid #aabbe0!important;border-radius:18px!important;box-shadow:0 0 0 4px #7b8fc812,0 8px 22px #35234a12,inset 0 1px #ffffff!important;color:#1A233B!important;text-shadow:0 0 5px #1A233B55,0 0 12px #7188bd80!important}
+.ct-astro-clock .ct-h,.ct-astro-clock .ct-colon,.ct-astro-clock .ct-m{color:#1A233B!important;text-shadow:0 0 5px #1A233B55,0 0 12px #7188bd80!important}
+html.light .ct-astro-clock,html.hub-light .ct-astro-clock{color:#1A233B!important;text-shadow:0 0 5px #1A233B55,0 0 12px #7188bd80!important}
+html.light .ct-astro-clock .ct-h,html.light .ct-astro-clock .ct-colon,html.light .ct-astro-clock .ct-m,html.hub-light .ct-astro-clock .ct-h,html.hub-light .ct-astro-clock .ct-colon,html.hub-light .ct-astro-clock .ct-m{color:#1A233B!important;text-shadow:0 0 5px #1A233B55,0 0 12px #7188bd80!important}
+html:not(.light):not(.hub-light) .ct-astro-clock,html:not(.light):not(.hub-light) .ct-astro-clock .ct-h,html:not(.light):not(.hub-light) .ct-astro-clock .ct-colon,html:not(.light):not(.hub-light) .ct-astro-clock .ct-m{color:#DDD7B8!important;text-shadow:0 0 5px #DDD7B899,0 0 13px #DDD7B866!important}
+/* Tema claro: dados astrológicos e botão de cidade usam o mesmo tom do dia da semana */
+html.light .ct-astro .ct-body,html.hub-light .ct-astro .ct-body{color:#24375D!important}
+html.light .ct-astro .ct-body .ct-in,html.hub-light .ct-astro .ct-body .ct-in,html.light .ct-astro .ct-body .ct-deg,html.hub-light .ct-astro .ct-body .ct-deg,html.light .ct-astro .ct-body .ct-house,html.hub-light .ct-astro .ct-body .ct-house{color:#24375D!important;opacity:1!important}
+html.light .ct-astro .ct-astro-city,html.hub-light .ct-astro .ct-astro-city{color:#24375D!important;border-color:#24375D55!important;background:#ffffff80!important}
+html.light .ct-astro .ct-astro-city .ct-pin,html.hub-light .ct-astro .ct-astro-city .ct-pin,html.light .ct-astro .ct-astro-city .ct-caret,html.hub-light .ct-astro .ct-astro-city .ct-caret{color:#24375D!important}
+html.light .ct-astro .ct-astro-day,html.hub-light .ct-astro .ct-astro-day{color:#24375D!important}
+
+/* Relogio sem moldura em ambos os temas; apenas os numeros recebem cor e glow. */
+.ct-astro-clock, #portal-view .ct-astro-clock {
+  background: transparent !important; border: 0 !important; outline: 0 !important;
+  box-shadow: none !important; border-radius: 0 !important; padding: 0 !important;
+  color: #3a1f12 !important; text-shadow: 0 0 5px #1A233B88, 0 0 12px #1A233B55 !important;
+}
+.ct-astro-clock .ct-h, .ct-astro-clock .ct-colon, .ct-astro-clock .ct-m,
+#portal-view .ct-astro-clock .ct-h, #portal-view .ct-astro-clock .ct-colon, #portal-view .ct-astro-clock .ct-m {
+  color: #3a1f12 !important; text-shadow: 0 0 5px #1A233B88, 0 0 12px #1A233B55 !important;
+}
+html:not(.light):not(.hub-light) .ct-astro-clock,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock {
+  background: transparent !important; border: 0 !important; outline: 0 !important;
+  box-shadow: none !important; border-radius: 0 !important; padding: 0 !important;
+  color: #ffbea6 !important; text-shadow: 0 0 5px #DDD7B8aa, 0 0 13px #DDD7B888 !important;
+}
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-h,
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-colon,
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-m,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-h,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-colon,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-m {
+  color: #ffbea6 !important; text-shadow: 0 0 5px #DDD7B8aa, 0 0 13px #DDD7B888 !important;
+}
+
+/* Horario sem qualquer fundo/moldura; tipografia igual ao titulo Ctônia do hub (Cinzel). */
+.ct-astro-clock, #portal-view .ct-astro-clock, .ct-astro .ct-astro-clock {
+  display:inline-flex !important; align-items:center !important; justify-content:center !important;
+  font-family:'Cinzel',serif !important; font-weight:700 !important;
+  background:transparent !important; background-color:transparent !important; background-image:none !important;
+  border:0 !important; outline:0 !important; box-shadow:none !important;
+  border-radius:0 !important; padding:0 !important; margin:0 !important;
+  color:#3a1f12 !important; -webkit-text-fill-color:#3a1f12 !important;
+  text-shadow:0 0 5px #1A233B88, 0 0 12px #1A233B55 !important;
+}
+.ct-astro-clock::before, .ct-astro-clock::after, #portal-view .ct-astro-clock::before, #portal-view .ct-astro-clock::after {
+  content:none !important; display:none !important; background:transparent !important; box-shadow:none !important;
+}
+.ct-astro-clock .ct-h, .ct-astro-clock .ct-colon, .ct-astro-clock .ct-m,
+#portal-view .ct-astro-clock .ct-h, #portal-view .ct-astro-clock .ct-colon, #portal-view .ct-astro-clock .ct-m {
+  font-family:'Cinzel',serif !important; color:#3a1f12 !important; -webkit-text-fill-color:#3a1f12 !important;
+  background:transparent !important; border:0 !important; box-shadow:none !important;
+  text-shadow:0 0 5px #1A233B88, 0 0 12px #1A233B55 !important;
+}
+html:not(.light):not(.hub-light) .ct-astro-clock,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock {
+  background:transparent !important; background-color:transparent !important; background-image:none !important;
+  border:0 !important; outline:0 !important; box-shadow:none !important; border-radius:0 !important; padding:0 !important;
+  color:#ffbea6 !important; -webkit-text-fill-color:#ffbea6 !important;
+  text-shadow:0 0 5px #DDD7B8aa, 0 0 13px #DDD7B888 !important;
+}
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-h,
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-colon,
+html:not(.light):not(.hub-light) .ct-astro-clock .ct-m,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-h,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-colon,
+html:not(.light):not(.hub-light) #portal-view .ct-astro-clock .ct-m {
+  font-family:'Cinzel',serif !important; color:#ffbea6 !important; -webkit-text-fill-color:#ffbea6 !important;
+  background:transparent !important; border:0 !important; box-shadow:none !important;
+  text-shadow:0 0 5px #DDD7B8aa, 0 0 13px #DDD7B888 !important;
+}

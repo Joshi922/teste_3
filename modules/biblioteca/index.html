@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1B132B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ctônia Web Reader Pro</title>
+    
+    <!-- Fontes Místicas: Cinzel para Títulos (Ancestralidade), Montserrat para Textos (Legibilidade/Modernidade) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+    
+    <!-- Bibliotecas Fixadas e Estáveis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.90/dist/epub.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ctonia: {
+                            abyssal: '#1B132B',
+                            indigo: '#252B50',
+                            nightsky: '#4A6E8A',
+                            darkmint: '#1E4D4F',
+                            mystic: '#3B8C88',
+                            luminous: '#7BF0C3',
+                            magenta: '#E85A71',
+                            salmon: '#FFBEA6'
+                        },
+                        kindle: { blue: '#7BF0C3', dark: '#1B132B', border: '#4A6E8A' },
+                        hl: {
+                            red: '#FF4D6D', orange: '#FF9F43', yellow: '#FFE14D', green: '#34E89E',
+                            cyan: '#22D3EE', blue: '#5B8CFF', purple: '#B36BFF', pink: '#FF5FC8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        serif: ['Cinzel', 'ui-serif', 'Cambria', 'Times New Roman', 'serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="../../css/library.css">
+<script>(function(){try{var light=!!(parent&&parent.document&&parent.document.documentElement.classList.contains('light'));document.documentElement.classList.toggle('hub-light',light);document.documentElement.classList.toggle('hub-dark',!light);}catch(e){document.documentElement.classList.add('hub-dark');}})();</script>
+<script>(function(){function sync(){try{var light=!!(parent&&parent.document&&parent.document.documentElement.classList.contains('light'));document.documentElement.classList.toggle('hub-light',light);document.documentElement.classList.toggle('hub-dark',!light);}catch(e){}}sync();try{new MutationObserver(sync).observe(parent.document.documentElement,{attributes:true,attributeFilter:['class']});}catch(e){}})();</script>
+
+
+
+
+<link rel="stylesheet" href="../../css/astro.css">
+<script src="../../js/core/astro.js"></script><link rel="stylesheet" href="../../css/themes.css">
+</head>
+<body class="theme-dark h-screen w-screen overflow-hidden flex flex-col transition-colors duration-300">
+
+    <!-- TELA DE BOAS-VINDAS -->
+    <div id="splash" onclick="hideSplash()">
+        <h1 class="splash-title">CTÔNIA</h1>
+        <div class="splash-line"></div>
+        <p class="text-ctonia-luminous font-body tracking-[0.3em] uppercase text-xs mt-6 opacity-0 animate-[splashIn_2s_ease_1.5s_forwards]">A Biblioteca Abissal</p>
+    </div>
+
+    <!-- MAIN LIBRARY VIEW -->
+    <div id="main-view" class="flex-1 flex flex-col h-full bg-transparent relative">
+        <div id="header-main" class="px-3 pt-3 pb-2 flex items-center justify-between bg-ctonia-indigo/80 backdrop-blur-md z-10 border-b-2 border-ctonia-magenta gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+                <button onclick="returnToCtoniaHub()" aria-label="Voltar ao Ctônia Hub" title="Voltar ao Ctônia Hub" class="hub-back-button shrink-0 inline-flex items-center gap-1 rounded-full px-3 py-2 font-bold text-sm border transition-colors">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/><path d="M9 12h12"/></svg><span class="hub-back-label">Hub</span>
+                </button>
+                <h1 id="main-header-title" class="text-xl sm:text-2xl font-bold font-serif tracking-widest text-ctonia-salmon truncate shrink-0">COLEÇÕES</h1>
+                <div data-ct-astro aria-label="Relógio e painel astrológico"></div>
+            </div>
+            <div class="flex items-center gap-3 text-ctonia-luminous shrink-0">
+                
+                <label for="file-upload" aria-label="Adicionar arquivo" title="Adicionar arquivo" class="cursor-pointer p-1 hover:text-ctonia-salmon transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></label>
+                <input id="file-upload" type="file" accept=".epub,.pdf" class="hidden" multiple onchange="handleFileUpload(event)">
+                <button onclick="openDisplayMenu()" aria-label="Opções de exibição" title="Opções de exibição" class="p-1 hover:text-ctonia-salmon transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16M8 4 4 7l4 3M16 14l4 3-4 3"/></svg></button>
+            </div>
+        </div>
+
+        <div id="header-inner-collection" class="px-4 py-3 flex items-center gap-3 bg-ctonia-indigo/80 backdrop-blur-md z-10 hidden border-b border-ctonia-magenta">
+            <button onclick="backToCollections()" class="p-2 -ml-2 rounded-full text-ctonia-luminous hover:bg-ctonia-abyssal transition"><i class="ph ph-caret-left text-2xl"></i></button>
+            <h1 id="inner-collection-title" class="text-xl font-bold font-serif truncate text-ctonia-salmon flex-1 min-w-0">Coleção</h1>
+            <button onclick="openDisplayMenu()" aria-label="Organizar títulos" title="Organizar títulos" class="p-2 -mr-2 rounded-full text-ctonia-luminous hover:bg-ctonia-abyssal transition"><i class="ph ph-sort-ascending text-2xl"></i></button>
+        </div>
+
+        <div id="search-container" class="relative px-4 pb-3 pt-3 bg-ctonia-indigo/80 backdrop-blur-md z-10 border-b border-ctonia-darkmint">
+            <div class="relative flex items-center w-full h-10 rounded-full border border-ctonia-nightsky bg-ctonia-abyssal overflow-hidden focus-within:border-ctonia-luminous transition-colors shadow-inner">
+                <i class="ph ph-magnifying-glass text-ctonia-luminous text-xl ml-3"></i>
+                <input type="text" id="library-search" autocomplete="off" onfocus="openFilterPanel()" onclick="openFilterPanel()" oninput="onLibrarySearch(this.value)" placeholder="Pesquisar nas profundezas..." class="w-full h-full px-3 text-sm outline-none bg-transparent placeholder-ctonia-nightsky text-ctonia-salmon font-body">
+            </div>
+        
+            <div id="filter-bar" class="hidden"></div>
+            <div id="filter-panel" class="hidden" role="dialog" aria-label="Filtros da biblioteca"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 bg-transparent">
+            <div id="collections-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="books-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden"></div>
+            <div id="books-list" class="flex flex-col hidden pb-4"></div>
+            <div id="no-results" class="hidden flex-col items-center justify-center text-center mt-12 px-6 text-ctonia-nightsky">
+                <i class="ph-fill ph-funnel text-5xl mb-4 text-ctonia-mystic opacity-60"></i>
+                <p class="text-base text-ctonia-salmon font-serif">Nenhum livro com esses filtros.</p>
+                <p class="text-xs mt-2 text-ctonia-nightsky">Remova um filtro ou apague o texto da busca para ampliar o resultado.</p>
+            </div>
+            <div id="empty-state" class="hidden flex-col items-center justify-center h-full text-ctonia-nightsky mt-10">
+                <i class="ph-fill ph-book-open text-6xl mb-4 text-ctonia-mystic opacity-50"></i>
+                <p class="text-base text-ctonia-salmon font-serif">O domínio está vazio.</p>
+                <p class="text-xs mt-2 italic text-ctonia-luminous/70">Invoque novos pergaminhos através do <i class="ph ph-plus text-sm"></i></p>
+            </div>
+        </div>
+
+        <div id="bottom-nav" class="bg-ctonia-indigo/90 border-t-2 border-ctonia-magenta px-6 py-2 flex justify-around items-center pb-safe z-20 shrink-0">
+            <button type="button" onclick="closeMore(); backToCollections()" aria-label="Biblioteca" class="flex flex-col items-center text-ctonia-luminous cursor-pointer w-20 hover:text-white transition-colors">
+                <i class="ph-fill ph-books text-[26px]"></i><span class="text-[10px] mt-1 font-bold tracking-widest uppercase">Biblioteca</span>
+            </button>
+            <button type="button" onclick="openMore()" aria-label="Mais" class="flex flex-col items-center text-ctonia-nightsky cursor-pointer w-20 hover:text-ctonia-salmon transition-colors">
+                <i class="ph-fill ph-compass-tool text-[26px]"></i><span class="text-[10px] mt-1 font-bold tracking-widest uppercase">Mais</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- PAINEL MAIS (Oráculo) -->
+    <div id="more-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[88]" onclick="closeMore()"></div>
+    <div id="more-panel" class="slide-panel-right fixed inset-y-0 right-0 w-full sm:max-w-md bg-ctonia-abyssal border-l border-ctonia-magenta z-[90] shadow-2xl flex flex-col text-ctonia-salmon">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50">
+            <h2 class="text-2xl font-bold font-serif tracking-widest text-ctonia-luminous"><i class="ph-fill ph-compass-tool mr-2"></i> ORÁCULO</h2>
+            <button onclick="closeMore()" class="p-2 -mr-2 rounded-full hover:bg-ctonia-magenta/30 hover:text-white transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div id="more-body" class="flex-1 overflow-y-auto font-body bg-transparent scrollbar-thin scrollbar-thumb-ctonia-mystic"></div>
+    </div>
+
+    <div id="drive-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[120] flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal border-2 border-ctonia-mystic rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col overflow-hidden shadow-[0_0_30px_rgba(59,140,136,0.4)] text-ctonia-salmon">
+            <div class="px-5 py-4 border-b border-ctonia-darkmint bg-ctonia-indigo/80 flex justify-between items-center"><h3 class="font-bold text-lg font-serif text-ctonia-luminous"><i class="ph-fill ph-cloud mr-2"></i>Nuvem Ancestral</h3><button onclick="closeFolderPicker()" class="hover:text-ctonia-magenta"><svg aria-hidden="true" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+            <div id="drive-browse" class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-ctonia-mystic"></div>
+        </div>
+    </div>
+
+    <!-- DISPLAY MENU -->
+    <div id="display-menu-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex flex-col justify-end transition-opacity opacity-0" onclick="closeDisplayMenu()">
+        <div id="display-menu-content" class="bg-ctonia-indigo border-t-2 border-ctonia-magenta w-full rounded-t-2xl pb-6 max-h-[88vh] overflow-y-auto text-ctonia-salmon shadow-[0_-10px_30px_rgba(232,90,113,0.2)]" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center px-5 py-4 border-b border-ctonia-darkmint">
+                <h2 class="text-lg font-serif font-bold text-ctonia-luminous">Exibir</h2>
+                <button onclick="closeDisplayMenu()" class="text-ctonia-magenta font-bold text-sm uppercase tracking-wider hover:text-white transition-colors">Concluído</button>
+            </div>
+            <div class="py-2 px-2">
+                <button onclick="setDisplayMode('grid')" class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-ctonia-abyssal rounded-lg transition-colors group">
+                    <div class="flex items-center gap-4"><i class="ph-fill ph-grid-four text-2xl text-ctonia-nightsky group-hover:text-ctonia-luminous"></i><span class="text-[16px] font-bold">Grade</span></div>
+                    <i id="check-grid" class="ph-bold ph-check text-ctonia-luminous text-xl hidden drop-shadow-[0_0_5px_#7BF0C3]"></i>
+                </button>
+                <button onclick="setDisplayMode('list')" class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-ctonia-abyssal rounded-lg transition-colors group mt-1">
+                    <div class="flex items-center gap-4"><i class="ph-fill ph-list-dashes text-2xl text-ctonia-nightsky group-hover:text-ctonia-luminous"></i><span class="text-[16px] font-bold">Lista</span></div>
+                    <i id="check-list" class="ph-bold ph-check text-ctonia-luminous text-xl hidden drop-shadow-[0_0_5px_#7BF0C3]"></i>
+                </button>
+                <button onclick="setDisplayMode('collections')" class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-ctonia-abyssal rounded-lg transition-colors group mt-1">
+                    <div class="flex items-center gap-4"><i class="ph-fill ph-squares-four text-2xl text-ctonia-nightsky group-hover:text-ctonia-luminous"></i><span class="text-[16px] font-bold">Coleções</span></div>
+                    <i id="check-collections" class="ph-bold ph-check text-ctonia-luminous text-xl hidden drop-shadow-[0_0_5px_#7BF0C3]"></i>
+                </button>
+            </div>
+            <div class="px-5 pt-4 pb-1 border-t border-ctonia-darkmint mt-2"><h3 class="text-sm font-serif font-bold text-ctonia-luminous">Organizar por</h3></div>
+            <div id="sort-options" class="px-2 pb-2"></div>
+        </div>
+    </div>
+
+    <!-- CONTEXT MENU & MODALS -->
+    <div id="context-menu" class="hidden fixed bg-ctonia-indigo rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-ctonia-mystic z-50 w-56 py-2 text-sm text-ctonia-salmon overflow-hidden">
+        <button onclick="openEditModal()" class="w-full text-left px-4 py-3 hover:bg-ctonia-mystic/30 hover:text-ctonia-luminous flex items-center gap-3 transition-colors"><i class="ph-fill ph-pencil-simple text-lg"></i> Alterar Essência</button>
+        <div class="h-px bg-ctonia-darkmint mx-2 my-1"></div>
+        <button onclick="deleteBook()" class="w-full text-left px-4 py-3 hover:bg-ctonia-magenta/20 hover:text-white text-ctonia-magenta flex items-center gap-3 transition-colors font-bold"><i class="ph-fill ph-skull text-lg"></i> Banir Pergaminho</button>
+    </div>
+
+    <div id="edit-modal-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal border border-ctonia-luminous rounded-xl w-full max-w-sm max-h-[92vh] flex flex-col overflow-hidden shadow-[0_0_30px_rgba(123,240,195,0.2)]">
+            <div class="px-5 py-4 border-b border-ctonia-indigo bg-ctonia-indigo/80"><h3 class="font-bold text-lg font-serif text-ctonia-luminous">Ajustar Essência</h3></div>
+            <div class="p-5 flex flex-col gap-4 overflow-y-auto">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Título</label>
+                    <input type="text" id="edit-title" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Autor</label>
+                    <input type="text" id="edit-author" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Coleção</label>
+                    <input type="text" id="edit-collection" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Gênero</label>
+                    <input type="text" id="edit-genre" placeholder="Ex: Religião" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous placeholder-ctonia-nightsky/50">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Subgênero</label>
+                    <input type="text" id="edit-subgenre" placeholder="Separe por vírgula" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous placeholder-ctonia-nightsky/50">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Série</label>
+                    <input type="text" id="edit-series" placeholder="Ex: Umbanda Esotérica" class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous placeholder-ctonia-nightsky/50">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase tracking-wider text-ctonia-nightsky">Volume</label>
+                    <input type="text" id="edit-volume" placeholder="Único, I, II, 1, 2..." class="w-full bg-ctonia-indigo border border-ctonia-darkmint text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-ctonia-luminous placeholder-ctonia-nightsky/50">
+                </div>
+            </div>
+            <div class="px-5 py-4 border-t border-ctonia-indigo bg-ctonia-indigo/40 flex justify-end gap-3">
+                <button onclick="closeEditModal()" class="px-4 py-2 text-sm font-bold text-ctonia-salmon hover:text-white transition-colors">Cancelar</button>
+                <button onclick="saveBookProperties()" class="px-5 py-2 text-sm font-bold text-ctonia-abyssal bg-ctonia-luminous hover:bg-white rounded shadow-[0_0_10px_rgba(123,240,195,0.4)] transition-colors">Transmutar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- READER VIEW -->
+    <div id="reader-view" class="fixed inset-0 z-[70] hidden flex flex-col bg-transparent reader-ui-hidden">
+        
+        <!-- Top Toolbar -->
+        <div class="top-bar reader-ui-bar absolute top-0 left-0 right-0 shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-[80] flex items-center justify-between px-2 py-2">
+            <div class="flex items-center">
+                <button onclick="closeReader()" aria-label="Voltar" title="Voltar" class="p-3 reader-icon-button rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button onclick="togglePanel('toc-panel')" aria-label="Índice" title="Índice" class="p-3 reader-icon-button rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"/></svg></button>
+            </div>
+            <div class="flex-1 flex justify-center"><span id="reader-book-title" class="text-sm font-bold truncate font-serif text-white tracking-wider"></span></div>
+            <div class="flex items-center gap-1">
+                <button onclick="openSettingsSheet()" aria-label="Formatação" title="Formatação" class="p-3 reader-icon-button rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 28 24" width="27" height="25" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20 8 4l6 16M4.2 14h7.6M16 20l4-11 4 11M17.5 16h5"/></svg></button>
+                <button onclick="togglePanel('search-panel')" aria-label="Pesquisar" title="Pesquisar" class="p-3 reader-icon-button rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
+                <button onclick="togglePanel('notes-panel'); renderNotesList();" class="p-3 text-ctonia-salmon hover:text-white hover:bg-ctonia-abyssal/50 rounded-full relative transition-colors">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v17H5zM8 4V2h8v2M8 9h8M8 13h8M8 17h5"/></svg><span id="notes-badge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-ctonia-magenta rounded-full border-2 border-ctonia-indigo shadow-[0_0_5px_rgba(232,90,113,0.8)]"></span>
+                </button>
+                <button onclick="addBookmark()" class="p-3 text-ctonia-salmon hover:text-white hover:bg-ctonia-abyssal/50 rounded-full transition-colors"><svg id="bookmark-icon" aria-hidden="true" viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4z"/></svg></button>
+            </div>
+        </div>
+
+        <!-- Rendering Area -->
+        <div class="flex-1 w-full relative overflow-hidden" id="reader-container">
+            <div id="viewer" class="absolute inset-0 z-10" style="perspective: 1500px;"></div>
+            <div id="marker-layer" class="absolute inset-0 z-[30] pointer-events-none"></div>
+            <button id="pin-fab" onclick="openPinSheet()" class="hidden absolute bottom-1 right-3 z-[66] items-center gap-1 px-3 py-1.5 bg-ctonia-indigo/80 backdrop-blur border border-ctonia-luminous rounded-full font-bold text-lg shadow-[0_0_15px_rgba(123,240,195,0.3)] text-ctonia-luminous transition-transform hover:scale-105"><svg aria-hidden="true" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 5 5-4 1-4 4-1 5-2-2-3 5-1-1 5-3-2-2 5-1 4-4z"/><path d="m4 20 5-5"/></svg><span id="pin-count">0</span></button>
+            
+            <div class="minimal-footer hidden absolute bottom-2 left-0 right-0 z-[65] px-6 text-[11px] font-body font-bold tracking-widest pointer-events-none">
+                <span id="min-footer-left">Invocando...</span>
+                <span id="min-footer-right">0%</span>
+            </div>
+        </div>
+
+        <!-- Bottom Toolbar -->
+        <div class="bottom-bar reader-ui-bar absolute bottom-0 left-0 right-0 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-[80] p-4 pb-safe flex flex-col gap-3">
+            <div class="text-center text-xs font-bold text-ctonia-salmon font-body tracking-wider uppercase" id="scrubber-text">Posição -- de -- • --%</div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-ctonia-nightsky font-bold" id="scrubber-min">1</span>
+                <input type="range" id="reader-scrubber" min="0" max="100" value="0" class="flex-1" onchange="onScrubberChange(this.value)">
+                <span class="text-xs text-ctonia-nightsky font-bold" id="scrubber-max">100</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS (Aa) DRAWER -->
+    <div id="settings-sheet-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[95]" onclick="closeSettingsSheet()"></div>
+    <div id="settings-sheet" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-ctonia-indigo border-t-2 border-ctonia-magenta rounded-t-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.8)] z-[100] flex flex-col h-[55vh] max-h-[450px] text-ctonia-salmon">
+        <div class="flex border-b border-ctonia-darkmint bg-ctonia-abyssal/50 rounded-t-2xl overflow-hidden">
+            <button class="flex-1 py-4 text-[13px] uppercase tracking-widest font-bold border-b-[3px] border-ctonia-luminous text-ctonia-luminous bg-ctonia-indigo/50 transition-colors" id="tab-btn-fonte" onclick="switchSettingsTab('fonte')">Fonte</button>
+            <button class="flex-1 py-4 text-[13px] uppercase tracking-widest font-bold text-ctonia-nightsky border-b-[3px] border-transparent hover:text-ctonia-salmon transition-colors" id="tab-btn-layout" onclick="switchSettingsTab('layout')">Layout</button>
+            <button class="flex-1 py-4 text-[13px] uppercase tracking-widest font-bold text-ctonia-nightsky border-b-[3px] border-transparent hover:text-ctonia-salmon transition-colors" id="tab-btn-mais" onclick="switchSettingsTab('mais')">Mais</button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-6 py-6 scrollbar-thin scrollbar-thumb-ctonia-mystic">
+            <!-- TAB FONTE -->
+            <div id="tab-fonte" class="block">
+                <div class="mb-6">
+                    <label class="block text-sm font-bold mb-3 text-ctonia-luminous font-serif tracking-wider">Família de Fonte</label>
+                    <div class="relative">
+                        <select id="setting-font" onchange="updateSet('font', this.value)" class="w-full p-4 border border-ctonia-darkmint rounded-xl outline-none bg-ctonia-abyssal text-white font-serif text-[17px] appearance-none focus:border-ctonia-luminous shadow-inner transition-colors">
+                            <option value="Baskerville" class="font-serif">Baskerville (Clássica)</option>
+                            <option value="Bookerly" class="font-serif">Bookerly (Padrão)</option>
+                            <option value="Georgia" class="font-serif">Georgia</option>
+                            <option value="Cinzel" class="font-serif">Cinzel (Ancestral)</option>
+                            <option value="Montserrat" class="font-sans">Montserrat (Moderna)</option>
+                            <option value="Outfit" class="font-sans">Outfit (Leve)</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-ctonia-luminous pointer-events-none"></i>
+                    </div>
+                </div>
+                <div class="mb-2 bg-ctonia-abyssal/50 p-4 rounded-xl border border-ctonia-darkmint">
+                    <label class="block text-sm font-bold mb-4 text-ctonia-luminous font-serif tracking-wider text-center">Tamanho da Runa</label>
+                    <div class="flex items-center gap-5 px-2">
+                        <span class="text-[13px] font-serif text-white">Aa</span>
+                        <input type="range" id="setting-size" min="1" max="10" value="3" onchange="updateSet('size', parseInt(this.value))" class="flex-1 accent-ctonia-luminous h-1 bg-ctonia-nightsky rounded-full">
+                        <span class="text-[24px] font-serif text-white">Aa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB LAYOUT -->
+            <div id="tab-layout" class="hidden">
+                <div class="mb-6">
+                    <label class="block text-sm font-bold mb-3 text-ctonia-luminous font-serif tracking-wider">Aura da Página</label>
+                    <div class="flex gap-4 justify-center bg-ctonia-abyssal/50 p-4 rounded-xl border border-ctonia-darkmint">
+                        <button onclick="updateSet('theme', 'light')" class="w-14 h-14 rounded-full border-[3px] border-ctonia-mystic bg-[#f8fafc] theme-btn shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-110 transition-transform" data-theme="light"></button>
+                        <button onclick="updateSet('theme', 'sepia')" class="w-14 h-14 rounded-full border-[3px] border-transparent bg-[#3f3126] theme-btn shadow-[0_0_15px_rgba(140,106,77,0.3)] hover:scale-110 transition-transform" data-theme="sepia"></button>
+                        <button onclick="updateSet('theme', 'dark')" class="w-14 h-14 rounded-full border-[3px] border-transparent bg-[#1B132B] theme-btn shadow-[0_0_15px_rgba(37,43,80,0.5)] hover:scale-110 transition-transform flex items-center justify-center" data-theme="dark"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#252B50] to-[#1B132B]"></div></button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-6 pt-4 border-t border-ctonia-nightsky/30">
+                    <div>
+                        <div class="font-bold text-[15px] text-white">Rolagem Contínua</div>
+                        <div class="text-[12px] text-ctonia-nightsky mt-1">Deslize pelas eras verticalmente.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shadow-inner rounded-full">
+                        <input type="checkbox" id="setting-scroll" onchange="updateSet('scroll', this.checked)" class="sr-only peer">
+                        <div class="w-12 h-6 bg-ctonia-abyssal border border-ctonia-darkmint peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-ctonia-nightsky after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ctonia-luminous peer-checked:after:bg-white"></div>
+                    </label>
+                </div>
+                <div class="mb-6 pt-4 border-t border-ctonia-nightsky/30">
+                    <label class="block text-sm font-bold mb-3 text-ctonia-luminous font-serif tracking-wider">Margens (Limites)</label>
+                    <div class="flex gap-3">
+                        <button onclick="updateSet('margin', 'narrow')" class="flex-1 py-3 border border-ctonia-darkmint bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 rounded-xl margin-btn transition-colors" data-margin="narrow"><i class="ph-bold ph-list text-2xl text-white"></i></button>
+                        <button onclick="updateSet('margin', 'normal')" class="flex-1 py-3 border border-ctonia-darkmint bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 rounded-xl margin-btn transition-colors" data-margin="normal"><i class="ph-bold ph-list text-2xl px-2 text-white"></i></button>
+                        <button onclick="updateSet('margin', 'wide')" class="flex-1 py-3 border border-ctonia-darkmint bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 rounded-xl margin-btn transition-colors" data-margin="wide"><i class="ph-bold ph-list text-2xl px-6 text-white"></i></button>
+                    </div>
+                </div>
+                <div class="mb-2 pt-4 border-t border-ctonia-nightsky/30">
+                    <label class="block text-sm font-bold mb-3 text-ctonia-luminous font-serif tracking-wider">Alinhamento</label>
+                    <div class="flex gap-3">
+                        <button onclick="updateSet('align', 'justify')" class="flex-1 py-3 border border-ctonia-darkmint bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 rounded-xl align-btn transition-colors" data-align="justify"><i class="ph-bold ph-text-align-justify text-2xl text-white"></i></button>
+                        <button onclick="updateSet('align', 'left')" class="flex-1 py-3 border border-ctonia-darkmint bg-ctonia-abyssal hover:bg-ctonia-nightsky/30 rounded-xl align-btn transition-colors" data-align="left"><i class="ph-bold ph-text-align-left text-2xl text-white"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB MAIS -->
+            <div id="tab-mais" class="hidden">
+                <div class="mb-6">
+                    <div class="font-bold text-[15px] mb-1 text-white">Rastreador de Progresso</div>
+                    <div class="text-[12px] text-ctonia-nightsky mb-4">Escolha o oráculo de leitura no rodapé.</div>
+                    <div class="relative">
+                        <select id="setting-progress" onchange="updateSet('progress', this.value)" class="w-full p-4 border border-ctonia-darkmint rounded-xl outline-none bg-ctonia-abyssal text-white font-medium appearance-none focus:border-ctonia-luminous transition-colors">
+                            <option value="location">Localização na obra</option>
+                            <option value="hidden">Nuvem Obscura (Ocultar tudo)</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-ctonia-luminous pointer-events-none"></i>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-5 border-t border-ctonia-nightsky/30">
+                    <div class="pr-4">
+                        <div class="font-bold text-[15px] text-white">Folhear em 3D (livro)</div>
+                        <div class="text-[12px] text-ctonia-nightsky mt-1.5 leading-relaxed">Modo livro: as páginas viram como num livro de verdade (na horizontal aparecem duas por vez). Desativado em modo contínuo.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0 shadow-inner rounded-full">
+                        <input type="checkbox" id="setting-anim3d" onchange="updateSet('anim3d', this.checked)" class="sr-only peer">
+                        <div class="w-12 h-6 bg-ctonia-abyssal border border-ctonia-darkmint peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-ctonia-nightsky after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ctonia-magenta peer-checked:after:bg-white shadow-[0_0_10px_rgba(232,90,113,0.3)]"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OUTROS DRAWERS (TOC, Busca, Caderno) -->
+    <div id="toc-panel" class="slide-panel fixed inset-y-0 left-0 w-4/5 max-w-sm bg-ctonia-abyssal z-[90] shadow-[20px_0_40px_rgba(0,0,0,0.8)] border-r border-ctonia-mystic flex flex-col text-ctonia-salmon">
+        <div class="flex items-center px-4 py-5 border-b border-ctonia-darkmint bg-ctonia-indigo/50">
+            <button onclick="togglePanel('toc-panel')" class="p-2 hover:text-white hover:bg-ctonia-magenta/20 rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+            <h2 class="ml-3 font-bold text-xl font-serif tracking-widest text-ctonia-luminous">ÍNDICE</h2>
+        </div>
+        <div id="toc-list" class="flex-1 overflow-y-auto p-4 flex flex-col gap-2 font-body text-[15px] text-white scrollbar-thin scrollbar-thumb-ctonia-mystic"></div>
+    </div>
+
+    <div id="search-panel" class="slide-panel-right fixed inset-y-0 right-0 w-4/5 max-w-sm bg-ctonia-abyssal z-[90] shadow-[-20px_0_40px_rgba(0,0,0,0.8)] border-l border-ctonia-mystic flex flex-col text-ctonia-salmon">
+        <div class="flex items-center px-3 py-4 border-b border-ctonia-darkmint bg-ctonia-indigo/50">
+            <button aria-label="Sair da pesquisa" title="Sair da pesquisa" onclick="togglePanel('search-panel')" class="p-2 text-ctonia-luminous hover:text-white hover:bg-ctonia-magenta/20 rounded-full transition-colors mr-1"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+            <div class="flex-1 bg-ctonia-abyssal rounded-full px-4 py-2.5 flex items-center mr-2 border border-ctonia-nightsky focus-within:border-ctonia-luminous transition-colors shadow-inner">
+                <i class="ph-bold ph-magnifying-glass text-ctonia-luminous mr-3 text-lg"></i>
+                <input type="text" id="search-input" placeholder="Buscar nas eras..." class="bg-transparent w-full outline-none text-sm text-white placeholder-ctonia-nightsky" onkeydown="if(event.key==='Enter') executeSearch()">
+            </div>
+        </div>
+        <div id="search-results" class="flex-1 overflow-y-auto p-0 scrollbar-thin scrollbar-thumb-ctonia-mystic bg-transparent"></div>
+    </div>
+
+    <div id="notes-panel" class="slide-panel-right fixed inset-y-0 right-0 w-full md:w-4/5 max-w-md bg-ctonia-abyssal z-[90] shadow-[-20px_0_40px_rgba(0,0,0,0.8)] border-l border-ctonia-magenta flex flex-col text-ctonia-salmon">
+        <div class="flex items-center justify-between px-3 py-4 bg-ctonia-indigo/80 border-b border-ctonia-darkmint">
+            <div class="flex items-center">
+                <button aria-label="Fechar caderno de anotações" title="Fechar caderno de anotações" onclick="togglePanel('notes-panel')" class="p-2 text-ctonia-luminous hover:text-white hover:bg-ctonia-magenta/20 rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+                <h2 class="font-bold text-xl font-serif tracking-widest text-ctonia-luminous ml-2">REGISTROS</h2>
+            </div>
+            <button onclick="document.getElementById('export-modal').classList.remove('hidden')" class="p-2 text-ctonia-magenta hover:text-white transition-colors" title="Exportar"><i class="ph-bold ph-export text-2xl"></i></button>
+        </div>
+        <div class="bg-ctonia-indigo/40 px-5 py-3 border-b border-ctonia-darkmint flex justify-end">
+            <button onclick="toggleFilterSheet()" class="border border-ctonia-mystic rounded-lg px-4 py-1.5 hover:bg-ctonia-mystic/20 text-ctonia-luminous font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors"><i class="ph-bold ph-sliders-horizontal text-lg"></i> Filtrar Aura</button>
+        </div>
+        <div id="notes-list" class="flex-1 overflow-y-auto p-0 flex flex-col scrollbar-thin scrollbar-thumb-ctonia-mystic"></div>
+    </div>
+
+    <!-- Filtros Bottom Sheet -->
+    <div id="filter-sheet-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[95]" onclick="toggleFilterSheet()"></div>
+    <div id="filter-sheet" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-ctonia-indigo border-t-2 border-ctonia-mystic rounded-t-2xl z-[100] p-6 pb-8 flex flex-col text-ctonia-salmon shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+        <div class="flex justify-between items-center mb-6 border-b border-ctonia-darkmint pb-4">
+            <h3 class="font-bold text-xl font-serif tracking-widest text-ctonia-luminous">FILTROS AURAIS</h3>
+            <button onclick="toggleFilterSheet()" class="hover:text-white transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div>
+            <h4 class="font-bold text-xs uppercase tracking-widest mb-3 text-ctonia-nightsky">Essência (Tipo)</h4>
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-5 py-2.5 rounded-lg text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="type:bookmark"><i class="ph-fill ph-bookmark-simple mr-1 text-ctonia-nightsky"></i> Selo</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-5 py-2.5 rounded-lg text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="type:note"><i class="ph-fill ph-file-text mr-1 text-ctonia-mystic"></i> Nota</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-5 py-2.5 rounded-lg text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="type:highlight"><i class="ph-fill ph-highlighter mr-1 text-ctonia-magenta"></i> Brilho</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-5 py-2.5 rounded-lg text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="type:pin"><i class="ph-fill ph-push-pin mr-1 text-ctonia-luminous"></i> Pin</button>
+            </div>
+            <h4 class="font-bold text-xs uppercase tracking-widest mb-3 text-ctonia-nightsky">Espectro de Cor</h4>
+            <div class="grid grid-cols-2 gap-3">
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:red"><span class="w-4 h-4 rounded-full bg-hl-red shadow-[0_0_8px_#E85A71]"></span> Sangue</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:orange"><span class="w-4 h-4 rounded-full bg-hl-orange shadow-[0_0_8px_#FFBEA6]"></span> Ocaso</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:yellow"><span class="w-4 h-4 rounded-full bg-hl-yellow shadow-[0_0_8px_#7BF0C3]"></span> Ouro</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:green"><span class="w-4 h-4 rounded-full bg-hl-green shadow-[0_0_8px_#3B8C88]"></span> Musgo</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:cyan"><span class="w-4 h-4 rounded-full bg-hl-cyan shadow-[0_0_8px_#4A6E8A]"></span> Lago Místico</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:blue"><span class="w-4 h-4 rounded-full bg-hl-blue shadow-[0_0_8px_#252B50]"></span> Profundeza</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:purple"><span class="w-4 h-4 rounded-full bg-hl-purple shadow-[0_0_8px_#1B132B] border border-ctonia-darkmint"></span> Vazio</button>
+                <button class="filter-btn bg-ctonia-abyssal border border-ctonia-darkmint px-4 py-3 rounded-lg flex items-center gap-3 text-sm text-white font-bold hover:border-ctonia-luminous transition-colors" data-filter="color:pink"><span class="w-4 h-4 rounded-full bg-hl-pink shadow-[0_0_8px_#d4485f]"></span> Rosa Negra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menus de Ações da Anotação -->
+    <div id="annotation-action-menu" class="hidden fixed bg-ctonia-abyssal rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-ctonia-luminous z-[110] w-52 py-2 text-sm text-white font-bold">
+        <button id="btn-edit-note" onclick="triggerEditNote()" class="w-full text-left px-5 py-3 hover:bg-ctonia-mystic/30 hover:text-ctonia-luminous transition-colors hidden"><i class="ph-bold ph-pencil-simple mr-2"></i> Transmutar nota</button>
+        <button onclick="triggerCopyNote()" class="w-full text-left px-5 py-3 hover:bg-ctonia-mystic/30 hover:text-ctonia-luminous transition-colors"><i class="ph-bold ph-copy mr-2"></i> Clonar (Copiar)</button>
+        <div class="h-px bg-ctonia-darkmint mx-3 my-1"></div>
+        <button id="btn-del-hl" onclick="triggerDeleteNote()" class="w-full text-left px-5 py-3 hover:bg-ctonia-magenta/20 text-ctonia-magenta transition-colors"><i class="ph-bold ph-trash mr-2"></i> Destruir Vínculo</button>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal border border-ctonia-magenta rounded-2xl w-full max-w-sm flex flex-col overflow-hidden p-6 shadow-[0_0_30px_rgba(232,90,113,0.3)]">
+            <h3 class="font-bold text-xl font-serif text-ctonia-luminous mb-2 leading-tight">Exportar Pergaminhos de Conhecimento</h3>
+            <p class="text-xs text-ctonia-nightsky font-bold uppercase tracking-wider mb-5">Doutrina de Citação</p>
+            <div class="flex flex-col gap-4 mb-8 text-white font-medium">
+                <label class="flex items-center gap-3 cursor-pointer p-2 hover:bg-ctonia-indigo/50 rounded-lg transition-colors"><input type="radio" name="export-style" value="APA" checked class="w-5 h-5 accent-ctonia-magenta"> Ordem da APA</label>
+                <label class="flex items-center gap-3 cursor-pointer p-2 hover:bg-ctonia-indigo/50 rounded-lg transition-colors"><input type="radio" name="export-style" value="Chicago" class="w-5 h-5 accent-ctonia-magenta"> Estilo de Chicago</label>
+                <label class="flex items-center gap-3 cursor-pointer p-2 hover:bg-ctonia-indigo/50 rounded-lg transition-colors"><input type="radio" name="export-style" value="MLA" class="w-5 h-5 accent-ctonia-magenta"> Rito MLA</label>
+                <label class="flex items-center gap-3 cursor-pointer p-2 hover:bg-ctonia-indigo/50 rounded-lg transition-colors text-ctonia-salmon/70"><input type="radio" name="export-style" value="Nenhum" class="w-5 h-5 accent-ctonia-nightsky"> Texto Bruto (Sem Doutrina)</label>
+            </div>
+            <div class="flex justify-end gap-3 border-t border-ctonia-darkmint pt-5">
+                <button onclick="document.getElementById('export-modal').classList.add('hidden')" class="px-5 py-2.5 border border-ctonia-darkmint bg-ctonia-indigo text-ctonia-salmon rounded-lg font-bold text-sm hover:bg-ctonia-nightsky transition-colors">Cancelar</button>
+                <button onclick="executeExport()" class="px-6 py-2.5 bg-ctonia-magenta text-white rounded-lg font-bold text-sm hover:bg-[#d4485f] shadow-[0_0_10px_rgba(232,90,113,0.5)] transition-colors">Extrair</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de Seleção de Texto -->
+    <div id="selection-toolbar" class="hidden fixed bottom-12 left-1/2 -translate-x-1/2 bg-ctonia-abyssal/95 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-full px-2 py-2 flex items-center gap-1 z-[95] border-2 border-ctonia-luminous max-w-[95vw]">
+        <div id="hl-color-popup" class="hidden absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-ctonia-indigo shadow-[0_0_20px_rgba(123,240,195,0.4)] rounded-full border border-ctonia-luminous px-4 py-3 flex gap-3"></div>
+        <button onclick="toggleColorPopup()" class="flex flex-col items-center px-4 py-1.5 text-[10px] font-bold tracking-wider uppercase text-ctonia-luminous hover:text-white hover:bg-ctonia-mystic/30 rounded-full transition-colors"><i class="ph-bold ph-highlighter text-2xl mb-0.5"></i>Aura</button>
+        <button onclick="openNoteEditor()" class="flex flex-col items-center px-4 py-1.5 text-[10px] font-bold tracking-wider uppercase text-ctonia-mystic hover:text-white hover:bg-ctonia-mystic/30 rounded-full transition-colors"><i class="ph-bold ph-pencil-simple text-2xl mb-0.5"></i>Nota</button>
+        <button onclick="copySelection()" class="flex flex-col items-center px-4 py-1.5 text-[10px] font-bold tracking-wider uppercase text-ctonia-nightsky hover:text-white hover:bg-ctonia-mystic/30 rounded-full transition-colors"><i class="ph-bold ph-copy text-2xl mb-0.5"></i>Copiar</button>
+        <button onclick="pinSelection()" class="flex flex-col items-center px-4 py-1.5 text-[10px] font-bold tracking-wider uppercase text-ctonia-salmon hover:text-white hover:bg-ctonia-magenta/30 rounded-full transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="25" height="25" class="mb-0.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 5 5-4 1-4 4-1 5-2-2-3 5-1-1 5-3-2-2 5-1 4-4z"/><path d="m4 20 5-5"/></svg>Selo</button>
+        <div class="w-px h-8 bg-ctonia-darkmint mx-1"></div>
+        <button onclick="closeSelection()" class="px-3 text-ctonia-magenta hover:text-[#d4485f] hover:scale-110 transition-transform"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+
+    <!-- Menu ao tocar num destaque existente -->
+    <div id="hl-edit-menu" class="hidden fixed bottom-12 left-1/2 -translate-x-1/2 bg-ctonia-abyssal/95 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-2xl px-5 py-4 flex flex-col gap-4 z-[96] border-2 border-ctonia-magenta w-[320px] max-w-[95vw]">
+        <div class="text-xs font-bold uppercase tracking-widest text-center text-ctonia-salmon">Mudar Essência Luminosa</div>
+        <div id="hl-edit-colors" class="flex gap-3 justify-center flex-wrap"></div>
+        <div class="h-px bg-ctonia-darkmint w-full opacity-50"></div>
+        <div class="flex justify-between items-center px-1 text-xs font-bold uppercase tracking-wider text-ctonia-luminous">
+            <button onclick="hlMenuNote()" class="flex flex-col items-center gap-1 hover:text-white transition-colors"><i class="ph-bold ph-pencil-simple text-xl"></i> Nota</button>
+            <button onclick="hlMenuCopy()" class="flex flex-col items-center gap-1 hover:text-white transition-colors text-ctonia-nightsky"><i class="ph-bold ph-copy text-xl"></i> Copiar</button>
+            <button onclick="hlMenuDelete()" class="flex flex-col items-center gap-1 text-ctonia-magenta hover:text-[#d4485f] transition-colors"><i class="ph-bold ph-trash text-xl"></i> Banir</button>
+            <button onclick="closeHlMenu()" class="text-ctonia-salmon/50 hover:text-ctonia-salmon flex flex-col items-center justify-center pt-2"><i class="ph-bold ph-x text-lg"></i></button>
+        </div>
+    </div>
+
+    <!-- Pins: painel inferior -->
+    <div id="pin-sheet-backdrop" class="hidden fixed inset-0 z-[96]" onclick="closePinSheet()"></div>
+    <div id="pin-sheet" class="bottom-sheet fixed bottom-0 left-0 right-0 mx-3 mb-4 bg-ctonia-indigo/95 backdrop-blur rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.9)] border-2 border-ctonia-luminous z-[100] flex flex-col h-[50vh] overflow-hidden text-white">
+        <div class="flex justify-between items-center px-5 py-4 relative border-b border-ctonia-darkmint bg-ctonia-abyssal/50">
+            <button onclick="togglePinMenu(event)" class="p-2 text-ctonia-luminous hover:text-white transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
+            <div class="font-serif font-bold text-ctonia-luminous tracking-widest">SELO ESPACIAL</div>
+            <button onclick="closePinSheet()" class="p-2 text-ctonia-magenta hover:text-white transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div id="pin-menu" class="hidden absolute left-6 top-14 bg-ctonia-abyssal rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-ctonia-magenta w-64 py-2 text-[14px] font-bold text-ctonia-salmon z-10">
+                <button onclick="deleteCurrentPin()" class="w-full text-left px-5 py-3 hover:bg-ctonia-mystic/30 hover:text-white transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" class="inline-block mr-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg> Destruir este selo</button>
+                <button onclick="goToPin()" class="w-full text-left px-5 py-3 hover:bg-ctonia-mystic/30 hover:text-ctonia-luminous transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" class="inline-block mr-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l11-11M4 15l5 5M17 2v3m5 4h-3M13 1v2"/></svg> Viajar para a origem</button>
+                <div class="h-px bg-ctonia-darkmint mx-4 my-1"></div>
+                <button onclick="deleteAllPins()" class="w-full text-left px-5 py-3 hover:bg-ctonia-magenta/20 text-ctonia-magenta transition-colors"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" class="inline-block mr-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5"/><circle cx="17" cy="9" r="5"/><path d="M6 14v5h14v-5M10 19v3m6-3v3"/></svg> Erradicar todos os selos</button>
+            </div>
+        </div>
+        <div id="pin-body" class="flex-1 overflow-y-auto px-8 py-6 scrollbar-thin scrollbar-thumb-ctonia-mystic flex items-center justify-center text-center"></div>
+        <div class="bg-ctonia-abyssal/80 border-t border-ctonia-darkmint py-4 flex justify-between items-center px-8 relative">
+            <button onclick="pinNav(-1)" class="p-3 bg-ctonia-indigo rounded-full text-ctonia-luminous hover:text-ctonia-abyssal hover:bg-ctonia-luminous transition-colors shadow-lg"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+            <div class="flex flex-col items-center">
+                <span id="pin-counter" class="text-xl font-bold font-serif text-white tracking-widest drop-shadow-[0_0_5px_#7BF0C3]"></span>
+                <span id="pin-loc" class="text-[10px] font-bold uppercase tracking-widest text-ctonia-nightsky mt-1"></span>
+            </div>
+            <button onclick="pinNav(1)" class="p-3 bg-ctonia-indigo rounded-full text-ctonia-luminous hover:text-ctonia-abyssal hover:bg-ctonia-luminous transition-colors shadow-lg"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+    </div>
+
+    <!-- Note Editor Modal -->
+    <div id="note-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="bg-ctonia-abyssal rounded-2xl w-full max-w-md flex flex-col overflow-hidden shadow-[0_0_40px_rgba(59,140,136,0.4)] border border-ctonia-mystic">
+            <div class="p-5 border-b border-ctonia-darkmint flex justify-between items-center bg-ctonia-indigo">
+                <h3 class="font-bold text-lg font-serif text-ctonia-luminous tracking-widest"><i class="ph-fill ph-pencil-simple mr-2"></i> Inscrição Mística</h3>
+                <button onclick="closeNoteEditor()" class="text-ctonia-mystic hover:text-ctonia-magenta transition-colors"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+            <textarea id="note-textarea" class="w-full p-6 h-40 outline-none resize-none text-[16px] font-body bg-transparent text-white placeholder-ctonia-nightsky/50" placeholder="Insira seus conhecimentos arcanos aqui..."></textarea>
+            <div class="p-4 border-t border-ctonia-darkmint bg-ctonia-indigo/40 flex justify-end">
+                <button onclick="saveNote()" class="px-8 py-3 bg-ctonia-luminous text-ctonia-abyssal rounded-lg text-sm font-bold tracking-widest hover:bg-white shadow-[0_0_15px_rgba(123,240,195,0.4)] transition-all uppercase">Gravar</button>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="../../css/reader.css">
+    <script src="../../js/core/app.js"></script>
+<script src="../../js/library/metadata.js"></script>
+<script src="../../js/library/books.js"></script>
+<script src="../../js/reader/settings.js"></script>
+<script src="../../js/reader/reader.js"></script>
+<script src="../../js/reader/pdf.js"></script>
+<script src="../../js/reader/book3d.js"></script>
+<script src="../../js/reader/rendering.js"></script>
+<script src="../../js/reader/epub.js"></script>
+<script src="../../js/reader/flip3d.js"></script>
+<script src="../../js/reader/navigation.js"></script>
+<script src="../../js/reader/search.js"></script>
+<script src="../../js/annotations/highlights.js"></script>
+<script src="../../js/annotations/bookmarks.js"></script>
+<script src="../../js/annotations/notes.js"></script>
+<script src="../../js/annotations/markers.js"></script>
+<script src="../../js/core/database.js"></script>
+<script src="../../js/statistics/reading-stats.js"></script>
+<script src="../../js/reader/layout.js"></script>
+<script src="../../js/library/pdf-meta.js"></script>
+<script src="../../js/library/sorting.js"></script>
+<script src="../../js/library/filters.js"></script>
+<script src="../../js/core/hub-bridge.js"></script>
+<script src="../../js/sync/google-drive.js"></script>
+<script src="../../js/statistics/panel.js"></script>
+<script src="../../js/reader/pdf-links.js"></script>
+<script src="../../js/sync/cloud-sync.js"></script>
+<script src="../../js/core/boot.js"></script>
+</body>
+</html>
