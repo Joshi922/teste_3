@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07110f">
+<title>Biblioteca Viva — Laboratório Ctônia</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="../../../../css/lab-kit.css">
+<link rel="stylesheet" href="../../../../css/biblioteca-viva.css">
+<script>
+try {
+  var bvSkin = localStorage.getItem('ct-lab-bv-skin');
+  if (bvSkin) document.documentElement.setAttribute('data-bv-skin', bvSkin);
+  var bvPrefs = localStorage.getItem('ct-lab-bv-prefs');
+} catch (e) {}
+</script>
+</head>
+<body class="bv" data-bv-skin="abissal">
+
+<div class="bv-ambient" aria-hidden="true">
+  <span class="bv-ambient__aurora"></span>
+  <span class="bv-ambient__veil"></span>
+  <span class="lk-noise"></span>
+</div>
+
+<div class="bv-app" id="bv-app">
+
+  <!-- ===================================================== trilho esquerdo -->
+  <aside class="bv-rail" id="bv-rail" aria-label="Navegação da biblioteca">
+    <div class="bv-rail__head">
+      <span class="bv-rail__sigil" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="32" cy="32" r="27" stroke-dasharray="1 5" opacity=".6"/>
+          <path d="M10 32c5-7.8 12.3-12 22-12s17 4.2 22 12c-5 7.8-12.3 12-22 12S15 39.8 10 32Z"/>
+          <circle cx="32" cy="32" r="6"/>
+          <circle cx="32" cy="32" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <div class="bv-rail__id">
+        <span>AUTOR</span>
+        <b>K. R. Valetius</b>
+      </div>
+      <button type="button" class="bv-rail__collapse" id="bv-rail-toggle" title="Recolher menu" aria-label="Recolher menu" aria-expanded="true">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="bv-rail__body">
+      <nav class="bv-nav" aria-label="Seções">
+        <button type="button" class="bv-nav__item is-on" data-view="library"><i class="fa-solid fa-book" aria-hidden="true"></i><span>Biblioteca</span></button>
+        <button type="button" class="bv-nav__item" data-view="manuscript"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i><span>Manuscrito</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Universo"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Universo</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Roteiro"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Roteiro</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Enredo"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span>Enredo</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Novelas"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Novelas</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Diagramação"><i class="fa-solid fa-border-all" aria-hidden="true"></i><span>Diagramação</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Música"><i class="fa-solid fa-music" aria-hidden="true"></i><span>Música</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Progresso"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span>Progresso</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Agenda"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i><span>Agenda</span></button>
+        <button type="button" class="bv-nav__item" data-soon="Mapas"><i class="fa-solid fa-map" aria-hidden="true"></i><span>Mapas</span></button>
+      </nav>
+
+      <div class="bv-rail__sep"></div>
+
+      <div class="bv-rail__group">
+        <span class="bv-rail__label">Projeto</span>
+        <button type="button" class="bv-toggle is-on" data-toggle="projeto"><i class="bv-dot bv-dot--gold"></i><span>Projeto</span></button>
+        <button type="button" class="bv-toggle is-on" data-toggle="salvo"><i class="bv-dot bv-dot--teal"></i><span>Salvo</span></button>
+        <button type="button" class="bv-toggle" data-toggle="fullscreen"><i class="bv-dot bv-dot--plain"></i><span>Tela cheia</span></button>
+        <button type="button" class="bv-toggle is-on" data-toggle="arca"><i class="bv-dot bv-dot--gold"></i><span>Arca</span></button>
+        <button type="button" class="bv-toggle" data-toggle="goal" id="bv-rail-goal"><i class="bv-dot bv-dot--plain"></i><span id="bv-goal-label">0% meta</span></button>
+      </div>
+    </div>
+
+    <div class="bv-rail__foot">
+      <button type="button" class="bv-nav__item" data-soon="Painel"><i class="fa-solid fa-table-columns" aria-hidden="true"></i><span>Painel</span><i class="bv-live-dot" aria-hidden="true"></i></button>
+      <button type="button" class="bv-nav__item" data-soon="Comando"><i class="fa-solid fa-terminal" aria-hidden="true"></i><span>Comando</span></button>
+      <button type="button" class="bv-nav__item" data-soon="Sessão"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>Sessão</span><i class="bv-live-dot" aria-hidden="true"></i></button>
+      <button type="button" class="bv-nav__item" data-soon="Lixeira"><i class="fa-solid fa-trash-can" aria-hidden="true"></i><span>Lixeira</span></button>
+      <button type="button" class="bv-nav__item bv-nav__item--compass" data-settings="aparencia"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Configurações</span></button>
+    </div>
+  </aside>
+
+  <!-- ===================================================== área de trabalho -->
+  <div class="bv-workspace">
+    <header class="bv-topbar">
+      <button type="button" class="bv-iconbtn bv-labback" id="bv-lab-back" title="Voltar ao Laboratório" aria-label="Voltar ao Laboratório">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      </button>
+      <span class="bv-topbar__rule" aria-hidden="true"></span>
+      <div class="bv-topbar__id">
+        <span class="bv-topbar__author">AUTOR</span>
+        <b id="bv-top-project">Estrela do Caos</b>
+        <span class="bv-topbar__status"><i aria-hidden="true"></i> ATIVO</span>
+      </div>
+
+      <label class="bv-search" for="bv-search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input id="bv-search" type="search" placeholder="Buscar por título ou autor..." autocomplete="off" spellcheck="false">
+      </label>
+
+      <div class="bv-topbar__actions">
+        <button type="button" class="bv-iconbtn" data-soon="Notificações" title="Notificações" aria-label="Notificações"><i class="fa-regular fa-bell" aria-hidden="true"></i></button>
+        <button type="button" class="bv-iconbtn" data-soon="Lixeira" title="Lixeira" aria-label="Lixeira"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
+        <button type="button" class="bv-iconbtn" id="bv-skins-btn" title="Trocar skin" aria-label="Trocar skin"><i class="fa-solid fa-palette" aria-hidden="true"></i></button>
+        <button type="button" class="bv-iconbtn" id="bv-fullscreen" title="Tela cheia" aria-label="Tela cheia"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
+        <button type="button" class="lk-btn lk-btn--sm" id="bv-open-project" aria-label="Abrir projeto"><i class="fa-regular fa-folder-open" aria-hidden="true"></i> <span>Abrir projeto</span></button>
+        <button type="button" class="lk-btn lk-btn--primary lk-btn--sm" id="bv-new-project" aria-label="Novo projeto"><i class="fa-solid fa-plus" aria-hidden="true"></i> <span>Novo projeto</span></button>
+      </div>
+    </header>
+
+    <main class="bv-main">
+
+      <!-- ================================================== BIBLIOTECA -->
+      <section class="bv-view bv-view--library is-on" id="bv-view-library" aria-label="Biblioteca">
+
+        <div class="bv-hero">
+          <!-- projeto selecionado -->
+          <section class="bv-project-panel" aria-labelledby="bv-project-title">
+            <div class="bv-project-cover" id="bv-project-cover">
+              <div class="bv-mini bv-mini--project" id="bv-project-mini">
+                <span class="bv-mini__glyph" aria-hidden="true"><i class="fa-regular fa-star"></i></span>
+                <span class="bv-mini__title" id="bv-mini-title">ESTRELA<br>DO CAOS</span>
+                <span class="bv-mini__author" id="bv-mini-author">K. R. VALETIUS</span>
+              </div>
+              <button type="button" class="bv-project-cover__change" id="bv-change-cover">
+                <i class="fa-solid fa-image" aria-hidden="true"></i> Trocar capa
+              </button>
+            </div>
+
+            <div class="bv-project-body">
+              <span class="bv-eyebrow">Projeto selecionado</span>
+              <h2 class="bv-project-title" id="bv-project-title">Estrela do Caos</h2>
+              <p class="bv-project-author"><b id="bv-project-author">K. R. Valetius</b><span>·</span><span id="bv-project-subtitle">Estrela do Caos.autora</span></p>
+
+              <div class="bv-project-stats" id="bv-project-stats">
+                <div><b id="bv-stat-words">159.002</b><span>Palavras</span></div>
+                <div><b id="bv-stat-chapters">46</b><span>Capítulos</span></div>
+                <div><b id="bv-stat-scenes">12</b><span>Cenas</span></div>
+                <div><b id="bv-stat-world">121</b><span>Mundo</span></div>
+              </div>
+
+              <div class="bv-project-dates">
+                <span>Aberto <b id="bv-date-open">19/09/2026</b></span>
+                <span>Modificado <b id="bv-date-modified">19/09/2026</b></span>
+              </div>
+
+              <div class="bv-project-actions">
+                <button type="button" class="bv-action bv-action--primary" id="bv-continue"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Continuar</button>
+                <button type="button" class="bv-action" id="bv-edit"><i class="fa-solid fa-pen" aria-hidden="true"></i> Editar</button>
+                <button type="button" class="bv-action" id="bv-backup-project"><i class="fa-solid fa-box-archive" aria-hidden="true"></i> Backup na arca</button>
+                <button type="button" class="bv-action" id="bv-rename"><i class="fa-solid fa-signature" aria-hidden="true"></i> Renomear</button>
+                <button type="button" class="bv-action" data-soon="Revelar pasta"><i class="fa-regular fa-folder" aria-hidden="true"></i> Revelar pasta</button>
+                <button type="button" class="bv-action" id="bv-goal"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> Meta do livro</button>
+                <button type="button" class="bv-action" id="bv-quote-edit"><i class="fa-solid fa-quote-left" aria-hidden="true"></i> Frase do livro</button>
+                <button type="button" class="bv-action bv-action--danger" id="bv-delete"><i class="fa-solid fa-trash-can" aria-hidden="true"></i> Excluir</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- livro 3D -->
+          <section class="bv-stage" aria-label="Livro em 3D">
+            <div class="bv-stage__top">
+              <span class="bv-stage__label"><i class="fa-solid fa-cube" aria-hidden="true"></i> Livro físico</span>
+              <div class="bv-face-switch" role="group" aria-label="Face do livro">
+                <button type="button" class="bv-facebtn is-on" data-face="front">Capa</button>
+                <button type="button" class="bv-facebtn" data-face="spine">Lombada</button>
+                <button type="button" class="bv-facebtn" data-face="back">Contracapa</button>
+              </div>
+            </div>
+
+            <div class="bv-scene" id="bv-scene">
+              <span class="bv-scene__halo" aria-hidden="true"></span>
+              <span class="bv-scene__floor" aria-hidden="true"></span>
+
+              <div class="bv-book-float">
+                <div class="bv-book" id="bv-book">
+                  <div class="bv-face bv-face--back">
+                    <div class="bv-backcover">
+                      <span class="bv-backcover__label">Sinopse</span>
+                      <p class="bv-backcover__text" id="bv-synopsis">Uma estrela caiu onde ninguém ousava olhar. O gelo guardou o nome dela por séculos — até o dia em que uma princesa sem coroa decidiu atravessá-lo.</p>
+                      <span class="bv-backcover__quote" id="bv-backquote">“O gelo queima como o fogo.”</span>
+                      <span class="bv-backcover__isbn" id="bv-isbn">978-65-0000-000-0</span>
+                    </div>
+                  </div>
+
+                  <div class="bv-face bv-face--spine">
+                    <span class="bv-spine__mark" aria-hidden="true">✦</span>
+                    <span class="bv-spine__text" id="bv-spine-text">ESTRELA DO CAOS</span>
+                    <span class="bv-spine__author" id="bv-spine-author">K. R. VALETIUS</span>
+                    <span class="bv-spine__mark" aria-hidden="true">✦</span>
+                  </div>
+
+                  <div class="bv-face bv-face--pages" aria-hidden="true"></div>
+                  <div class="bv-face bv-face--top" aria-hidden="true"></div>
+                  <div class="bv-face bv-face--bottom" aria-hidden="true"></div>
+
+                  <div class="bv-face bv-face--front">
+                    <div class="bv-cover" id="bv-cover">
+                      <span class="bv-cover__frame" aria-hidden="true"></span>
+                      <span class="bv-cover__over" id="bv-cover-over">K. R. VALETIUS</span>
+                      <span class="bv-cover__title" id="bv-cover-title">ESTRELA DO CAOS</span>
+                      <span class="bv-cover__rule" aria-hidden="true"></span>
+                      <span class="bv-cover__seal" id="bv-cover-seal" aria-hidden="true"><i class="fa-regular fa-star"></i></span>
+                      <span class="bv-cover__foot" id="bv-cover-foot">EDIÇÃO DE ESTÚDIO</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <span class="bv-scene__hint"><i class="fa-solid fa-arrows-up-down-left-right" aria-hidden="true"></i> arraste para girar</span>
+            </div>
+
+            <p class="bv-quote">“<span id="bv-quote">O gelo queima como o fogo.</span>”</p>
+
+            <div class="bv-stage__actions">
+              <button type="button" class="bv-chipbtn" id="bv-spin"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Girar</button>
+              <button type="button" class="bv-chipbtn" id="bv-hardcover"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Capa dura</button>
+              <button type="button" class="bv-chipbtn bv-chipbtn--gold" id="bv-cover-editor"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> Diagramar capa</button>
+            </div>
+          </section>
+
+          <!-- coluna direita -->
+          <aside class="bv-side" aria-label="Painéis da biblioteca">
+            <section class="bv-panel">
+              <header class="bv-panel__head"><span>Resumo da biblioteca</span><i class="fa-solid fa-chart-simple" aria-hidden="true"></i></header>
+              <div class="bv-summary" id="bv-summary"></div>
+            </section>
+
+            <section class="bv-panel bv-panel--inspira">
+              <header class="bv-panel__head">
+                <span>Inspiração do dia</span>
+                <button type="button" class="bv-panel__mini" id="bv-new-quote" title="Outra frase" aria-label="Outra frase"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+              </header>
+              <blockquote class="bv-daily" id="bv-daily-quote">“Liberdade é pouco. O que eu desejo ainda não tem nome.”</blockquote>
+              <cite class="bv-daily__author" id="bv-daily-author">— Clarice Lispector</cite>
+              <i class="fa-solid fa-feather-pointed bv-daily__feather" aria-hidden="true"></i>
+            </section>
+
+            <section class="bv-panel">
+              <header class="bv-panel__head"><span>Progresso geral</span><span class="bv-panel__meta" id="bv-progress-meta">4 de 13 com meta</span></header>
+              <div class="bv-progress" id="bv-progress">
+                <div class="bv-ring">
+                  <svg viewBox="0 0 84 84" aria-hidden="true">
+                    <circle cx="42" cy="42" r="35" class="bv-ring__track"></circle>
+                    <circle cx="42" cy="42" r="35" class="bv-ring__fill" id="bv-ring-fill"></circle>
+                  </svg>
+                  <span class="bv-ring__label"><b id="bv-ring-value">59%</b><span>geral</span></span>
+                </div>
+                <div class="bv-progress__copy">
+                  <b id="bv-progress-words">376.050</b>
+                  <span id="bv-progress-sub">4 de 13 livros com meta definida</span>
+                </div>
+              </div>
+              <ul class="bv-bars" id="bv-bars"></ul>
+            </section>
+
+            <section class="bv-panel">
+              <header class="bv-panel__head"><span>Atividade recente</span><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></header>
+              <ul class="bv-activity" id="bv-activity"></ul>
+            </section>
+          </aside>
+        </div>
+
+        <!-- recentes -->
+        <section class="bv-recent" aria-labelledby="bv-recent-title">
+          <header class="bv-recent__head">
+            <h2 class="bv-eyebrow" id="bv-recent-title">Projetos recentes</h2>
+            <button type="button" class="bv-recent__all" id="bv-all-projects" aria-label="Ver todos os projetos"><span id="bv-others-count">+ 9</span></button>
+          </header>
+          <div class="bv-recent__grid" id="bv-recent-grid"></div>
+        </section>
+      </section>
+
+      <!-- ================================================== MANUSCRITO -->
+      <section class="bv-view bv-view--manuscript" id="bv-view-manuscript" aria-label="Manuscrito" hidden>
+        <div class="bv-ms">
+          <header class="bv-ms__top">
+            <button type="button" class="bv-backbtn" id="bv-ms-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Biblioteca</button>
+            <div class="bv-ms__id">
+              <span class="bv-eyebrow">Manuscrito</span>
+              <b id="bv-ms-project">Estrela do Caos</b>
+            </div>
+            <div class="bv-ms__actions">
+              <span class="bv-save" id="bv-save-state"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> salvo</span>
+              <button type="button" class="lk-btn lk-btn--sm" id="bv-ms-export" aria-label="Exportar capítulo em TXT"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> <span>Exportar .txt</span></button>
+              <button type="button" class="lk-btn lk-btn--primary lk-btn--sm" id="bv-ms-review" aria-label="Revisar capítulo"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> <span>Revisar capítulo</span></button>
+            </div>
+          </header>
+
+          <div class="bv-ms__body">
+            <!-- capítulos -->
+            <aside class="bv-chapters" aria-label="Capítulos">
+              <div class="bv-chapters__head">
+                <span>Capítulos</span>
+                <button type="button" id="bv-add-chapter" title="Novo capítulo" aria-label="Novo capítulo"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+              </div>
+              <ol class="bv-chapters__list" id="bv-chapter-list"></ol>
+              <div class="bv-chapters__foot">
+                <span id="bv-chapters-total">13 de 46 capítulos</span>
+                <span id="bv-chapters-words">— palavras</span>
+              </div>
+            </aside>
+
+            <!-- página -->
+            <div class="bv-pagewrap">
+              <div class="bv-pagetools">
+                <div class="bv-fmt" role="toolbar" aria-label="Formatação">
+                  <button type="button" data-cmd="bold" title="Negrito"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
+                  <button type="button" data-cmd="italic" title="Itálico"><i class="fa-solid fa-italic" aria-hidden="true"></i></button>
+                  <button type="button" data-cmd="underline" title="Sublinhado"><i class="fa-solid fa-underline" aria-hidden="true"></i></button>
+                  <span class="bv-fmt__sep"></span>
+                  <button type="button" data-block="h2" title="Título"><i class="fa-solid fa-heading" aria-hidden="true"></i></button>
+                  <button type="button" data-block="blockquote" title="Citação"><i class="fa-solid fa-quote-left" aria-hidden="true"></i></button>
+                  <button type="button" data-cmd="insertUnorderedList" title="Lista"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+                  <span class="bv-fmt__sep"></span>
+                  <button type="button" data-cmd="justifyLeft" title="Alinhar à esquerda"><i class="fa-solid fa-align-left" aria-hidden="true"></i></button>
+                  <button type="button" data-cmd="justifyCenter" title="Centralizar"><i class="fa-solid fa-align-center" aria-hidden="true"></i></button>
+                  <span class="bv-fmt__sep"></span>
+                  <button type="button" data-cmd="undo" title="Desfazer"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                  <button type="button" data-cmd="redo" title="Refazer"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="bv-pagemeta">
+                  <span id="bv-ms-pagecount">1 / 1</span>
+                  <button type="button" class="bv-panel__mini" id="bv-ms-goal" title="Meta do livro"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></button>
+                </div>
+              </div>
+
+              <div class="bv-page" id="bv-page">
+                <div class="bv-page__inner">
+                  <input class="bv-chapter-title" id="bv-chapter-title" value="Metanóia" aria-label="Título do capítulo" spellcheck="false">
+                  <div class="bv-page__rule" aria-hidden="true"><span></span></div>
+                  <div class="bv-editor" id="bv-editor" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Texto do capítulo" data-placeholder="Escreva aqui. A página espera."></div>
+                </div>
+              </div>
+
+              <footer class="bv-ms__status">
+                <span><b id="bv-ms-words">0</b> palavras</span>
+                <span><b id="bv-ms-paras">0</b> parágrafos</span>
+                <span><b id="bv-ms-pages">1</b> página</span>
+                <span><b id="bv-ms-reading">0 min</b> de leitura</span>
+                <span class="bv-ms__goalstatus">meta do dia <b id="bv-ms-daily">0%</b></span>
+              </footer>
+            </div>
+
+            <!-- painel de revisão -->
+            <aside class="bv-review" aria-label="Revisão do capítulo">
+              <div class="bv-review__tabs" role="tablist">
+                <button type="button" class="is-on" data-panel="review" role="tab" aria-selected="true">Correção</button>
+                <button type="button" data-panel="stats" role="tab" aria-selected="false">Capítulo</button>
+              </div>
+
+              <div class="bv-review__panel" id="bv-review-panel" data-panel="review">
+                <p class="bv-review__hint">Correção local, sem IA. O corretor nativo do navegador também marca o que conhece.</p>
+                <button type="button" class="lk-btn lk-btn--accent lk-btn--block" id="bv-run-review"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Revisar texto</button>
+
+                <div class="bv-review__summary" id="bv-review-summary" hidden></div>
+                <ol class="bv-issues" id="bv-review-issues"></ol>
+                <p class="bv-review__empty" id="bv-review-empty">Nenhuma revisão ainda. O botão acima lê o capítulo inteiro.</p>
+                <div class="bv-review__foot">
+                  <button type="button" class="bv-link" id="bv-ignore-all" hidden>Ignorar tudo</button>
+                  <button type="button" class="bv-link" id="bv-apply-safe" hidden>Aplicar seguras</button>
+                </div>
+              </div>
+
+              <div class="bv-review__panel" id="bv-stats-panel" data-panel="stats" hidden>
+                <dl class="bv-chapterstats" id="bv-chapterstats"></dl>
+                <p class="bv-review__hint">Contagem feita neste capítulo. O tempo de leitura considera 200 palavras por minuto.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================================================== bússola de ajustes -->
+<div class="bv-compass" id="bv-compass" aria-label="Ajustes rápidos">
+  <span class="bv-compass__caption">ajustes</span>
+  <button type="button" class="bv-compass__core" id="bv-compass-core" aria-haspopup="dialog" aria-expanded="false" title="Ajustes">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
+      <circle cx="50" cy="50" r="45" stroke-dasharray="1 4" opacity=".7"/>
+      <circle cx="50" cy="50" r="35" opacity=".35"/>
+      <circle cx="50" cy="50" r="6" opacity=".8"/>
+      <path d="M50 7 56 44 50 50 44 44Z" fill="currentColor" stroke="none" opacity=".9"/>
+      <path d="M50 93 44 56 50 50 56 56Z" fill="currentColor" stroke="none" opacity=".45"/>
+      <path d="M7 50 44 44 50 50 44 56Z" fill="currentColor" stroke="none" opacity=".6"/>
+      <path d="M93 50 56 56 50 50 56 44Z" fill="currentColor" stroke="none" opacity=".6"/>
+      <circle cx="50" cy="50" r="2.4" fill="var(--bv-bg)" stroke="none"/>
+    </svg>
+  </button>
+  <div class="bv-compass__opts" role="menu" aria-label="Opções de ajuste">
+    <button type="button" data-settings="aparencia" role="menuitem"><i class="fa-solid fa-palette" aria-hidden="true"></i><span>Aparência</span></button>
+    <button type="button" data-settings="tipografia" role="menuitem"><i class="fa-solid fa-font" aria-hidden="true"></i><span>Tipografia</span></button>
+    <button type="button" data-settings="correcao" role="menuitem"><i class="fa-solid fa-spell-check" aria-hidden="true"></i><span>Correção</span></button>
+    <button type="button" data-settings="dados" role="menuitem"><i class="fa-solid fa-database" aria-hidden="true"></i><span>Dados</span></button>
+  </div>
+</div>
+
+<!-- ===================================================== popover de skins -->
+<div class="bv-skinpop" id="bv-skinpop" hidden>
+  <div class="bv-skinpop__head"><span>Trocar skin</span><button type="button" id="bv-skinpop-close" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+  <div class="bv-skinpop__grid" id="bv-skinpop-grid"></div>
+</div>
+
+<!-- ===================================================== gaveta de ajustes -->
+<div class="bv-scrim" id="bv-settings-scrim" hidden></div>
+<aside class="bv-drawer bv-settings" id="bv-settings" hidden aria-label="Ajustes" role="dialog" aria-modal="true">
+  <header class="bv-drawer__head">
+    <div>
+      <span class="bv-eyebrow">Bússola de ajustes</span>
+      <h2>Ajustes</h2>
+    </div>
+    <button type="button" class="bv-iconbtn" id="bv-settings-close" aria-label="Fechar ajustes"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  </header>
+
+  <div class="bv-settings__tabs" role="tablist">
+    <button type="button" class="is-on" data-tab="aparencia" role="tab" aria-selected="true">Aparência</button>
+    <button type="button" data-tab="tipografia" role="tab" aria-selected="false">Tipografia</button>
+    <button type="button" data-tab="correcao" role="tab" aria-selected="false">Correção</button>
+    <button type="button" data-tab="dados" role="tab" aria-selected="false">Dados</button>
+  </div>
+
+  <div class="bv-settings__body">
+    <section class="bv-settings__panel is-on" data-panel="aparencia">
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Skin da biblioteca</span>
+        <div class="bv-skin-grid" id="bv-skin-grid"></div>
+      </div>
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Densidade</span>
+        <div class="bv-segment" id="bv-density">
+          <button type="button" data-density="comfy" class="is-on">Confortável</button>
+          <button type="button" data-density="compact">Compacta</button>
+        </div>
+      </div>
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Movimento</span>
+        <label class="lk-switch"><input type="checkbox" id="bv-motion" checked><span class="lk-switch__track"></span><span>Animações e livro flutuante</span></label>
+      </div>
+    </section>
+
+    <section class="bv-settings__panel" data-panel="tipografia" hidden>
+      <div class="bv-settings__block">
+        <label class="lk-field"><span class="lk-label">Fonte do manuscrito</span>
+          <select class="lk-select" id="bv-font">
+            <option value="Lora">Lora — serifada de leitura</option>
+            <option value="Montserrat">Montserrat — sem serifa</option>
+            <option value="Cinzel">Cinzel — capitular</option>
+          </select>
+        </label>
+      </div>
+      <div class="bv-settings__block">
+        <label class="bv-range"><span>Tamanho <b id="bv-size-value">16 px</b></span><input type="range" id="bv-size" min="13" max="22" step="1" value="16"></label>
+      </div>
+      <div class="bv-settings__block">
+        <label class="bv-range"><span>Entrelinha <b id="bv-line-value">1.9</b></span><input type="range" id="bv-line" min="1.4" max="2.4" step="0.1" value="1.9"></label>
+      </div>
+      <p class="bv-settings__note">A prévia aparece no manuscrito. O livro 3D mantém a tipografia da capa.</p>
+    </section>
+
+    <section class="bv-settings__panel" data-panel="correcao" hidden>
+      <div class="bv-settings__block">
+        <label class="lk-switch"><input type="checkbox" id="bv-native-spell" checked><span class="lk-switch__track"></span><span>Corretor nativo do navegador</span></label>
+      </div>
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Regras locais</span>
+        <div class="bv-rules" id="bv-rules">
+          <label class="lk-switch"><input type="checkbox" data-rule="acento" checked><span class="lk-switch__track"></span><span>Acentuação</span></label>
+          <label class="lk-switch"><input type="checkbox" data-rule="repeticao" checked><span class="lk-switch__track"></span><span>Repetições</span></label>
+          <label class="lk-switch"><input type="checkbox" data-rule="espaco" checked><span class="lk-switch__track"></span><span>Espaços</span></label>
+          <label class="lk-switch"><input type="checkbox" data-rule="pontuacao" checked><span class="lk-switch__track"></span><span>Pontuação</span></label>
+          <label class="lk-switch"><input type="checkbox" data-rule="maiuscula" checked><span class="lk-switch__track"></span><span>Maiúsculas</span></label>
+          <label class="lk-switch"><input type="checkbox" data-rule="frase" checked><span class="lk-switch__track"></span><span>Frases longas</span></label>
+        </div>
+      </div>
+      <p class="bv-settings__note">Tudo roda no seu computador. Nenhum texto sai desta máquina.</p>
+    </section>
+
+    <section class="bv-settings__panel" data-panel="dados" hidden>
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Backup</span>
+        <p class="bv-settings__note">Salva o projeto selecionado, as capas e os capítulos em um arquivo .json.</p>
+        <button type="button" class="lk-btn lk-btn--block" id="bv-export-all"><i class="fa-solid fa-download" aria-hidden="true"></i> Exportar biblioteca</button>
+      </div>
+      <div class="bv-settings__block">
+        <span class="bv-settings__label">Zona de risco</span>
+        <button type="button" class="lk-btn lk-btn--danger lk-btn--block" id="bv-reset"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Restaurar o experimento</button>
+        <p class="bv-settings__note">Apaga as alterações locais desta biblioteca experimental e volta ao estado inicial.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer class="bv-drawer__foot">
+    <span>As alterações ficam salvas neste navegador.</span>
+    <button type="button" class="lk-btn lk-btn--primary lk-btn--sm" id="bv-settings-done">Concluir</button>
+  </footer>
+</aside>
+
+<!-- ===================================================== gaveta de capa -->
+<div class="bv-scrim" id="bv-cover-scrim" hidden></div>
+<aside class="bv-drawer bv-coverdrawer" id="bv-coverdrawer" hidden aria-label="Diagramar capa" role="dialog" aria-modal="true">
+  <header class="bv-drawer__head">
+    <div>
+      <span class="bv-eyebrow">Diagramação</span>
+      <h2>Diagramar capa</h2>
+    </div>
+    <button type="button" class="bv-iconbtn" id="bv-cover-close" aria-label="Fechar diagramação"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  </header>
+
+  <div class="bv-coverdrawer__tabs" role="tablist">
+    <button type="button" class="is-on" data-covtab="front" role="tab" aria-selected="true">Capa</button>
+    <button type="button" data-covtab="spine" role="tab" aria-selected="false">Lombada</button>
+    <button type="button" data-covtab="back" role="tab" aria-selected="false">Contracapa</button>
+  </div>
+
+  <div class="bv-coverdrawer__body">
+    <section class="bv-coverdrawer__panel is-on" data-covpanel="front">
+      <label class="lk-field"><span class="lk-label">Título na capa</span><input class="lk-input" id="ce-title" maxlength="60"></label>
+      <label class="lk-field"><span class="lk-label">Linha superior</span><input class="lk-input" id="ce-over" maxlength="40"></label>
+      <label class="lk-field"><span class="lk-label">Rodapé</span><input class="lk-input" id="ce-foot" maxlength="40"></label>
+      <div class="bv-fieldrow">
+        <label class="lk-field"><span class="lk-label">Tecido</span><input type="color" class="bv-color" id="ce-cloth"></label>
+        <label class="lk-field"><span class="lk-label">Foil</span><input type="color" class="bv-color" id="ce-foil"></label>
+      </div>
+      <div class="bv-fieldrow">
+        <label class="lk-field"><span class="lk-label">Textura</span>
+          <select class="lk-select" id="ce-texture">
+            <option value="linho">Linho</option>
+            <option value="couro">Couro</option>
+            <option value="papel">Papel</option>
+          </select>
+        </label>
+        <label class="lk-field"><span class="lk-label">Símbolo</span>
+          <select class="lk-select" id="ce-glyph">
+            <option value="fa-star">Estrela</option>
+            <option value="fa-moon">Lua</option>
+            <option value="fa-sun">Sol</option>
+            <option value="fa-crown">Coroa</option>
+            <option value="fa-feather">Pena</option>
+            <option value="fa-leaf">Folha</option>
+            <option value="fa-fire">Chama</option>
+            <option value="fa-snowflake">Floco</option>
+            <option value="fa-eye">Olho</option>
+            <option value="fa-skull">Crânio</option>
+            <option value="fa-globe">Globo</option>
+            <option value="fa-map">Mapa</option>
+            <option value="fa-box">Caixa</option>
+          </select>
+        </label>
+      </div>
+      <div class="bv-fieldrow bv-fieldrow--align">
+        <label class="lk-btn lk-btn--sm" for="ce-image"><i class="fa-regular fa-image" aria-hidden="true"></i> Enviar arte</label>
+        <input id="ce-image" type="file" accept="image/*" hidden>
+        <button type="button" class="bv-link" id="ce-image-remove">Remover arte</button>
+      </div>
+      <p class="bv-settings__note">A arte entra como fundo; o texto da capa continua por cima para não perder legibilidade.</p>
+    </section>
+
+    <section class="bv-coverdrawer__panel" data-covpanel="spine" hidden>
+      <label class="lk-field"><span class="lk-label">Texto da lombada</span><input class="lk-input" id="ce-spine" maxlength="60"></label>
+      <label class="lk-field"><span class="lk-label">Autor na lombada</span><input class="lk-input" id="ce-spine-author" maxlength="40"></label>
+      <label class="lk-field"><span class="lk-label">Cor da lombada</span><input type="color" class="bv-color" id="ce-spine-color"></label>
+      <p class="bv-settings__note">A lombada acompanha a espessura da capa dura. O texto fica na vertical, como no livro impresso.</p>
+    </section>
+
+    <section class="bv-coverdrawer__panel" data-covpanel="back" hidden>
+      <label class="lk-field"><span class="lk-label">Sinopse</span><textarea class="lk-textarea" id="ce-synopsis" maxlength="600"></textarea></label>
+      <label class="lk-field"><span class="lk-label">Frase da contracapa</span><input class="lk-input" id="ce-backquote" maxlength="120"></label>
+      <label class="lk-field"><span class="lk-label">Código / ISBN</span><input class="lk-input" id="ce-isbn" maxlength="30"></label>
+    </section>
+  </div>
+
+  <footer class="bv-drawer__foot">
+    <button type="button" class="bv-link" id="ce-reset">Restaurar</button>
+    <span class="bv-drawer__spacer"></span>
+    <button type="button" class="lk-btn lk-btn--sm" id="ce-export"><i class="fa-solid fa-download" aria-hidden="true"></i> Exportar capa</button>
+    <button type="button" class="lk-btn lk-btn--primary lk-btn--sm" id="ce-done">Concluir</button>
+  </footer>
+</aside>
+
+<div id="bv-modals"></div>
+<div class="lk-toast" id="bv-toast" role="status" aria-live="polite"><i class="fa-solid fa-circle-info"></i><span></span></div>
+
+<script src="../../../../js/laboratorio/ortografia.js"></script>
+<script src="../../../../js/biblioteca-viva/app.js"></script>
+</body>
+</html>

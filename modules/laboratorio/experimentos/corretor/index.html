@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0a17">
+<title>Corretor Local — Laboratório Ctônia</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="../../../../css/lab-kit.css">
+<link rel="stylesheet" href="../../../../css/corretor.css">
+</head>
+<body class="cor">
+
+<div class="cor-aura" aria-hidden="true"></div>
+<div class="lk-noise" aria-hidden="true"></div>
+
+<header class="cor-head">
+  <button type="button" class="lk-iconbtn" id="cor-back" title="Voltar ao laboratório" aria-label="Voltar ao laboratório">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18 9 12l6-6"/><path d="M9 12h12"/></svg>
+  </button>
+  <div class="cor-brand">
+    <span class="cor-brand__icon" aria-hidden="true"><i class="fa-solid fa-spell-check"></i></span>
+    <div>
+      <span class="cor-brand__eyebrow">Laboratório · protótipo II</span>
+      <h1>Corretor Local</h1>
+    </div>
+  </div>
+  <div class="cor-head__right">
+    <span class="cor-pill"><i class="fa-solid fa-wifi-slash" aria-hidden="true"></i> sem rede</span>
+    <span class="cor-pill cor-pill--gold"><i class="fa-solid fa-key" aria-hidden="true"></i> sem chave de IA</span>
+    <span class="cor-head__stat"><b id="cor-wordcount">0</b><span>palavras</span></span>
+    <span class="cor-head__stat"><b id="cor-dictcount">0</b><span>no dicionário</span></span>
+  </div>
+</header>
+
+<main class="cor-main">
+  <section class="cor-editor lk-panel" aria-label="Texto para revisar">
+    <div class="cor-editor__head">
+      <span class="lk-kicker lk-kicker--plain">Texto</span>
+      <span class="cor-editor__hint">escreva ou cole · <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para revisar</span>
+    </div>
+    <textarea id="cor-text" class="cor-text" spellcheck="true" placeholder="Cole aqui o trecho que você quer revisar. A análise acontece neste computador — nada é enviado para fora."></textarea>
+    <div class="cor-editor__foot">
+      <div class="cor-editor__actions">
+        <button type="button" class="lk-btn lk-btn--primary" id="cor-run"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Revisar texto</button>
+        <button type="button" class="lk-btn" id="cor-apply" disabled><i class="fa-solid fa-check-double" aria-hidden="true"></i> Aplicar seguras</button>
+      </div>
+      <div class="cor-editor__minor">
+        <button type="button" class="cor-link" id="cor-sample">Carregar exemplo</button>
+        <button type="button" class="cor-link" id="cor-clear">Limpar</button>
+        <button type="button" class="cor-link" id="cor-copy">Copiar</button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="cor-side" aria-label="Resultados da revisão">
+    <div class="cor-summary">
+      <div class="cor-summary__top">
+        <span class="lk-kicker lk-kicker--plain">Resultado</span>
+        <span class="cor-summary__count" id="cor-issuecount">—</span>
+      </div>
+      <div class="cor-summary__chips" id="cor-chips"></div>
+      <p class="cor-summary__empty" id="cor-empty">Rode a revisão para ver o que o corretor encontrou. Nenhum texto sai daqui.</p>
+    </div>
+
+    <div class="cor-filters" id="cor-filters" role="group" aria-label="Filtrar por tipo" hidden></div>
+
+    <ol class="cor-issues" id="cor-issues"></ol>
+
+    <div class="cor-actions">
+      <button type="button" class="lk-btn lk-btn--accent lk-btn--block" id="cor-applyall" disabled>
+        <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+        Aplicar todas as seguras
+      </button>
+      <button type="button" class="lk-btn lk-btn--ghost lk-btn--block" id="cor-resetignore" hidden>Voltar a mostrar ignoradas</button>
+    </div>
+  </aside>
+</main>
+
+<section class="cor-config" aria-labelledby="cor-config-title">
+  <div class="cor-config__intro">
+    <span class="lk-kicker">Sem nuvem, sem modelo</span>
+    <h2 id="cor-config-title">Regras que você pode desligar.</h2>
+    <p>O corretor compara o texto com um dicionário de formas comuns do português e aplica regras de espaço, repetição e pontuação. O corretor nativo do navegador continua ligado por baixo — os dois se completam.</p>
+  </div>
+
+  <div class="cor-config__rules" id="cor-rules">
+    <label class="lk-switch"><input type="checkbox" data-rule="acento" checked><span class="lk-switch__track"></span><span>Acentuação e grafias comuns</span></label>
+    <label class="lk-switch"><input type="checkbox" data-rule="repeticao" checked><span class="lk-switch__track"></span><span>Palavras repetidas</span></label>
+    <label class="lk-switch"><input type="checkbox" data-rule="espaco" checked><span class="lk-switch__track"></span><span>Espaços duplicados e recuos</span></label>
+    <label class="lk-switch"><input type="checkbox" data-rule="pontuacao" checked><span class="lk-switch__track"></span><span>Pontuação e espaçamento</span></label>
+    <label class="lk-switch"><input type="checkbox" data-rule="maiuscula" checked><span class="lk-switch__track"></span><span>Início de frase</span></label>
+    <label class="lk-switch"><input type="checkbox" data-rule="frase" checked><span class="lk-switch__track"></span><span>Frases muito longas</span></label>
+  </div>
+
+  <div class="cor-dict">
+    <div class="cor-dict__head">
+      <span class="lk-kicker lk-kicker--plain">Dicionário pessoal</span>
+      <span class="cor-dict__hint" id="cor-dict-hint">nomes próprios e palavras que o corretor deve aceitar</span>
+    </div>
+    <form class="cor-dict__form" id="cor-dict-form">
+      <input class="lk-input" id="cor-dict-input" type="text" placeholder="ex.: Cindars, Leyrian, Zeshirom…" autocomplete="off" spellcheck="false">
+      <button type="submit" class="lk-btn lk-btn--sm" aria-label="Adicionar palavra"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar</button>
+    </form>
+    <div class="cor-dict__words" id="cor-dict-words"></div>
+  </div>
+</section>
+
+<footer class="cor-foot">
+  <span>Ctônia · Laboratório</span>
+  <p>Regras locais, dicionário curto e nenhuma promessa de perfeição — um corretor de rascunho, não de editora.</p>
+  <button type="button" class="cor-link" id="cor-back2">Voltar ao laboratório</button>
+</footer>
+
+<div class="lk-toast" id="cor-toast" role="status" aria-live="polite"><i class="fa-solid fa-circle-info"></i><span></span></div>
+
+<script src="../../../../js/laboratorio/ortografia.js"></script>
+<script src="../../../../js/corretor/app.js"></script>
+</body>
+</html>

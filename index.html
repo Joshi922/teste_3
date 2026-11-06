@@ -125,7 +125,7 @@ html:not(.light) .portal-header{background:rgba(25,24,43,.78)!important}
                     <i class="portal-symbol fa-solid fa-book-open" aria-hidden="true"></i>
                     <span class="portal-card-title">Biblioteca</span>
                 </a>
-                <a class="portal-card" href="#arquivo" aria-label="Abrir Laboratório Ctônia" onclick="portalPlaceholder(event,'Laboratório')">
+                <a class="portal-card" href="#laboratorio" aria-label="Abrir Laboratório Ctônia" onclick="event.preventDefault();openCtoniaLaboratorio()">
                     <i class="portal-symbol fa-solid fa-flask" aria-hidden="true"></i>
                     <span class="portal-card-title">Laboratório</span>
                 </a>
@@ -183,6 +183,11 @@ html:not(.light) .portal-header{background:rgba(25,24,43,.78)!important}
     <!-- ACADEMIA CTÔNIA (documento isolado em iframe) -->
     <section id="ctonia-academia-overlay" class="fixed inset-0 z-[102] hidden flex-col bg-[#1B132B]" aria-label="Academia Ctônia">
         <iframe id="ctonia-academia-frame" title="Ctônia Academia" class="w-full flex-1 border-0 bg-[#1B132B]" style="min-height:0;height:100%" loading="eager"></iframe>
+    </section>
+
+    <!-- LABORATÓRIO CTÔNIA (câmara de experimentos) -->
+    <section id="ctonia-laboratorio-overlay" class="fixed inset-0 z-[103] hidden flex-col bg-[#0D0A17]" aria-label="Laboratório Ctônia">
+        <iframe id="ctonia-laboratorio-frame" title="Ctônia Laboratório" class="w-full flex-1 border-0 bg-[#0D0A17]" style="min-height:0;height:100%" loading="eager" allow="fullscreen; clipboard-write"></iframe>
     </section>
 
     <!-- LIVRO DE FEITURAS (medições) -->

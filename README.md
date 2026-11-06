@@ -1,6 +1,6 @@
 # Ctônia (estrutura modular)
 
-Mesmo sistema de antes (Hub, Biblioteca/Web Reader, Gerenciar, Academia, Livro de Feituras), mas cada parte
+Mesmo sistema de antes (Hub, Biblioteca/Web Reader, Gerenciar, Academia, Livro de Feituras e Laboratório), mas cada parte
 agora é um arquivo de verdade, sem Base64. O código foi **cortado, não reescrito**: cada linha é a mesma de antes.
 
 ## Como publicar (e não perder dados)
@@ -30,6 +30,8 @@ ctonia/
 │   ├── academia-gemas.css
 │   ├── academia.css
 │   ├── astro.css
+│   ├── biblioteca-viva.css
+│   ├── corretor.css
 │   ├── feituras.css
 │   ├── gerenciar-extras.css
 │   ├── gerenciar.css
@@ -38,6 +40,9 @@ ctonia/
 │   ├── hub-oraculo.css
 │   ├── hub-relogio.css
 │   ├── hub-themes.css
+│   ├── lab-kit.css
+│   ├── laboratorio-embreve.css
+│   ├── laboratorio.css
 │   ├── library.css
 │   ├── oraculo.css
 │   ├── reader.css
@@ -51,6 +56,8 @@ ctonia/
 │   │   ├── highlights.js
 │   │   ├── markers.js
 │   │   └── notes.js
+│   ├── biblioteca-viva/
+│   │   └── app.js
 │   ├── core/
 │   │   ├── app.js
 │   │   ├── astro.js
@@ -58,6 +65,8 @@ ctonia/
 │   │   ├── database.js
 │   │   ├── hub-bridge.js
 │   │   └── loader.js
+│   ├── corretor/
+│   │   └── app.js
 │   ├── feituras/
 │   │   └── app.js
 │   ├── gerenciar/
@@ -79,6 +88,10 @@ ctonia/
 │   │   ├── theme.js
 │   │   ├── tools-ui.js
 │   │   └── workflows.js
+│   ├── laboratorio/
+│   │   ├── app.js
+│   │   ├── embreve.js
+│   │   └── ortografia.js
 │   ├── library/
 │   │   ├── books.js
 │   │   ├── filters.js
@@ -111,8 +124,14 @@ ctonia/
 │   │   └── index.html
 │   ├── feituras/
 │   │   └── index.html
-│   └── gerenciar/
-│       └── index.html
+│   ├── gerenciar/
+│   │   └── index.html
+│   └── laboratorio/
+│       ├── index.html
+│       └── experimentos/
+│           ├── _embreve/index.html
+│           ├── biblioteca-viva/index.html
+│           └── corretor/index.html
 ├── index.html
 ├── manifest.webmanifest
 └── sw.js
@@ -132,6 +151,7 @@ ctonia/
 | Academia | `js/academia/app.js`, `css/academia*.css` |
 | Livro de Feituras | `js/feituras/app.js`, `css/feituras.css` |
 | Portal, ferramentas de PDF, backup | `js/hub/*.js`, `css/hub-*.css` |
+| Laboratório (hub, skins, experimentos) | `modules/laboratorio/*`, `js/laboratorio/*`, `js/biblioteca-viva/*`, `js/corretor/*`, `css/laboratorio*.css`, `css/lab-kit.css`, `css/biblioteca-viva.css`, `css/corretor.css` |
 
 Para cada módulo, a ordem dos `<script>` em `modules/<nome>/index.html` é a ordem original e **importa**:
 são scripts clássicos que compartilham o mesmo escopo global, como antes.
@@ -141,6 +161,39 @@ são scripts clássicos que compartilham o mesmo escopo global, como antes.
 `js/core/loader.js` busca `modules/<nome>/index.html`, resolve os links relativos e coloca o resultado no iframe via
 `srcdoc`. Assim cada módulo continua herdando a origem do portal (mesmos dados e `parent.*` funcionando).
 O `sw.js` busca sempre a versão nova na rede e usa o cache só como reserva offline.
+
+## Laboratório (câmara de experimentos)
+
+O cartão **Laboratório** do portal abre uma câmara isolada: uma grade de experimentos que ainda estão em
+desenvolvimento, cada um em seu próprio sub-módulo. Nada ali toca os dados reais da Biblioteca — o laboratório
+grava apenas chaves próprias no `localStorage` (`ct-lab-*`).
+
+Experimentos que já abrem:
+
+- **Biblioteca Viva** (`modules/laboratorio/experimentos/biblioteca-viva/`): protótipo da nova biblioteca,
+  com livro 3D (capa, lombada e contracapa), skins com revelação circular, manuscrito com corretor local e
+  bússola de ajustes que se revela no hover.
+- **Corretor Local** (`modules/laboratorio/experimentos/corretor/`): ortografia e pequenos vícios de estilo
+  sem IA, com dicionário pessoal e regras desligáveis.
+- **Conceitos** (Estúdio 3D, Bússola de Ajustes, Leitor Imersivo, IA Local): abrem a sala `_embreve`, que
+  guarda o desenho, as funcionalidades previstas e o roteiro de cada ideia.
+
+### Como criar um experimento novo
+
+1. Crie `modules/laboratorio/experimentos/<nome>/index.html` com o CSS e o JS do experimento. Pode usar
+   `css/lab-kit.css` para os componentes base (botões, campos, modais, toast, sigilo).
+2. Acrescente um objeto em `EXPERIMENTS`, no começo de `js/laboratorio/app.js`, com `id`, `title`,
+   `status` (`dev`, `proto` ou `concept`), `area`, `icon`, `description`, `tags`, `progress` e `path`.
+3. Abra o Laboratório: o card aparece na grade e o sub-módulo é montado em um iframe com a mesma origem
+   (logo, o `localStorage` e o `parent.*` continuam valendo).
+
+O laboratório injeta `<base>` apontando para a pasta do experimento. Por isso, dentro dele, os caminhos são
+relativos à própria pasta — por exemplo `../../../../css/lab-kit.css` e `../../../../js/laboratorio/ortografia.js`.
+
+Chaves usadas pelos protótipos: `ct-lab-skin` e `ct-lab-recent` (Laboratório), `ct-lab-bv-v1` e
+`ct-lab-bv-skin` (Biblioteca Viva), `ct-lab-corretor-v1` (Corretor Local).
+
+Prévias estáticas: `previews/laboratorio.png`, `previews/biblioteca-viva.png` e `previews/manuscrito.png`.
 
 ## O que ainda não está dividido
 

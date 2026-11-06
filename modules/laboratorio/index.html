@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0a17">
+<title>Laboratório — Ctônia</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="../../css/lab-kit.css">
+<link rel="stylesheet" href="../../css/laboratorio.css">
+
+<script>
+(function () {
+  try { var saved = localStorage.getItem('ct-lab-skin'); if (saved) document.documentElement.dataset.skin = saved; } catch (e) {}
+  function sync() {
+    try {
+      var light = !!(parent && parent.document && parent.document.documentElement.classList.contains('light'));
+      document.documentElement.classList.toggle('light', light);
+      document.documentElement.classList.toggle('dark', !light);
+    } catch (e) { /* fora do portal: permanece escuro */ }
+  }
+  sync();
+  try { new MutationObserver(sync).observe(parent.document.documentElement, { attributes: true, attributeFilter: ['class'] }); } catch (e) {}
+})();
+</script>
+</head>
+<body class="lab-hub">
+
+<div class="lab-aurora" aria-hidden="true"></div>
+<div class="lab-grid-lines" aria-hidden="true"></div>
+<div class="lab-dust" aria-hidden="true"></div>
+<div class="lk-noise" aria-hidden="true"></div>
+
+<a class="lk-sr-only" href="#lab-grid">Pular para a grade de experimentos</a>
+
+<header class="lab-head">
+  <button type="button" class="lk-iconbtn lab-back" id="lab-back" title="Voltar ao portal" aria-label="Voltar ao portal">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18 9 12l6-6"/><path d="M9 12h12"/></svg>
+  </button>
+
+  <div class="lab-brand">
+    <span class="lab-brand__sigil" aria-hidden="true">
+      <svg class="lk-sigil" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <circle class="lk-sigil__orbit" cx="32" cy="32" r="29" stroke-dasharray="1 5" opacity=".55"/>
+        <circle cx="32" cy="32" r="23" opacity=".35"/>
+        <path class="lk-sigil__eye" d="M9 32c5.4-8.4 13.3-13 23-13s17.6 4.6 23 13c-5.4 8.4-13.3 13-23 13S14.4 40.4 9 32Z"/>
+        <circle cx="32" cy="32" r="6.6"/>
+        <circle cx="32" cy="32" r="2.2" fill="currentColor" stroke="none"/>
+        <path d="M32 3v5M32 56v5M3 32h5M56 32h5M11.6 11.6l3.6 3.6M48.8 48.8l3.6 3.6M52.4 11.6l-3.6 3.6M15.2 48.8l-3.6 3.6" opacity=".6"/>
+      </svg>
+    </span>
+    <div class="lab-brand__text">
+      <span class="lab-brand__eyebrow">Ctônia · câmara de experimentos</span>
+      <h1 class="lab-brand__title">Laboratório</h1>
+      <p class="lab-brand__sub">Protótipos que ainda não pediram licença ao mundo.</p>
+    </div>
+  </div>
+
+  <div class="lab-head__aside">
+    <div class="lab-live" title="Experimentos navegáveis agora">
+      <span class="lab-live__dot" aria-hidden="true"></span>
+      <span class="lab-live__text"><b id="lab-active-count">3</b> salas abertas</span>
+    </div>
+    <div class="lab-skins" role="group" aria-label="Paleta do laboratório">
+      <button type="button" class="lab-skin" data-skin="abissal" aria-label="Paleta Abissal" title="Abissal" style="--sw:#7bf0c3;--sw2:#e6c98f"></button>
+      <button type="button" class="lab-skin" data-skin="esmeralda" aria-label="Paleta Esmeralda" title="Esmeralda" style="--sw:#5ee6a8;--sw2:#d8c27c"></button>
+      <button type="button" class="lab-skin" data-skin="ametista" aria-label="Paleta Ametista" title="Ametista" style="--sw:#b79bff;--sw2:#f0b7d8"></button>
+      <button type="button" class="lab-skin" data-skin="ouro" aria-label="Paleta Ouro Velho" title="Ouro Velho" style="--sw:#f0c977;--sw2:#ff9f7a"></button>
+      <button type="button" class="lab-skin" data-skin="gelo" aria-label="Paleta Gelo" title="Gelo" style="--sw:#a9e9ff;--sw2:#d8f3ff"></button>
+    </div>
+  </div>
+</header>
+
+<main class="lab-main">
+
+  <section class="lab-hero" aria-labelledby="lab-hero-title">
+    <div class="lab-hero__copy">
+      <span class="lk-kicker">Experimento em destaque</span>
+      <h2 class="lab-hero__title" id="lab-hero-title">Biblioteca <em>Viva</em></h2>
+      <p class="lab-hero__lede">A biblioteca que virou ateliê: livro flutuante em 3D, skins com revelação circular, manuscrito com corretor local e uma bússola de ajustes que só aparece quando você chega perto.</p>
+      <div class="lab-hero__actions">
+        <a class="lk-btn lk-btn--primary" href="#experimento=biblioteca-viva" data-open="biblioteca-viva">
+          Entrar na biblioteca experimental
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a class="lk-btn lk-btn--ghost" href="#experimento=corretor-local" data-open="corretor-local">
+          <i class="fa-solid fa-spell-check" aria-hidden="true"></i>
+          Abrir o corretor
+        </a>
+      </div>
+      <ul class="lab-hero__facts">
+        <li><b>06</b><span>salas planejadas</span></li>
+        <li><b>02</b><span>protótipos navegáveis</span></li>
+        <li><b>00</b><span>chaves de IA</span></li>
+      </ul>
+    </div>
+
+    <div class="lab-hero__art" aria-hidden="true">
+      <span class="lab-orbit lab-orbit--a"></span>
+      <span class="lab-orbit lab-orbit--b"></span>
+      <span class="lab-orbit lab-orbit--c"></span>
+      <span class="lab-orbit-dot lab-orbit-dot--a"></span>
+      <span class="lab-orbit-dot lab-orbit-dot--b"></span>
+
+      <div class="lab-mini-book">
+        <div class="lab-mini-book__face lab-mini-book__back"></div>
+        <div class="lab-mini-book__face lab-mini-book__spine"><span>ESTRELA DO CAOS · K.R VALETIUS</span></div>
+        <div class="lab-mini-book__face lab-mini-book__pages"></div>
+        <div class="lab-mini-book__face lab-mini-book__top"></div>
+        <div class="lab-mini-book__face lab-mini-book__bottom"></div>
+        <div class="lab-mini-book__face lab-mini-book__front">
+          <span class="lab-mini-book__over">K. R. VALETIUS</span>
+          <span class="lab-mini-book__title">ESTRELA<br>DO CAOS</span>
+          <span class="lab-mini-book__seal"><i class="fa-regular fa-star" aria-hidden="true"></i></span>
+          <span class="lab-mini-book__foot">EDIÇÃO DE ESTÚDIO</span>
+        </div>
+      </div>
+
+      <span class="lab-hero-tag"><span class="lab-hero-tag__dot"></span> experiência em curso</span>
+      <span class="lab-hero-note">SALA · I</span>
+    </div>
+  </section>
+
+  <section class="lab-toolbar" aria-label="Filtros dos experimentos">
+    <div class="lab-filters" role="group" aria-label="Filtrar por estágio">
+      <button type="button" class="lk-chip lab-filter is-on" data-filter="all">Todas <span class="lab-filter__n">6</span></button>
+      <button type="button" class="lk-chip lab-filter" data-filter="dev">Em desenvolvimento <span class="lab-filter__n">1</span></button>
+      <button type="button" class="lk-chip lab-filter" data-filter="proto">Protótipos <span class="lab-filter__n">1</span></button>
+      <button type="button" class="lk-chip lab-filter" data-filter="concept">Conceitos <span class="lab-filter__n">4</span></button>
+    </div>
+
+    <label class="lab-search" for="lab-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input id="lab-search" type="search" placeholder="Buscar experimento, tag ou ideia…" autocomplete="off" spellcheck="false">
+      <kbd>/</kbd>
+    </label>
+  </section>
+
+  <p class="lab-count" id="lab-count" aria-live="polite">6 salas · todas</p>
+
+  <section class="lab-grid" id="lab-grid" aria-label="Experimentos do laboratório"></section>
+
+  <section class="lab-empty" id="lab-empty" hidden>
+    <span class="lab-empty__sigil" aria-hidden="true"><i class="fa-solid fa-flask-vial"></i></span>
+    <h2>Nenhuma sala com esse nome.</h2>
+    <p>Tente outro termo — ou abra a <button type="button" class="lab-link" data-open="biblioteca-viva">Biblioteca Viva</button>, que está sempre acesa.</p>
+  </section>
+
+  <section class="lab-blueprint" aria-labelledby="lab-blueprint-title">
+    <div class="lab-blueprint__head">
+      <span class="lk-kicker">Como esta câmara funciona</span>
+      <h2 id="lab-blueprint-title">Um experimento, uma sala isolada.</h2>
+      <p>Nada aqui divide estado com a biblioteca real. Cada sala é um sub-módulo com seu próprio HTML, CSS e JS — pode quebrar à vontade, consertar no dia seguinte e publicar sem tocar no restante do Ctônia.</p>
+    </div>
+    <ol class="lab-steps">
+      <li class="lab-step">
+        <span class="lab-step__n">01</span>
+        <h3>Nova pasta</h3>
+        <p><code>modules/laboratorio/experimentos/&lt;nome&gt;/</code></p>
+        <span class="lab-step__hint">index.html + css + js próprios</span>
+      </li>
+      <li class="lab-step">
+        <span class="lab-step__n">02</span>
+        <h3>Registre a sala</h3>
+        <p>Acrescente um objeto em <code>EXPERIMENTS</code>, em <code>js/laboratorio/app.js</code>.</p>
+        <span class="lab-step__hint">id, título, estágio, tags e caminho</span>
+      </li>
+      <li class="lab-step">
+        <span class="lab-step__n">03</span>
+        <h3>Abra no laboratório</h3>
+        <p>O card monta a sala em um iframe com <code>srcdoc</code>, herdando a mesma origem e os mesmos dados.</p>
+        <span class="lab-step__hint">voltar sem recarregar o portal</span>
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="lab-foot">
+  <div class="lab-foot__brand">
+    <span class="lab-foot__mark" aria-hidden="true"><i class="fa-solid fa-flask"></i></span>
+    <div>
+      <b>Ctônia · Laboratório</b>
+      <span>ambiente de testes · nada aqui é definitivo</span>
+    </div>
+  </div>
+  <p class="lab-foot__quote">“Toda sala começa como um rascunho — e todo rascunho merece uma porta.”</p>
+  <span class="lab-foot__ver">v0.1 · nov 2026</span>
+</footer>
+
+<!-- Sala em execução -->
+<div class="lab-runner" id="lab-runner" hidden>
+  <iframe class="lab-runner__frame" id="lab-runner-frame" title="Experimento em execução" allow="fullscreen; clipboard-write"></iframe>
+
+  <div class="lab-runner__loading" id="lab-runner-loading">
+    <div class="lab-runner__sigil">
+      <svg class="lk-sigil" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle class="lk-sigil__orbit" cx="32" cy="32" r="29" stroke-dasharray="1 5"/>
+        <circle cx="32" cy="32" r="21" opacity=".4"/>
+        <path d="M12 32c4.7-7.3 11.6-11.3 20-11.3S47.3 24.7 52 32c-4.7 7.3-11.6 11.3-20 11.3S16.7 39.3 12 32Z"/>
+        <circle cx="32" cy="32" r="5.5"/>
+        <circle cx="32" cy="32" r="1.8" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <p class="lab-runner__label">Acendendo a sala</p>
+    <p class="lab-runner__name" id="lab-runner-name">Biblioteca Viva</p>
+    <div class="lab-runner__bar"><i></i></div>
+    <button type="button" class="lk-btn lk-btn--ghost lk-btn--sm lab-runner__cancel" id="lab-runner-cancel">Cancelar</button>
+  </div>
+
+  <div class="lab-runner__error" id="lab-runner-error" hidden>
+    <span class="lab-runner__erroricon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <h2>A sala não acendeu.</h2>
+    <p id="lab-runner-error-msg">O arquivo do experimento não foi encontrado.</p>
+    <div class="lab-runner__erroractions">
+      <button type="button" class="lk-btn lk-btn--primary" id="lab-runner-retry">Tentar de novo</button>
+      <button type="button" class="lk-btn lk-btn--ghost" id="lab-runner-exit">Voltar ao laboratório</button>
+    </div>
+  </div>
+</div>
+
+<div class="lk-toast" id="lab-toast" role="status" aria-live="polite"><i class="fa-solid fa-circle-info"></i><span></span></div>
+
+<script src="../../js/laboratorio/app.js"></script>
+</body>
+</html>

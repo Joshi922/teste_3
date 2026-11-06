@@ -40,6 +40,7 @@
             document.getElementById('hub-view').classList.add('hidden');
             document.getElementById('workspace-view').classList.add('hidden');
             document.getElementById('ctonia-manager-overlay').classList.add('hidden');
+            document.getElementById('ctonia-laboratorio-overlay').classList.add('hidden');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             document.body.classList.add('overflow-hidden');
@@ -63,6 +64,7 @@
             document.getElementById('hub-view').classList.add('hidden');
             document.getElementById('workspace-view').classList.add('hidden');
             document.getElementById('ctonia-library-overlay').classList.add('hidden');
+            document.getElementById('ctonia-laboratorio-overlay').classList.add('hidden');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             document.body.classList.remove('overflow-hidden');
@@ -83,7 +85,7 @@
                 ctoniaAcademiaLoaded = true;
                 ctoniaMountModule(frame, 'modules/academia/index.html', false).catch(err => { ctoniaAcademiaLoaded = false; ctoniaModuleError(frame, 'modules/academia/index.html', err); });
             }
-            ['portal-view','hub-view','workspace-view','ctonia-manager-overlay','ctonia-library-overlay'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['portal-view','hub-view','workspace-view','ctonia-manager-overlay','ctonia-library-overlay','ctonia-laboratorio-overlay'].forEach(id => document.getElementById(id).classList.add('hidden'));
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             document.body.classList.add('overflow-hidden');
@@ -98,6 +100,47 @@
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape' && !document.getElementById('ctonia-academia-overlay').classList.contains('hidden')) closeCtoniaAcademia();
         });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                const labOverlay = document.getElementById('ctonia-laboratorio-overlay');
+                const academiaOverlay = document.getElementById('ctonia-academia-overlay');
+                if (labOverlay && !labOverlay.classList.contains('hidden')) closeCtoniaLaboratorio();
+                else if (academiaOverlay && !academiaOverlay.classList.contains('hidden')) closeCtoniaAcademia();
+            }
+        });
+
+        // LABORATÓRIO: câmara de experimentos, carregada como um módulo normal.
+        let ctoniaLaboratorioLoaded = false;
+        function openCtoniaLaboratorio() {
+            const overlay = document.getElementById('ctonia-laboratorio-overlay');
+            const frame = document.getElementById('ctonia-laboratorio-frame');
+            if (!overlay || !frame) return;
+            if (!ctoniaLaboratorioLoaded) {
+                ctoniaLaboratorioLoaded = true;
+                ctoniaMountModule(frame, 'modules/laboratorio/index.html', true)
+                    .catch(err => { ctoniaLaboratorioLoaded = false; ctoniaModuleError(frame, 'modules/laboratorio/index.html', err); });
+            }
+            ['portal-view','hub-view','workspace-view','ctonia-manager-overlay','ctonia-library-overlay','ctonia-academia-overlay','ctonia-medicoes-overlay'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        }
+        function closeCtoniaLaboratorio() {
+            const overlay = document.getElementById('ctonia-laboratorio-overlay');
+            const frame = document.getElementById('ctonia-laboratorio-frame');
+            if (!overlay) return;
+            // se havia um experimento aberto, volta à grade antes de sair
+            try { if (frame && frame.contentWindow && typeof frame.contentWindow.labCloseExperiment === 'function') frame.contentWindow.labCloseExperiment(); } catch (e) {}
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+            const portal = document.getElementById('portal-view');
+            if (portal) portal.classList.remove('hidden');
+            document.body.classList.remove('overflow-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         let ctoniaMedicoesLoaded = false;
         function openCtoniaMedicoes() {
             const overlay = document.getElementById('ctonia-medicoes-overlay');

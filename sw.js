@@ -2,12 +2,14 @@
    - Arquivos do próprio site: rede primeiro, cache como reserva (você sempre vê a versão mais nova e o app abre offline).
    - Bibliotecas externas (CDN, fontes): usa o cache e atualiza em segundo plano.
    - Nunca mexe nas APIs do Google/Firebase (Drive, Agenda, login) nem em dados do usuário (IndexedDB/localStorage). */
-const VERSION = 'ctonia-modular-v1';
+const VERSION = 'ctonia-modular-v2';
 const SHELL = [
   './',
   'css/academia-gemas.css',
   'css/academia.css',
   'css/astro.css',
+  'css/biblioteca-viva.css',
+  'css/corretor.css',
   'css/feituras.css',
   'css/gerenciar-extras.css',
   'css/gerenciar.css',
@@ -16,6 +18,9 @@ const SHELL = [
   'css/hub-oraculo.css',
   'css/hub-relogio.css',
   'css/hub-themes.css',
+  'css/lab-kit.css',
+  'css/laboratorio-embreve.css',
+  'css/laboratorio.css',
   'css/library.css',
   'css/oraculo.css',
   'css/reader.css',
@@ -27,12 +32,14 @@ const SHELL = [
   'js/annotations/highlights.js',
   'js/annotations/markers.js',
   'js/annotations/notes.js',
+  'js/biblioteca-viva/app.js',
   'js/core/app.js',
   'js/core/astro.js',
   'js/core/boot.js',
   'js/core/database.js',
   'js/core/hub-bridge.js',
   'js/core/loader.js',
+  'js/corretor/app.js',
   'js/feituras/app.js',
   'js/gerenciar/app.js',
   'js/gerenciar/google-agenda.js',
@@ -51,6 +58,9 @@ const SHELL = [
   'js/hub/theme.js',
   'js/hub/tools-ui.js',
   'js/hub/workflows.js',
+  'js/laboratorio/app.js',
+  'js/laboratorio/embreve.js',
+  'js/laboratorio/ortografia.js',
   'js/library/books.js',
   'js/library/filters.js',
   'js/library/metadata.js',
@@ -75,7 +85,11 @@ const SHELL = [
   'modules/academia/index.html',
   'modules/biblioteca/index.html',
   'modules/feituras/index.html',
-  'modules/gerenciar/index.html'
+  'modules/gerenciar/index.html',
+  'modules/laboratorio/index.html',
+  'modules/laboratorio/experimentos/_embreve/index.html',
+  'modules/laboratorio/experimentos/biblioteca-viva/index.html',
+  'modules/laboratorio/experimentos/corretor/index.html'
 ];
 const CDN = /^(cdn\.tailwindcss\.com|cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com)$/;
 
